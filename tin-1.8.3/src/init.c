@@ -703,7 +703,7 @@ init_selfinfo(
 	 */
 	if (domain_name[0] == '\0') {
 		error_message(_(txt_error_no_domain_name));
-		sleep(2);
+		//sleep(2);
 		force_no_post = TRUE;
 	}
 

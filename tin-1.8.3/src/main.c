@@ -93,7 +93,7 @@ main(
 #	endif /* ENABLE_NLS */
 	} else {
 		error_message(txt_error_locale);
-		sleep(2);
+		//sleep(2);
 	}
 #endif /* HAVE_SETLOCALE && !NO_LOCALE */
 
