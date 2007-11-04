@@ -1149,9 +1149,7 @@ get_arrow_key(
 	int ch;
 	int ch1;
 
-#define wait_a_while(i) \
-	while (!input_pending(0) \
-		&& i < ((VT_ESCAPE_TIMEOUT * 1000) / SECOND_CHARACTER_DELAY))
+#define wait_a_while(i) 
 
 #	ifndef VMS
 	if (!input_pending(0)) {
@@ -1159,9 +1157,9 @@ get_arrow_key(
 		int i = 0;
 
 		wait_a_while(i) {
-			usleep((unsigned long) (SECOND_CHARACTER_DELAY * 1000));
+//			usleep((unsigned long) (SECOND_CHARACTER_DELAY * 1000));
 			i++;
-		}
+		} 
 #			else	/* !HAVE_USLEEP */
 #				ifdef HAVE_SELECT
 		struct timeval tvptr;

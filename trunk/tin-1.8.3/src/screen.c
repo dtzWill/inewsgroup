@@ -146,7 +146,7 @@ wait_message(
 	cursoron();
 	my_flush();
 
-	(void) sleep(sdelay);
+//	(void) sleep(sdelay);
 /*	clear_message(); would be nice, but tin doesn't expect this yet */
 	va_end(ap);
 }
@@ -179,7 +179,7 @@ error_message(
 		fflush(stderr);
 	} else {
 		stow_cursor();
-		(void) sleep(2);
+//		(void) sleep(2);
 		clear_message();
 	}
 

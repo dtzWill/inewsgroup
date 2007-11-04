@@ -169,7 +169,7 @@ read_newsauth_file(
 
 		if (S_ISREG(statbuf.st_mode) && (statbuf.st_mode|S_IRUSR|S_IWUSR) != (S_IRUSR|S_IWUSR|S_IFREG)) {
 			error_message(_(txt_error_insecure_permissions), line, statbuf.st_mode);
-			sleep(2);
+			//sleep(2);
 			/*
 			 * TODO: fix permssions?
 			 * fchmod(fd, S_IRUSR|S_IWUSR);
