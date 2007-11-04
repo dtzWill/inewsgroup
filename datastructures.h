@@ -2,6 +2,12 @@
 //datastructures.h
 #import <Foundation/Foundation.h>
 
+const char * const TIN = "/var/root/bin/tin";
+const char * const NEWSRC = "/var/root/.newsrc";
+const char * const NNTPSERVER = "/etc/nntpserver";
+//more!
+
+
 typedef struct
 {
 	NSString * server;
@@ -15,8 +21,21 @@ typedef struct
 	NSString * subject;
 	NSString * newsgroups;
 	NSString * content; 	
+	char[30] date; //==ctime
+} out_message;
 
-} message;
+enum readstatus
+{
+	unread,
+	read
+}
 
-
+typedef struct
+{
+	NSString * newsgroup;//treat cross-posted items as different messages
+	NSString * subject;
+	NSString * content;
+	NSDate * date;
+	readstatus status;
+} in_message;
 
