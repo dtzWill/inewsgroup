@@ -1,0 +1,1775 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:632: checking for X
+configure:700:   conftest.c >/dev/null 2>conftest.out
+./configure: line 699: ./conftest.c: Permission denied
+configure: failed program was:
+#line 695 "configure"
+#include "confdefs.h"
+#include <X11/Intrinsic.h>
+configure:776: arm-apple-darwin-gcc -o conftest    conftest.c -lXt  1>&5
+/usr/local/bin/arm-apple-darwin-ld: can't locate file for: -lXt
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 769 "configure"
+#include "confdefs.h"
+
+int main() {
+XtMalloc()
+; return 0; }
+configure:907: checking host system type
+configure:1053: checking for gcc
+configure:1166: checking whether the C compiler (arm-apple-darwin-gcc  ) works
+configure:1182: arm-apple-darwin-gcc -o conftest    conftest.c  1>&5
+configure:1208: checking whether the C compiler (arm-apple-darwin-gcc  ) is a cross-compiler
+configure:1213: checking whether we are using GNU C
+configure:1222: arm-apple-darwin-gcc -E conftest.c
+configure:1241: checking whether arm-apple-darwin-gcc accepts -g
+configure:1273: checking how to run the C preprocessor
+configure:1294: arm-apple-darwin-gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:1354: checking whether arm-apple-darwin-gcc needs -traditional
+configure:1379:20: error: termio.h: No such file or directory
+configure:1400: checking whether make sets ${MAKE}
+configure:1438: checking for a BSD compatible install
+configure:1515: checking for bison -y
+configure:1518: bison -y conftest.y
+configure:1522: arm-apple-darwin-gcc -o conftest -g -O2   conftest.c  1>&5
+configure:1546: checking for lint
+configure:1546: checking for alint
+configure:1546: checking for lclint
+configure:1546: checking for tdlint
+configure:1546: checking for splint
+configure:1577: checking for AIX
+configure:1602: checking if arm-apple-darwin-gcc -U and -D options work together
+configure:1624: arm-apple-darwin-gcc -c -g -O2 -UU_D_OPTIONS -DU_D_OPTIONS -DD_U_OPTIONS -UD_U_OPTIONS conftest.c 1>&5
+configure:1750: checking if we should define _XOPEN_SOURCE
+configure:1766: arm-apple-darwin-gcc -c -g -O2  conftest.c 1>&5
+configure: In function 'main':
+configure:1761: error: 'make' undeclared (first use in this function)
+configure:1761: error: (Each undeclared identifier is reported only once
+configure:1761: error: for each function it appears in.)
+configure:1761: error: syntax error before 'an'
+configure: failed program was:
+#line 1756 "configure"
+#include "confdefs.h"
+#include <sys/types.h>
+int main() {
+
+#ifndef _XOPEN_SOURCE
+make an error
+#endif
+; return 0; }
+configure:1786: arm-apple-darwin-gcc -c -g -O2  -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure: In function 'main':
+configure:1781: error: 'make' undeclared (first use in this function)
+configure:1781: error: (Each undeclared identifier is reported only once
+configure:1781: error: for each function it appears in.)
+configure:1781: error: syntax error before 'an'
+configure: failed program was:
+#line 1776 "configure"
+#include "confdefs.h"
+#include <sys/types.h>
+int main() {
+
+#ifdef _XOPEN_SOURCE
+make an error
+#endif
+; return 0; }
+configure:1841: checking if we should define _POSIX_C_SOURCE
+(line 1847) testing if the symbol is already defined go no further ...
+configure:1860: arm-apple-darwin-gcc -c -g -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:1957: checking for strerror in -lcposix
+configure:1976: arm-apple-darwin-gcc -o conftest -g -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcposix   1>&5
+/usr/local/bin/arm-apple-darwin-ld: can't locate file for: -lcposix
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 1965 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char strerror();
+
+int main() {
+strerror()
+; return 0; }
+configure:2000: checking for arm-apple-darwin-gcc option to accept ANSI C
+configure:2112: arm-apple-darwin-gcc -c -g -O2  -DCC_HAS_PROTOS  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:2220: checking for Cygwin environment
+configure:2236: arm-apple-darwin-gcc -c -g -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure: In function 'main':
+configure:2232: error: '__CYGWIN32__' undeclared (first use in this function)
+configure:2232: error: (Each undeclared identifier is reported only once
+configure:2232: error: for each function it appears in.)
+configure: failed program was:
+#line 2225 "configure"
+#include "confdefs.h"
+
+int main() {
+
+#ifndef __CYGWIN__
+#define __CYGWIN__ __CYGWIN32__
+#endif
+return __CYGWIN__;
+; return 0; }
+configure:2253: checking for mingw32 environment
+configure:2265: arm-apple-darwin-gcc -c -g -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure: In function 'main':
+configure:2261: error: '__MINGW32__' undeclared (first use in this function)
+configure:2261: error: (Each undeclared identifier is reported only once
+configure:2261: error: for each function it appears in.)
+configure: failed program was:
+#line 2258 "configure"
+#include "confdefs.h"
+
+int main() {
+return __MINGW32__;
+; return 0; }
+configure:2297: checking for executable suffix
+configure:2307: arm-apple-darwin-gcc -o conftest -g -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c  1>&5
+configure:2328: checking for object suffix
+configure:2334: arm-apple-darwin-gcc -c -g -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:2369: checking whether ln -s works
+configure:2413: checking for gcc
+configure:2445: checking for native build C compiler
+configure:2449: checking for native build C preprocessor
+configure:2462: checking for native build C flags
+configure:2473: checking for native build C preprocessor-flags
+configure:2484: checking for native build linker-flags
+configure:2495: checking for native build linker-libraries
+configure:2538: checking build system type
+configure:2564: checking for ranlib
+configure:2631: checking for ld
+configure:2698: checking for ar
+configure:2767: checking for archiver options (symbol AR_OPTS)
+configure:2830: checking for ispell
+configure:2904: checking for metamail
+configure:2978: checking for sum
+configure:3025: checking if /usr/bin/sum takes -r
+configure:3030: /usr/bin/sum -r config.log 1>&5
+53567     7
+configure:3060: checking for default editor
+configure:3088: checking for vi
+configure:3133: checking for sendmail
+configure:3258: checking for default mailer
+configure:3285: checking for incoming-mail directory
+configure:3331: checking if you want PGP/GPG-Support
+configure:3380: checking for pgp
+configure:3455: checking for pgpk
+configure:3530: checking for gpg
+configure:3587: checking for the default shell program
+configure:3606: arm-apple-darwin-gcc -c -g -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:3595:24: error: sys/params.h: No such file or directory
+configure: In function 'main':
+configure:3600: error: 'make' undeclared (first use in this function)
+configure:3600: error: (Each undeclared identifier is reported only once
+configure:3600: error: for each function it appears in.)
+configure:3600: error: syntax error before 'an'
+configure: failed program was:
+#line 3593 "configure"
+#include "confdefs.h"
+
+#include <sys/params.h>
+int main() {
+
+#if (defined(BSD) && (BSD >= 199103))
+#else
+make an error
+#endif
+
+; return 0; }
+(line 3616) testing paths of shell programs: sh ksh bash zsh pdksh mksh jsh keysh ash dash ...
+(line 3620) testing /etc/shells ...
+configure:3715: checking if NNTP-support will be used
+configure:3737: checking whether to be NNTP_ONLY
+configure:3769: checking if you want to compile-in debug support
+configure:3796: checking if you want to see long compiling messages
+configure:3841: checking if you want to compile with fallback prototypes
+configure:3865: checking if you want to turn on gcc warnings
+configure:4035: checking for news-library path
+configure:4073: checking for news spool-directory path
+configure:4111: checking for news overview-directory path
+configure:4149: checking for overview filename
+configure:4185: checking for directory containing "inews"
+configure:4226: checking for inews
+configure:4283: checking for optional INN-NNTP library
+configure:4315: checking if you want socks library
+configure:4335: checking if you want socks5 library
+configure:4434: checking for network libraries
+configure:4445: checking for gethostname
+configure:4473: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c  1>&5
+configure:4612: checking for main in -linet
+configure:4627: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -linet   1>&5
+/usr/local/bin/arm-apple-darwin-ld: can't locate file for: -linet
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 4620 "configure"
+#include "confdefs.h"
+
+int main() {
+main()
+; return 0; }
+configure:4652: checking for socket
+configure:4680: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c  1>&5
+configure:4819: checking for gethostbyname
+configure:4847: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c  1>&5
+configure:4930: checking for strcasecmp
+configure:4958: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c  1>&5
+configure:5206: checking for unistd.h
+configure:5216: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:5206: checking for fcntl.h
+configure:5216: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:5206: checking for sys/file.h
+configure:5216: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:5243: checking for fcntl
+configure:5271: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c   1>&5
+configure:5291: checking for lockf
+configure:5319: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c   1>&5
+configure:5339: checking for flock
+configure:5367: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c   1>&5
+configure:5388: checking for file-locking functions
+configure:5428: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:5460: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:5495: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure: In function 'main':
+configure:5488: error: 'LOCK_EX' undeclared (first use in this function)
+configure:5488: error: (Each undeclared identifier is reported only once
+configure:5488: error: for each function it appears in.)
+configure:5488: error: 'LOCK_NB' undeclared (first use in this function)
+configure:5489: error: 'LOCK_UN' undeclared (first use in this function)
+configure: failed program was:
+#line 5472 "configure"
+#include "confdefs.h"
+
+#include <stdio.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h>
+#endif
+#ifdef HAVE_SYS_FILE_H
+#include <sys/file.h>
+#endif
+
+int main() {
+
+	int block = 1, fd = 0;
+	int ret = flock(fd, (LOCK_EX|LOCK_NB))
+	 && flock(fd, LOCK_UN)
+	 && flock(fd, block ? LOCK_EX : (LOCK_EX | LOCK_NB));
+	
+; return 0; }
+configure:5516: checking which locking method should be used
+configure:5585: checking for screen type
+configure:5601: checking if you specified curses install-directory
+configure:5658: checking if you want to use ncurses library
+configure:5671: checking if you want curses rather than termcap interface
+configure:8175: checking if you want to use installed version of pcre
+configure:8248: checking if you want to link with dbmalloc for testing
+configure:8336: checking if you want to link with dmalloc for testing
+configure:8424: checking if you want debugging-trace
+configure:8543: checking for domain-name
+configure:8572: checking for NNTP default-server
+configure:8638: checking whether to use MH style mail handling for mailgroups
+configure:8657: checking whether to enable 8-bit keycodes
+configure:8683: checking whether to enable ANSI-color
+configure:8700: checking whether to enable posting-etiquette
+configure:8719: checking whether to strictly observe RFC2047 and break long lines
+configure:8738: checking whether to force MM_CHARSET obeyance when decoding mime
+configure:8764: checking for MIME character-set
+configure:8786: checking for default ISO/ASCII table
+configure:8808: checking whether to enable locale support
+configure:8827: checking whether to enable posting
+configure:8846: checking whether to enable shell escape
+configure:8865: checking whether to have fascist newsadmin
+configure:8884: checking whether to enable inverse video and highlighting
+configure:8903: checking whether to enable piping support
+configure:8922: checking whether to enable printer support
+configure:8941: checking whether to unique tmp-files by appending .pid
+configure:8967: checking whether to fallback to XHDR XREF if XOVER isn't supported
+configure:8994: checking whether to send a GROUP command before a LISTGROUP
+configure:9014: checking whether to ignore system()s return value
+configure:9034: checking for directory containing tin.defaults file
+configure:9077: checking whether to enable IPv6
+configure:9702: checking for getaddrinfo
+configure:9730: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c   1>&5
+configure:9702: checking for getnameinfo
+configure:9730: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c   1>&5
+configure:9759: checking whether to make a coffee while compiling
+configure:9784: checking for makeflags variable
+configure:9829: checking for working const
+configure:9883: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:9904: checking for inline
+configure:9918: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:9945: checking for ansi token expansion/substitution
+configure:9959: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:9980: checking for ansi token concatenation
+configure:9994: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:10015: checking if nested parameters work
+configure:10028: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:10051: checking for ANSI C header files
+configure:10064: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10159: checking for dirent.h that defines DIR
+configure:10172: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:10197: checking for opendir in -ldir
+configure:10216: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -ldir    1>&5
+/usr/local/bin/arm-apple-darwin-ld: can't locate file for: -ldir
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 10205 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char opendir();
+
+int main() {
+opendir()
+; return 0; }
+configure:10280: checking whether time.h and sys/time.h may both be included
+configure:10294: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:10315: checking for sys/wait.h that is POSIX.1 compatible
+configure:10336: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:10415: checking for argz.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:18: error: argz.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <argz.h>
+
+configure:10415: checking for arpa/inet.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for curses.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for errno.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for fcntl.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for getopt.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for ioctl.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:19: error: ioctl.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <ioctl.h>
+
+configure:10415: checking for langinfo.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for libc.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for locale.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for malloc.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:20: error: malloc.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <malloc.h>
+
+configure:10415: checking for net/socket.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:24: error: net/socket.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <net/socket.h>
+
+configure:10415: checking for netdb.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for netinet/in.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for netlib.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:20: error: netlib.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <netlib.h>
+
+configure:10415: checking for nl_types.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for nomacros.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:22: error: nomacros.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <nomacros.h>
+
+configure:10415: checking for paths.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for poll.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for prototypes.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:24: error: prototypes.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <prototypes.h>
+
+configure:10415: checking for pwd.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sgtty.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for socket.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:20: error: socket.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <socket.h>
+
+configure:10415: checking for stdarg.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for stdbool.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for stddef.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for stdlib.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for string.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for strings.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for stropts.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+In file included from configure:10420:
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/stropts.h:22:22: error: features.h: No such file or directory
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/stropts.h:23:24: error: bits/types.h: No such file or directory
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/stropts.h:24:27: error: bits/xtitypes.h: No such file or directory
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/stropts.h:39:26: error: bits/stropts.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <stropts.h>
+
+configure:10415: checking for sys/bsdtypes.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:26: error: sys/bsdtypes.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <sys/bsdtypes.h>
+
+configure:10415: checking for sys/errno.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/file.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/ioctl.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/param.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/poll.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/ptem.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:22: error: sys/ptem.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <sys/ptem.h>
+
+configure:10415: checking for sys/pty.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:21: error: sys/pty.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <sys/pty.h>
+
+configure:10415: checking for sys/select.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/stat.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/stream.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:24: error: sys/stream.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <sys/stream.h>
+
+configure:10415: checking for sys/socket.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/time.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/timeb.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/times.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/types.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for sys/utsname.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for term.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for termio.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10420:20: error: termio.h: No such file or directory
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <termio.h>
+
+configure:10415: checking for time.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for unistd.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for varargs.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+In file included from configure:10420:
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/include/varargs.h:4:2: error: #error "GCC no longer implements <varargs.h>."
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/include/varargs.h:5:2: error: #error "Revise your code to use <stdarg.h>."
+configure: failed program was:
+#line 10417 "configure"
+#include "confdefs.h"
+
+#include <sys/types.h>
+#include <varargs.h>
+
+configure:10415: checking for wchar.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10415: checking for wctype.h
+configure:10425: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10461: checking for termio.h
+configure:10471: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10467:20: error: termio.h: No such file or directory
+configure: failed program was:
+#line 10466 "configure"
+#include "confdefs.h"
+#include <termio.h>
+configure:10461: checking for termios.h
+configure:10471: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:10461: checking for unistd.h
+configure:10547: checking whether termios.h needs _POSIX_SOURCE
+configure:10556: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:10597: checking declaration of size-change
+configure:10650: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+size-change succeeded ()
+configure:10689: checking if sys/time.h conflicts with sys/select.h
+configure:10725: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:10749: checking for gid_t
+configure:10782: checking for mode_t
+configure:10815: checking for off_t
+configure:10848: checking for pid_t
+configure:10881: checking for size_t
+configure:10914: checking for ssize_t
+configure:10947: checking for time_t
+configure:11043: checking for uid_t in sys/types.h
+configure:11078: checking for quad_t
+configure:11093: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:11112: checking for long long
+configure:11123: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:11142: checking for nl_item
+configure:11159: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:11181: checking for UUInitialize in -luu
+configure:11200: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -luu    1>&5
+/usr/local/bin/arm-apple-darwin-ld: can't locate file for: -luu
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 11189 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char UUInitialize();
+
+int main() {
+UUInitialize()
+; return 0; }
+configure:11265: checking for stringprep_check_version in -lidn
+configure:11284: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lidn    1>&5
+/usr/local/bin/arm-apple-darwin-ld: can't locate file for: -lidn
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 11273 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char stringprep_check_version();
+
+int main() {
+stringprep_check_version()
+; return 0; }
+configure:11457: checking for unicode/unorm.h
+configure:11467: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:11463:27: error: unicode/unorm.h: No such file or directory
+configure: failed program was:
+#line 11462 "configure"
+#include "confdefs.h"
+#include <unicode/unorm.h>
+configure:11620: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_tgoto
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 11613 "configure"
+#include "confdefs.h"
+
+int main() {
+char *x=(char*)tgoto("",0,0)
+; return 0; }
+configure:11659: checking for tigetstr in -lcurses
+configure:11668: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:11787: checking if we should include termcap.h
+configure:11804: arm-apple-darwin-gcc -c -O2 -I./include  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure: In function 'main':
+configure:11798: error: 'make' undeclared (first use in this function)
+configure:11798: error: (Each undeclared identifier is reported only once
+configure:11798: error: for each function it appears in.)
+configure:11798: error: syntax error before 'an'
+configure: failed program was:
+#line 11791 "configure"
+#include "confdefs.h"
+
+#define HAVE_TERMCAP_H 1
+#include <tcurses.h>
+int main() {
+
+#ifdef NCURSES_VERSION
+make an error
+#endif
+
+; return 0; }
+configure:11822: checking for term.h
+configure:11844: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:11838:26: error: curses.hterm.h: No such file or directory
+configure: failed program was:
+#line 11835 "configure"
+#include "confdefs.h"
+
+#include <curses.h>
+#include <curses.hterm.h>
+int main() {
+WINDOW *x
+; return 0; }
+configure:11844: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:11885: checking if we should include curses.h or termcap.h
+configure:11911: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500   conftest.c -lcurses   1>&5
+configure:11911: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  -DNEED_CURSES_H  conftest.c -lcurses   1>&5
+configure:11911: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  -DNEED_TERMCAP_H  conftest.c -lcurses   1>&5
+configure:11911: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  -DNEED_CURSES_H -DNEED_TERMCAP_H  conftest.c -lcurses   1>&5
+Curses/termcap test = maybe (C:, T:)
+configure:12008: checking declaration of tputs 3rd param
+(line 12024) testing loop variables P:int, Q:int, R:int, S: ...
+configure:12036: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c 1>&5
+configure:12117: checking if external errno is declared
+configure:12136: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:12164: checking if external errno exists
+configure:12180: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12212: checking for strerror
+configure:12240: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for atoi
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for atol
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for bcopy
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'bcopy'
+configure:12518: checking for chmod
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for closesocket
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_closesocket
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 12523 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char closesocket(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char closesocket();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_closesocket) || defined (__stub___closesocket)
+choke me
+#else
+closesocket();
+#endif
+
+; return 0; }
+configure:12518: checking for execlp
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'execlp'
+configure:12518: checking for fcntl
+configure:12518: checking for fdopen
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for fork
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'fork'
+configure:12518: checking for ftime
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for ftruncate
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for getcwd
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for gettimeofday
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for getwd
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for inet_aton
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for is_xterm
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_is_xterm
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 12523 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char is_xterm(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char is_xterm();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_is_xterm) || defined (__stub___is_xterm)
+choke me
+#else
+is_xterm();
+#endif
+
+; return 0; }
+configure:12518: checking for isascii
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'isascii'
+configure:12518: checking for link
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for lockf
+configure:12518: checking for memcmp
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'memcmp'
+configure:12518: checking for memcpy
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'memcpy'
+configure:12518: checking for memmove
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'memmove'
+configure:12518: checking for memset
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'memset'
+configure:12518: checking for mkdir
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for mkfifo
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for mktemp
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for mkstemp
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for nl_langinfo
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for poll
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for putenv
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for rewinddir
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for resizeterm
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for select
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for setenv
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for setlocale
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for settz
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_settz
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 12523 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char settz(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char settz();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_settz) || defined (__stub___settz)
+choke me
+#else
+settz();
+#endif
+
+; return 0; }
+configure:12518: checking for sigaction
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for snprintf
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'snprintf'
+configure:12518: checking for stpcpy
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'stpcpy'
+configure:12518: checking for strchr
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'strchr'
+configure:12518: checking for strcasecmp
+configure:12518: checking for strcasestr
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for strdup
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'strdup'
+configure:12518: checking for strftime
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'strftime'
+configure:12518: checking for strpbrk
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'strpbrk'
+configure:12518: checking for strrstr
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_strrstr
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 12523 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char strrstr(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char strrstr();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_strrstr) || defined (__stub___strrstr)
+choke me
+#else
+strrstr();
+#endif
+
+; return 0; }
+configure:12518: checking for strsep
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for strstr
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'strstr'
+configure:12518: checking for strtol
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for tmpfile
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for tzset
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for uname
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for unlink
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for use_default_colors
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for usleep
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for vasprintf
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for vsnprintf
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12530: warning: conflicting types for built-in function 'vsnprintf'
+configure:12518: checking for waitpid
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for tigetint
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_tigetint
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 12523 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char tigetint(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char tigetint();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_tigetint) || defined (__stub___tigetint)
+choke me
+#else
+tigetint();
+#endif
+
+; return 0; }
+configure:12518: checking for tigetnum
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12518: checking for tparam
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_tparam
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 12523 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char tparam(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char tparam();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_tparam) || defined (__stub___tparam)
+choke me
+#else
+tparam();
+#endif
+
+; return 0; }
+configure:12518: checking for tparm
+configure:12546: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12572: checking for flock
+configure:12670: checking for wide char and multibyte support
+configure:12711: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12781: checking if gettimeofday takes two arguments
+configure:12795: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure: In function 'main':
+configure:12791: warning: passing argument 2 of 'gettimeofday' from incompatible pointer type
+configure:12814: checking return type of signal handlers
+configure:12836: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:12856: checking declaration of signal arguments
+configure:12873: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:12899: checking whether sigaction needs _POSIX_SOURCE
+configure:12914: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:12935: checking if we have sigaction/related functions
+configure:12959: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:12981: checking for fork
+configure:13022: checking for memmove
+configure:13173: checking if select expects int * arguments
+configure:13195: checking whether closedir returns void
+configure:13295: checking for gai_strerror
+configure:13323: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:13295: checking for getaddrinfo
+configure:13295: checking for gethostname
+configure:13295: checking for gethostbyname
+configure:13295: checking for getservbyname
+configure:13323: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:13295: checking for inet_addr
+configure:13323: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:13295: checking for inet_ntoa
+configure:13323: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:13295: checking for strncasecmp
+configure:13323: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:13350: checking for type sigaction_t
+configure:13364: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure: In function 'main':
+configure:13360: error: 'sigaction_t' undeclared (first use in this function)
+configure:13360: error: (Each undeclared identifier is reported only once
+configure:13360: error: for each function it appears in.)
+configure:13360: error: syntax error before 'x'
+configure: failed program was:
+#line 13356 "configure"
+#include "confdefs.h"
+
+#include <signal.h>
+int main() {
+sigaction_t x
+; return 0; }
+configure:13384: checking for nonconflicting termios.h
+configure:13412: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:13443: checking for passwd.pw_gecos
+configure:13460: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure: In function 'main':
+configure:13457: warning: initialization makes integer from pointer without a cast
+configure:13480: checking for tm.tm_gmtoff
+configure:13506: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:13526: checking for long file names
+configure:13574: checking for sys/wait.h
+configure:13712: checking for union wait
+configure:13729: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+compiles ok w/o union wait
+configure:13780: checking if the system function returns usable child-status
+configure:13997: checking for redefinable signal constants
+configure:14062: checking for ANSI qsort
+configure:14080: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:14108: checking if application can dump core
+configure:14205: checking for missing errno extern
+(line 14211) testing for missing errno external ...
+configure:14230: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14222:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14222:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure: failed program was:
+#line 14216 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+
+#undef errno
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *errno();
+
+int main() {
+
+
+; return 0; }
+configure:14205: checking for missing getenv extern
+(line 14211) testing for missing getenv external ...
+configure:14230: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14222:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14222:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14226: error: conflicting types for 'getenv'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/stdlib.h:160: error: previous declaration of 'getenv' was here
+configure: failed program was:
+#line 14216 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+
+#undef getenv
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *getenv();
+
+int main() {
+
+
+; return 0; }
+configure:14205: checking for missing getlogin extern
+(line 14211) testing for missing getlogin external ...
+configure:14230: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14222:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14222:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14226: error: conflicting types for 'getlogin'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/unistd.h:420: error: previous declaration of 'getlogin' was here
+configure: failed program was:
+#line 14216 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+
+#undef getlogin
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *getlogin();
+
+int main() {
+
+
+; return 0; }
+configure:14205: checking for missing getpwnam extern
+(line 14211) testing for missing getpwnam external ...
+configure:14230: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14222:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14222:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14226: error: conflicting types for 'getpwnam'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/pwd.h:136: error: previous declaration of 'getpwnam' was here
+configure: failed program was:
+#line 14216 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+
+#undef getpwnam
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *getpwnam();
+
+int main() {
+
+
+; return 0; }
+configure:14205: checking for missing popen extern
+(line 14211) testing for missing popen external ...
+configure:14230: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14222:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14222:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14226: error: conflicting types for 'popen'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/stdio.h:334: error: previous declaration of 'popen' was here
+configure: failed program was:
+#line 14216 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+
+#undef popen
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *popen();
+
+int main() {
+
+
+; return 0; }
+configure:14205: checking for missing strchr extern
+(line 14211) testing for missing strchr external ...
+configure:14230: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14222:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14222:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14226: error: conflicting types for 'strchr'
+configure: failed program was:
+#line 14216 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+
+#undef strchr
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *strchr();
+
+int main() {
+
+
+; return 0; }
+configure:14205: checking for missing strcasestr extern
+(line 14211) testing for missing strcasestr external ...
+configure:14230: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14222:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14222:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure: failed program was:
+#line 14216 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+
+#undef strcasestr
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *strcasestr();
+
+int main() {
+
+
+; return 0; }
+configure:14205: checking for missing strsep extern
+(line 14211) testing for missing strsep external ...
+configure:14230: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14222:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14222:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure: failed program was:
+#line 14216 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+
+#undef strsep
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *strsep();
+
+int main() {
+
+
+; return 0; }
+configure:14297: checking for missing gethostbyname extern
+(line 14303) testing for missing gethostbyname external ...
+configure:14322: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14314:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14314:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14319: error: conflicting types for 'gethostbyname'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/netdb.h:267: error: previous declaration of 'gethostbyname' was here
+configure: failed program was:
+#line 14308 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+#include <tnntp.h>
+
+#undef gethostbyname
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *gethostbyname();
+
+int main() {
+
+
+; return 0; }
+configure:14297: checking for missing getservbyname extern
+(line 14303) testing for missing getservbyname external ...
+configure:14322: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14314:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14314:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14319: error: conflicting types for 'getservbyname'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/netdb.h:278: error: previous declaration of 'getservbyname' was here
+configure: failed program was:
+#line 14308 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+#include <tnntp.h>
+
+#undef getservbyname
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *getservbyname();
+
+int main() {
+
+
+; return 0; }
+configure:14297: checking for missing inet_aton extern
+(line 14303) testing for missing inet_aton external ...
+configure:14322: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14314:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14314:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure: failed program was:
+#line 14308 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+#include <tnntp.h>
+
+#undef inet_aton
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *inet_aton();
+
+int main() {
+
+
+; return 0; }
+configure:14297: checking for missing inet_ntoa extern
+(line 14303) testing for missing inet_ntoa external ...
+configure:14322: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14314:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14314:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14319: error: conflicting types for 'inet_ntoa'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/arpa/inet.h:104: error: previous declaration of 'inet_ntoa' was here
+configure: failed program was:
+#line 14308 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+#include <tnntp.h>
+
+#undef inet_ntoa
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *inet_ntoa();
+
+int main() {
+
+
+; return 0; }
+configure:14297: checking for missing socket extern
+(line 14303) testing for missing socket external ...
+configure:14322: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14314:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14314:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14319: error: conflicting types for 'socket'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/sys/socket.h:576: error: previous declaration of 'socket' was here
+configure: failed program was:
+#line 14308 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+#include <tnntp.h>
+
+#undef socket
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *socket();
+
+int main() {
+
+
+; return 0; }
+configure:14387: checking for missing tgetstr extern
+(line 14393) testing for missing tgetstr external ...
+configure:14412: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14404:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14404:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14409: error: conflicting types for 'tgetstr'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/term.h:772: error: previous declaration of 'tgetstr' was here
+configure: failed program was:
+#line 14398 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+#include <tcurses.h>
+
+#undef tgetstr
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *tgetstr();
+
+int main() {
+
+
+; return 0; }
+configure:14387: checking for missing tgoto extern
+(line 14393) testing for missing tgoto external ...
+configure:14412: arm-apple-darwin-gcc -o conftest -O2 -I./include -I./pcre  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+In file included from configure:14404:
+./include/tin.h:807:18: error: pcre.h: No such file or directory
+In file included from configure:14404:
+./include/tin.h:1687: error: syntax error before 'pcre'
+./include/tin.h:1687: warning: no semicolon at end of struct or union
+./include/tin.h:1688: warning: data definition has no type or storage class
+./include/tin.h:1689: error: syntax error before '}' token
+configure:14409: error: conflicting types for 'tgoto'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/term.h:773: error: previous declaration of 'tgoto' was here
+configure: failed program was:
+#line 14398 "configure"
+#include "confdefs.h"
+
+
+#define M_UNIX
+#define __CPROTO__
+#define HAVE_CONFDEFS_H
+#include <tin.h>
+#include <tcurses.h>
+
+#undef tgoto
+struct zowie { int a; double b; struct zowie *c; char d; };
+extern struct zowie *tgoto();
+
+int main() {
+
+
+; return 0; }
+configure:14787: checking for working TIOCGWINSZ
+configure:14870: checking for ranlib
+configure:14900: checking for working alloca.h
+configure:14912: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:14933: checking for alloca
+configure:14966: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15135: checking for unistd.h
+configure:15174: checking for getpagesize
+configure:15202: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15227: checking for working mmap
+configure:15399: checking whether we are using the GNU C Library 2.1 or newer
+configure:15406:22: error: features.h: No such file or directory
+configure:15466: checking for argz.h
+configure:15476: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15472:18: error: argz.h: No such file or directory
+configure: failed program was:
+#line 15471 "configure"
+#include "confdefs.h"
+#include <argz.h>
+configure:15466: checking for limits.h
+configure:15476: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15466: checking for locale.h
+configure:15476: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15466: checking for nl_types.h
+configure:15476: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15466: checking for malloc.h
+configure:15476: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15472:20: error: malloc.h: No such file or directory
+configure: failed program was:
+#line 15471 "configure"
+#include "confdefs.h"
+#include <malloc.h>
+configure:15466: checking for stddef.h
+configure:15476: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15466: checking for stdlib.h
+configure:15476: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15466: checking for string.h
+configure:15476: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15466: checking for unistd.h
+configure:15466: checking for sys/param.h
+configure:15476: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15507: checking for feof_unlocked
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15507: checking for fgets_unlocked
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_fgets_unlocked
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 15512 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char fgets_unlocked(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char fgets_unlocked();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_fgets_unlocked) || defined (__stub___fgets_unlocked)
+choke me
+#else
+fgets_unlocked();
+#endif
+
+; return 0; }
+configure:15507: checking for getcwd
+configure:15507: checking for getegid
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15507: checking for geteuid
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15507: checking for getgid
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15507: checking for getuid
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15507: checking for mempcpy
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15519: warning: conflicting types for built-in function 'mempcpy'
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_mempcpy
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 15512 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char mempcpy(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char mempcpy();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_mempcpy) || defined (__stub___mempcpy)
+choke me
+#else
+mempcpy();
+#endif
+
+; return 0; }
+configure:15507: checking for munmap
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15507: checking for putenv
+configure:15507: checking for setenv
+configure:15507: checking for setlocale
+configure:15507: checking for stpcpy
+configure:15507: checking for strchr
+configure:15507: checking for strcasecmp
+configure:15507: checking for strdup
+configure:15507: checking for strtoul
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15507: checking for tsearch
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15507: checking for __argz_count
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+___argz_count
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 15512 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char __argz_count(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char __argz_count();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub___argz_count) || defined (__stub_____argz_count)
+choke me
+#else
+__argz_count();
+#endif
+
+; return 0; }
+configure:15507: checking for __argz_stringify
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+___argz_stringify
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 15512 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char __argz_stringify(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char __argz_stringify();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub___argz_stringify) || defined (__stub_____argz_stringify)
+choke me
+#else
+__argz_stringify();
+#endif
+
+; return 0; }
+configure:15507: checking for __argz_next
+configure:15535: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+___argz_next
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 15512 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char __argz_next(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char __argz_next();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub___argz_next) || defined (__stub_____argz_next)
+choke me
+#else
+__argz_next();
+#endif
+
+; return 0; }
+configure:15576: checking for iconv
+configure:15594: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+/usr/local/bin/arm-apple-darwin-ld: Undefined symbols:
+_libiconv
+_libiconv_close
+_libiconv_open
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 15584 "configure"
+#include "confdefs.h"
+#include <stdlib.h>
+#include <iconv.h>
+int main() {
+iconv_t cd = iconv_open("","");
+       iconv(cd,NULL,NULL,NULL,NULL);
+       iconv_close(cd);
+; return 0; }
+configure:15616: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   -liconv 1>&5
+configure:15637: checking for iconv declaration
+configure:15662: arm-apple-darwin-gcc -c -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c 1>&5
+configure:15652: error: conflicting types for 'libiconv'
+/usr/local/lib/gcc/arm-apple-darwin/4.0.1/../../../../arm-apple-darwin/include/iconv.h:82: error: previous declaration of 'libiconv' was here
+configure: failed program was:
+#line 15643 "configure"
+#include "confdefs.h"
+
+#include <stdlib.h>
+#include <iconv.h>
+extern
+#ifdef __cplusplus
+"C"
+#endif
+#if defined(__STDC__) || defined(__cplusplus)
+size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
+#else
+size_t iconv();
+#endif
+
+int main() {
+
+; return 0; }
+configure:15691: checking for nl_langinfo and CODESET
+configure:15703: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15726: checking for LC_MESSAGES
+configure:15738: arm-apple-darwin-gcc -o conftest -O2  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500  conftest.c -lcurses   1>&5
+configure:15759: checking whether NLS is requested
+configure:15783: checking whether included gettext is requested
+configure:15804: checking for libintl.h
+configure:15814: arm-apple-darwin-gcc -E  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:15810:21: error: libintl.h: No such file or directory
+configure: failed program was:
+#line 15809 "configure"
+#include "confdefs.h"
+#include <libintl.h>
+configure:16094: checking for msgfmt
+configure:16128: checking for gmsgfmt
+configure:16165: checking for xgettext
+configure:16238: checking for bison
+configure:16271: checking version of bison
+configure:16319: checking for catalogs to be installed
+configure:16375: checking if we should use included message-library
+configure:16524: checking for working alloca.h
+configure:16557: checking for alloca
+configure:16779: checking for iconv.h
+configure:16789: arm-apple-darwin-gcc -E -I../intl  -U_XOPEN_SOURCE -D_XOPEN_SOURCE=500 conftest.c >/dev/null 2>conftest.out
+configure:16815: checking for iconv_open() //TRANSLIT extension

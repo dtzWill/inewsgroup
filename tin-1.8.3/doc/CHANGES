@@ -1,0 +1,89 @@
+-- 1.8.3 release 20070201 "Scotasay" --
+
+018) Christian Weisgerber <naddy@mips.inka.de>
+     BUG. assumed that wchar_t and wint_t are of the same size
+     FIX. tcurses.c
+
+017) Antonio Querubin <tony@lava.net>
+     BUG. missplaced ||
+     FIX. nntplib.c
+
+016) Toomas Soome <Toomas.Soome@microlink.ee>
+      ADD. updated estonian translation
+      FIX. et.po
+
+015) Michael Bienia <michael@vorlon.ping.de>
+     BUG. 'l' from the pager doesn't reposition cursor to last viewed
+          article
+     FIX. thread.c
+
+014) Urs Janssen <urs@tin.org>  
+     BUG. "Kill text pattern" form killfile menu was applied to
+          Message-ID and Rrferences instead of Message-ID only
+     BUG. FILTER_FILE_OFFSET was wrong
+     ADD. allow .ax TLD
+     FIX. tin.h, filter.c, policy.h
+
+013) Urs Janssen <urs@tin.org>
+     ADD. minor manpage tweaking
+     FIX. tin.1, tin.5
+
+012) Peter Breitenlohner <peb@mppmu.mpg.de>
+     BUG. build problem with VPATH
+     FIX. Makefile.in
+
+-- 1.8.2 release 20060425 "Shillay" --
+
+ 011) Andrey Simonenko <simon@comsys.ntu-kpi.kiev.ua>
+      ADD. updated russian translation
+      FIX. ru.po
+
+ 010) Urs Janssen <urs@tin.org>
+      BUG. possible division by zero in thread_by_percentage()
+      FIX. art.c
+
+ 009) Urs Janssen <urs@tin.org>
+      BUG. didn't reissue GROUP cmd after reconnect with authentication
+      BUG. possible buffer overflow
+      REM. unnecessary test for wcsnlen
+      ADD. cat, jobs, travel and mobi TLDs
+      FIX. aclocal.m4, policy.h, misc.c, nntplib.c
+
+ 008) Urs Janssen <urs@tin.org>
+      ADD. config.guess, config.sub update
+      FIX. config.guess, config.sub
+
+ 007) Michael Bienia <michael@vorlon.ping.de>
+      BUG. buffer overflow in convert_tex2iso in UTF-8 environment
+      FIX. charset.c
+
+-- 1.8.1 release 20060215 "Mealasta" --
+
+ 006) Aleksey Salow <aleksey.salow@gmail.com>
+      BUG. possible buffer overflow
+      FIX. mail.c
+
+ 005) Daniel Nylander <po@danielnylander.se>
+      ADD. initial swedish translation
+      FIX. sv.po
+
+ 004) Chung-chieh Shan <ken@digitas.harvard.edu>
+      BUG. bogus '/' in MAILDIR_NEW
+      FIX. misc.c
+
+ 003) Thomas E. Dickey <dickey@invisible-island.net>
+      Urs Janssen <urs@tin.org>
+      BUG. build problem on Mac OS X
+      FIX. tin.h, header.c, nntplib.c
+
+ 002) Urs Janssen <urs@tin.org>
+      ADD. config.guess, config.sub update
+      FIX. config.guess, config.sub
+
+ 001) Andrey Simonenko <simon@comsys.ntu-kpi.kiev.ua>
+      ADD. updated russian translation
+      FIX. ru.po
+
+-- 1.8.0 release 20051224 "Ronay" --
+
+For changes made till the 1.8.0 release look at CHANGES.old
