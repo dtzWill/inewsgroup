@@ -2,7 +2,7 @@
 //inewsgroup.m --wrapper/launcher for main application
 #import <UIKit/UIKit.h>
 
-//#import "UIUCMapApp.h"
+#import "iNewsApp.h"
 #import "newsfunctions.h"
 #import "datastructures.h"
 
@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	NSLog( @"Return of newmessages():%d", tinCheckForMessages() );
-	message msg;
+	out_message msg;
 	msg.subject = @"testing more";
 	msg.newsgroups = @"cs.test";
 	msg.content = @"This time it's completely automated.. no gui yet :(";
@@ -27,5 +27,5 @@ int main(int argc, char **argv)
 		tinSendMessages();	
 	}
 	NSLog( @"done" );
-	return 0;//UIApplicationMain(argc, argv, [UIUCMapApp class]);
+	return 0;//UIApplicationMain(argc, argv, [iNewsApp class]);
 }

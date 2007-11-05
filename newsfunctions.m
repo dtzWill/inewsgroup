@@ -11,7 +11,7 @@ int tinCheckForMessages()
 {
 //async-ly run tin to download new messages
 	int pid = fork();
-	char *exec_args[] = { "/var/root/bin/tin", "-rnQSc" };	
+	char * exec_args[] = { TIN, TIN_CHECKPARAMS };	
 	if ( pid < 0 ) //error
 		return -1;
 	if ( pid == 0 )//child
@@ -30,7 +30,7 @@ int tinSendMessages()
 
 //maybe check if it actually was sent..???
 	int pid = fork();
-	char *exec_args[] = { "/var/root/bin/tin", "-rnQo" };	
+	char *exec_args[] = { TIN,TIN_SENDPARAMS  };	
 	if ( pid < 0 ) //error
 		return -1;
 	if ( pid == 0 )//child
@@ -46,22 +46,24 @@ int tinSendMessages()
 }
 
 //write the message to the send queue
-void sendMessage( message msg, connection c )
+void sendMessage( out_message msg, connection c )
 {
-	char buf[200];
-
 	time_t timestamp;
 	time( &timestamp );
-
-	FILE * file = fopen( "/var/root/.tin/postponed.articles", "a" );
-	fprintf( file, "From root %s", ctime( &timestamp ) ); //includes linebreak??
-	fprintf( file, "From: %s\n", [c.from cString] );
-	fprintf( file, "Subject: %s\n", [msg.subject cString] );
-	fprintf( file, "Newsgroups: %s\n", [msg.newsgroups cString] );
-	fprintf( file, "Summary:\nKeywords:\n\n" ); //needed?
-	fprintf( file, "%s\n\n", [msg.content cString] );
-	fflush( file );
-	fclose ( file );
+	FILE * file = fopen( POSTPONEDARTICLES, "a" );
+	
+	if ( file <= 0)	perror( "error opening file");
+	else
+	{
+		fprintf( file, "From root %s", ctime( &timestamp ) ); //includes linebreak??
+		fprintf( file, "From: %s\n", [c.from cString] );
+		fprintf( file, "Subject: %s\n", [msg.subject cString] );
+		fprintf( file, "Newsgroups: %s\n", [msg.newsgroups cString] );
+		fprintf( file, "Summary:\nKeywords:\n\n" ); //needed?
+		fprintf( file, "%s\n\n", [msg.content cString] );
+		fflush( file );
+		fclose ( file );
+	}
 }
 
 

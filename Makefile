@@ -5,7 +5,7 @@ CC=gcc
 LD=$(CC)
 LDFLAGS=-Wl,-syslibroot,/usr/local/share/iphone-filesystem -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit
 
-all:    iNewsGroup 
+all:    clean iNewsGroup 
 
 iNewsGroup:  inewsgroup.o newsfunctions.o
 	$(ARMLD) $(LDFLAGS) -o $@ $^
@@ -16,7 +16,8 @@ iNewsGroup:  inewsgroup.o newsfunctions.o
 
 clean:
 	rm -f *.o iNewsGroup iNewsGroup-x86
-
+install: all
+	scp iNewsGroup root@192.168.255.2:
 #
 #
 #x86: iNewsGroup-x86

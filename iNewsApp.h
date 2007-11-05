@@ -1,0 +1,6 @@
+//Will Dietz
+//iNewsApp.h
+
+
+
+
