@@ -2,9 +2,13 @@
 //datastructures.h
 #import <Foundation/Foundation.h>
 
-const char * const TIN = "/var/root/bin/tin";
-const char * const NEWSRC = "/var/root/.newsrc";
-const char * const NNTPSERVER = "/etc/nntpserver";
+
+static char * const TIN = "/var/root/bin/tin";
+static char * const NEWSRC = "/var/root/.newsrc"; 
+static char * const NNTPSERVER = "/etc/nntpserver";
+static char * const POSTPONEDARTICLES = "/var/root/.tin/postponed.articles";
+static char * const TIN_CHECKPARAMS  = "-rnQSc";
+static char * const TIN_SENDPARAMS =  "-rnQo";
 //more!
 
 
@@ -21,14 +25,14 @@ typedef struct
 	NSString * subject;
 	NSString * newsgroups;
 	NSString * content; 	
-	char[30] date; //==ctime
+	char date[30]; //==ctime
 } out_message;
 
 enum readstatus
 {
-	unread,
-	read
-}
+	msg_unread,
+	msg_read
+};
 
 typedef struct
 {
@@ -36,6 +40,13 @@ typedef struct
 	NSString * subject;
 	NSString * content;
 	NSDate * date;
-	readstatus status;
+	enum readstatus status;
 } in_message;
+
+typedef struct
+{
+	NSArray * nodes;//could have any amount of children...
+		
+
+} groupNode, * pGroupNode;
 
