@@ -1,0 +1,2 @@
+//Will Dietz
+//NewsDefaults.m

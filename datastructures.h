@@ -12,6 +12,7 @@ static char * const TIN_SENDPARAMS =  "-rnQo";
 //more!
 
 
+//**********connection data:
 typedef struct
 {
 	NSString * server;
@@ -20,6 +21,9 @@ typedef struct
 	NSString * from; //hopefully " First Last <email@domain.com>"
 } connection;
 
+
+
+//**********messages:
 typedef struct 
 {
 	NSString * subject;
@@ -43,10 +47,16 @@ typedef struct
 	enum readstatus status;
 } in_message;
 
+
+
+//**********Structures for storing the various items in memory
 typedef struct
 {
 	NSArray * nodes;//could have any amount of children...
 		
 
 } groupNode, * pGroupNode;
+
+
+
 
