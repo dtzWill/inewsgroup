@@ -9,6 +9,9 @@
 int main(int argc, char **argv)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+//old testing code:
+/*
 	NSLog( @"Return of newmessages():%d", tinCheckForMessages() );
 	out_message msg;
 	msg.subject = @"testing more";
@@ -27,5 +30,6 @@ int main(int argc, char **argv)
 		tinSendMessages();	
 	}
 	NSLog( @"done" );
-	return 0;//UIApplicationMain(argc, argv, [iNewsApp class]);
+*/
+	return UIApplicationMain(argc, argv, [iNewsApp class]);
 }
