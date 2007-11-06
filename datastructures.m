@@ -11,12 +11,6 @@
 	[ super init];
 	_isDir = isDir;
 	_filename = [filename copy];
-//TODO:
-//	Set title to be either application name (when root)
-//	or the newsgroup name.. or the part of it we've hit thus
-// far.
-// Example:
-// "iNewsGroup" -> "class" -> "class.cs232" (etc)
 
 
 	[ self setTitle: _filename ];
@@ -30,9 +24,19 @@
 	return self;
 }
 
-- (UIView *) getView;
+- (UIView *) getView
 {
 	return _nextView;
+}
+
+- (NSString *) getFile
+{
+	return _filename;
+}
+
+- (BOOL) isDir
+{
+	return _isDir;
 }
 
 - (void) dealloc
@@ -53,13 +57,54 @@
 
 - (id) initWithFile: (NSString *) file andDelegate: delegate andParent: parent
 {
-	[ super init ];
+	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
+	rect.origin. x = rect.origin.y = 0;
+	[ super initWithFrame: rect ];
 	_delegate = delegate;
 	_parent = parent;
+
+	_file = [file copy];
+
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: _file ];
+	
+	UINavigationBar * nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
+	    0.0f, 0.0f, 320.0f, 48.0f)];
+	[nav pushNavigationItem: _titleItem];
+	[nav showButtonsWithLeftTitle:@"Back" rightTitle: nil leftBack:YES ];
+	
+	[nav setBarStyle: 0];
+	[nav setDelegate: self];
+
+	_textView = [[UITextView alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
+	    320.0f, 480.0f - 16.0f - 48.0f)];
+
+	[self addSubview: nav];
+	[self addSubview: _textView];
 	
 
+	return self;
 
 }
 
+- (void) refresh
+{
+	//[super refresh];
+	NSString * message = [[NSString alloc] initWithContentsOfFile: _file ];
+
+	[_textView setText: message ];	
+
+}
+
+- (void)navigationBar:(UINavigationBar*)bar buttonClicked:(int)which;
+{
+	if ( which == 1 ) //left
+	{
+		if ( _parent != self ) //we're not root
+		{
+			[_parent refresh]; 
+			[ _delegate setContentView: _parent ];
+		}
+	}
+}
 
 @end

@@ -10,6 +10,10 @@
 int tinCheckForMessages()
 {
 //async-ly run tin to download new messages
+
+//TODO:
+//	Check process list and don't run it /again/
+//	if already running
 	int pid = fork();
 	char * exec_args[] = { TIN, TIN_CHECKPARAMS };	
 	if ( pid < 0 ) //error
