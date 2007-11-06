@@ -58,15 +58,17 @@ typedef struct
 
 //**********Structures for storing the various items in memory
 
-@interface NewsItemView : UITextView
+@interface NewsItemView : UIView
 {
 	NSString * _file;
 	id _delegate;
+	UINavigationItem * _titleItem;
 	UIView * _parent;
+	UITextView * _textView;
 
 }
 - (id) initWithFile: (NSString *) file andDelegate: delegate andParent: parent;
-
+- (void) refresh;
 @end
 
 @interface NewsItem:  UIImageAndTextTableCell //could be actual file /or/ directory
@@ -78,7 +80,8 @@ typedef struct
 
 - (id) initWithFilename: (NSString *)filename isThatADir: (BOOL)isDir andNextView: (UIView *) nextView; 
 - (UIView *) getView;
-
+- (NSString *) getFile;
+- (BOOL) isDir;
 @end
 
 /*

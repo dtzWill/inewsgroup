@@ -50,7 +50,7 @@
 			}
 			else
 			{ 
-				item = [ [NewsItem alloc] initWithFilename: dirEnt isThatADir: isDir andNextView: self];
+				item = [ [NewsItem alloc] initWithFilename: dirEnt isThatADir: false andNextView: nil ];
 				[ _items addObject: item];
 				_rowcount++;
 			} 
@@ -63,14 +63,23 @@
 	
 	UINavigationBar * nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
+//TODO:
+//	Set title to be either application name (when root)
+//	or the newsgroup name.. or the part of it we've hit thus
+// far.
+// Example:
+// "iNewsGroup" -> "class" -> "class.cs232" (etc)
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: _path ];
 	[nav pushNavigationItem: _titleItem];
-	[nav showButtonsWithLeftTitle:@"Back" rightTitle: nil leftBack:YES ];
+	if ( _parent != self )
+	{//don't show back if at root!
+		[nav showButtonsWithLeftTitle:@"Back" rightTitle: @"Refresh" leftBack:YES ];
+	}
 	[nav setBarStyle: 0];
 	[nav setDelegate: self];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 480.0f - 16.0f - 32.0f)];
+	    320.0f, 480.0f - 16.0f - 48.0f)];
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"fileslist"
 	    identifier: @"fileslist" width: 320.0f];
 	
@@ -89,6 +98,7 @@
 -(void)refresh
 {
 //nothing useful for now
+//	[super refresh];
 	[_table reloadData];
 }; 
 
@@ -96,7 +106,7 @@
 //Methods to make table work...:
 - (int) numberOfRowsInTable: (UITable *)table
 {
-	NSLog ( @"numRows called: %d", _rowcount );
+	//NSLog ( @"numRows called: %d", _rowcount );
     return  _rowcount ;
 }
 
@@ -115,7 +125,18 @@
 - (void)tableRowSelected:(NSNotification *)notification {
 //  NSLog(@"tableRowSelected!");
 
-	UIView * view = [ [ _items objectAtIndex: [ _table selectedRow ] ] getView ];
+	NewsItem * item = [ _items objectAtIndex: [ _table selectedRow ] ]; 
+	UIView * view = [item getView ];
+	if ( view == nil && ![item isDir ] )
+	{
+		NSString * full_path = [ _path stringByAppendingPathComponent: [item getFile] ];
+		view = [[NewsItemView alloc] initWithFile: full_path andDelegate: _delegate andParent: self];
+	} 
+//	if ( view == nil );
+
+
+//				UIView * view = [[ NewsItemView alloc] initWithFile: full_path andDelegate: delegate andParent: self ];	
+	[ view refresh ];
 	[ _delegate setContentView: view ];
 }
 /*
@@ -133,8 +154,15 @@
 	{
 		if ( _parent != self ) //we're not root
 		{
+			[_parent refresh]; 
 			[ _delegate setContentView: _parent ];
 		}
+	}
+	else
+	{
+		tinCheckForMessages();
+
+
 	}
 }
 
