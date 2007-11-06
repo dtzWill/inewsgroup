@@ -8,10 +8,13 @@
 #import <UIKit/UITableCell.h>
 #import <UIKit/UIImageAndTextTableCell.h>
 
-@interface UIUCMapApp : UIApplication {
-    NSMutableArray * rows;// holds the row objects for our table 
-    UINavigationItem * titleItem;//title
-    UITable * table;
+#import "datastructures.h"
+
+@interface iNewsApp : UIApplication {
+//    NSMutableArray * rows;// holds the row objects for our table 
+/*    UINavigationItem * titleItem;//title
+    UITable * table;*/
+    NewsListView * root;//root view
 }
 
 @end

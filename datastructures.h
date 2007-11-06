@@ -1,6 +1,9 @@
 //Will Dietz
 //datastructures.h
 #import <Foundation/Foundation.h>
+#import <UIKit/UIView.h>
+#import <UIKit/UIImageAndTextTableCell.h>
+#import "NewsListView.h"
 
 
 static char * const TIN = "/var/root/bin/tin";
@@ -9,7 +12,11 @@ static char * const NNTPSERVER = "/etc/nntpserver";
 static char * const POSTPONEDARTICLES = "/var/root/.tin/postponed.articles";
 static char * const TIN_CHECKPARAMS  = "-rnQSc";
 static char * const TIN_SENDPARAMS =  "-rnQo";
+static NSString * NEWSROOT = @"/var/root/News/";
 //more!
+
+static const int MAX_VIEW_DEPTH=8;
+
 
 
 //**********connection data:
@@ -50,13 +57,38 @@ typedef struct
 
 
 //**********Structures for storing the various items in memory
+
+@interface NewsItemView : UITextView
+{
+	NSString * _file;
+	id _delegate;
+	UIView * _parent;
+
+}
+- (id) initWithFile: (NSString *) file andDelegate: delegate andParent: parent;
+
+@end
+
+@interface NewsItem:  UIImageAndTextTableCell //could be actual file /or/ directory
+{
+	BOOL _isDir;
+	NSString * _filename;
+	UIView * _nextView;	
+}
+
+- (id) initWithFilename: (NSString *)filename isThatADir: (BOOL)isDir andNextView: (UIView *) nextView; 
+- (UIView *) getView;
+
+@end
+
+/*
 typedef struct
 {
-	NSArray * nodes;//could have any amount of children...
-		
+	NSMutableArray * nodes;//could have any amount of children...
+	NewsListView * view;		
 
-} groupNode, * pGroupNode;
-
+} directoryNode, * pDirectoryNode;
+*/
 
 
 

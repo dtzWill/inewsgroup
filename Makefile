@@ -7,7 +7,7 @@ LDFLAGS=-Wl,-syslibroot,/usr/local/share/iphone-filesystem -lobjc -ObjC -framewo
 
 all:    clean iNewsGroup 
 
-iNewsGroup:  inewsgroup.o newsfunctions.o
+iNewsGroup:  iNewsApp.o NewsDefaults.o datastructures.o NewsListView.o inewsgroup.o newsfunctions.o
 	$(ARMLD) $(LDFLAGS) -o $@ $^
 #	cp UIUCMapApp UIUCMap.app
 
