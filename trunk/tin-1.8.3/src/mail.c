@@ -47,7 +47,7 @@
  */
 static FILE *open_newsgroups_fp(void);
 static void read_groups_descriptions(FILE *fp, FILE *fp_save);
-static void read_newsgroups_file(t_bool verb);
+//static void read_newsgroups_file(t_bool verb);
 #ifdef HAVE_MH_MAIL_HANDLING
 	static FILE *open_mail_active_fp(const char *mode);
 	static FILE *open_mailgroups_fp(void);
@@ -286,7 +286,7 @@ open_newsgroups_fp(
  * Load the text description from NEWSLIBDIR/newsgroups for each group into the
  * active[] array. Save a copy locally if reading via NNTP to save bandwidth.
  */
-static void
+void //static
 read_newsgroups_file(
 	t_bool verb)
 {
