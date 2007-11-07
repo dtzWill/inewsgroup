@@ -15,6 +15,7 @@
 #import <UIKit/UITableColumn.h>
 #import "iNewsApp.h"
 //#import "NewsListView.h"
+#import "newsfunctions.h"
 
 @implementation iNewsApp
 
@@ -26,8 +27,12 @@
 	rect.origin. x = rect.origin.y = 0;
 	window = [[UIWindow alloc] initWithContentRect: rect];
 
+
+	init_server();
+	readNewsRC();
+	NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
 	//build tree of current news.... and create views
-//	root = [ [NewsListView alloc] initWithFrame: rect withRoot: NEWSROOT andDelegate: window ];
+//	root = [ [NewsListView alloc] initWithFrame: rect andDelegate: window ];
 
 //	NSLog( @"Created views!" );
 /*
@@ -73,7 +78,23 @@
 
 //	[window setContentView: root];
 //	NSLog( @"Done with applicationDidFinishLaunching" ); 
+/*
+	if ( init_server() )
+	{
+		NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
+		//[root refresh];
+	}
+	else
+	{//error!
+		NSLog( @"Error connecting. If this is your frist time using iNewsGroup make suer to set your user/pass/server correctly" );
 	
+	}
+*/
+	init_server();
+	readNewsRC();
+	NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
+
+
 }
 
 /*

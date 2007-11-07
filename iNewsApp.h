@@ -9,12 +9,13 @@
 #import <UIKit/UIImageAndTextTableCell.h>
 
 #import "datastructures.h"
+#import "iNewsApp.h"
 
 @interface iNewsApp : UIApplication {
-//    NSMutableArray * rows;// holds the row objects for our table 
-/*    UINavigationItem * titleItem;//title
-    UITable * table;*/
- //   NewsListView * root;//root view
+    NSMutableArray * rows;// holds the row objects for our table 
+    UINavigationItem * titleItem;//title
+//    UITable * table;
+//    NewsListView * root;//root view
 }
 
 @end

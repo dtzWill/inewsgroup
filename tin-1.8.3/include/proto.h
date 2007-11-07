@@ -288,6 +288,7 @@ extern void print_group_line(FILE *fp, const char *group_name, long art_max, lon
 extern void read_descriptions(t_bool verb);
 extern void grp_del_mail_arts(struct t_group *group);
 extern void grp_del_mail_art(struct t_article *article);
+extern void read_newsgroups_file(t_bool verb);
 #ifdef HAVE_MH_MAIL_HANDLING
 	extern void read_mail_active_file(void);
 	extern void write_mail_active_file(void);
