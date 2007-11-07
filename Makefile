@@ -10,7 +10,7 @@ TINLIB = ./libtin.a
 PCRELIB = tin-1.8.3/pcre/libpcre.a 
 INTLLIB = tin-1.8.3/intl/libintl.a -liconv
 
-all:    clean iNewsGroup 
+all:    local_clean iNewsGroup 
 
 iNewsGroup:  $(TINLIB)  iNewsApp.o  datastructures.o  inewsgroup.o newsfunctions.o
 	$(ARMLD) $(LDFLAGS) -o $@ $(PCRELIB) $(INTLLIB) -lcurses $(TINLIB) $^
@@ -22,7 +22,10 @@ iNewsGroup:  $(TINLIB)  iNewsApp.o  datastructures.o  inewsgroup.o newsfunctions
 $(TINLIB):
 	cd $(TINDIR) && make
 
-clean:
+clean: local_clean
+	rm -f libtin.a
+	cd $(TINDIR) && make clean
+local_clean:
 	rm -f *.o iNewsGroup iNewsGroup-x86
 install: all
 	scp iNewsGroup root@192.168.255.2:
