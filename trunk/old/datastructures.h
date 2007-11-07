@@ -1,14 +1,9 @@
 //Will Dietz
 //datastructures.h
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <UIKit/UIView.h>
 #import <UIKit/UIImageAndTextTableCell.h>
-#import <objc/Object.h>
-//#import <UIKit/UINavigationBar.h>
-//#import <UIKit/UINavigationItem.h>
-//#import <UIKit/UIView.h>
-//#import <UIKit/UITextView.h>
-//#import "NewsListView.h"
+#import "NewsListView.h"
 
 /*
 static char * const TIN = "/var/root/bin/tin";
@@ -33,31 +28,16 @@ typedef enum
 } readstatus;
 
 //**********connection data:
-@interface connection : Object
+typedef struct
 {
-	NSString * _server;//name or ip, both work fine
-	NSString * _username;
-	NSString * _password; 
-	NSString * _from; //hopefully " First Last <email@domain.com>"
-	NSMutableArray * _groups;//all known groups
-	NSMutableArray * _outGoingMessages;
-	int connected;
-}
+	NSString * server;//name or ip, both work fine
+	NSString * username;
+	NSString * password; 
+	NSString * from; //hopefully " First Last <email@domain.com>"
+	NSMutableArray * groups;//all known groups
+	NSMutableArray * outGoingMessages;
+} connection;
 
-- (void) init;
-
-- (NSMutableArray *) sendMessages;
-- (void) refresh; 
-//accessor methods:
-- (void) setServer: (NSString *) server;
-- (int) setAuthWithUsername: (NSString *) user andPass: (NSString *) pass;
-- (void) setFrom: (NSString * ) from;
-- (NSMutableArray *) getGroups;
-- (NSMutableArray *) getOutgoingMessages;
-- (int) isConnected;
-
-
-@end
 
 //**********group data:
 typedef struct
@@ -72,14 +52,14 @@ typedef struct
 
 
 //**********message on server:
-@interface InMessage : Object
+@implementation InMessage : Object
 {
 	NSString * newsgroup;//treat cross-posted items as different messages
 	NSString * subject;
 	NSString * content;
 	NSDate * date;
 	NSString * from;//who is /said/ to have sent it
-	readstatus status;
+	enum readstatus status;
 }
 
 - (id) init;
@@ -90,7 +70,7 @@ typedef struct
 
 //**********outgoing message:
 
-@interface OutMessage: Object
+@implementation OutMessage: Object
 {
 	NSString * subject;
 	NSString * newsgroups;
@@ -99,11 +79,9 @@ typedef struct
 	//sender header by server.. hopefully
 	//	
 	char date[30]; //==ctime
-}
+} out_message;
 
-- (id) init;
 
-@end
 
 //**********UI Datastructures
 

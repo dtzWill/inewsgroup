@@ -14,7 +14,7 @@
 #import <UIKit/UITableCell.h>
 #import <UIKit/UITableColumn.h>
 #import "iNewsApp.h"
-#import "NewsListView.h"
+//#import "NewsListView.h"
 
 @implementation iNewsApp
 
@@ -27,7 +27,7 @@
 	window = [[UIWindow alloc] initWithContentRect: rect];
 
 	//build tree of current news.... and create views
-	root = [ [NewsListView alloc] initWithFrame: rect withRoot: NEWSROOT andDelegate: window ];
+//	root = [ [NewsListView alloc] initWithFrame: rect withRoot: NEWSROOT andDelegate: window ];
 
 //	NSLog( @"Created views!" );
 /*
@@ -71,7 +71,7 @@
 	mainView = [[UIView alloc] initWithFrame: rect];
 */
 
-	[window setContentView: root];
+//	[window setContentView: root];
 //	NSLog( @"Done with applicationDidFinishLaunching" ); 
 	
 }

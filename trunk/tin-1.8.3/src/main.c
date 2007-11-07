@@ -69,336 +69,336 @@ static void update_index_files(void);
 static void usage(char *theProgname);
 
 
-/*
- * OK lets start the ball rolling...
- */
-int
-main(
-	int argc,
-	char *argv[])
-{
-	int count;
-	int num_cmd_line_groups;
-	int start_groupnum = 0;
-	t_bool tmp_no_write;
-
-	cmd_line = TRUE;
-
-	/* initialize locale support */
-#if defined(HAVE_SETLOCALE) && !defined(NO_LOCALE)
-	if (setlocale(LC_ALL, "")) {
-#	ifdef ENABLE_NLS
-		bindtextdomain(PACKAGE, LOCALEDIR);
-		textdomain(PACKAGE);
-#	endif /* ENABLE_NLS */
-	} else {
-		error_message(txt_error_locale);
-		//sleep(2);
-	}
-#endif /* HAVE_SETLOCALE && !NO_LOCALE */
-
-	set_signal_handlers();
-
-	debug = 0;	/* debug OFF */
-
-	base_name(argv[0], tin_progname);
-#ifdef VMS
-	argv[0] = tin_progname;
-#endif /* VMS */
-
-#ifdef NNTP_ONLY
-	read_news_via_nntp = TRUE;
-#else
-	/*
-	 * If called as rtin, read news remotely via NNTP
-	 */
-	if (tin_progname[0] == 'r') {
-#	ifdef NNTP_ABLE
-		read_news_via_nntp = TRUE;
-#	else
-		error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
-		giveup();
-#	endif /* NNTP_ABLE */
-	}
-#endif /* NNTP_ONLY */
-
-	/*
-	 * Set up initial array sizes, char *'s: homedir, newsrc, etc.
-	 */
-	init_alloc();
-	hash_init();
-	init_selfinfo();
-	init_group_hash();
-	setup_default_keys(); /* preinit keybindings */
-
-	/*
-	 * Read user local & global config files
-	 * These override the compiled in defaults
-	 */
-	read_config_file(global_config_file, TRUE);
-	read_config_file(local_config_file, FALSE);
-
-	/*
-	 * Process envargs & command line options
-	 * These override the configured in values
-	 */
-	read_cmd_line_options(argc, argv);
-
-	tmp_no_write = no_write; /* keep no_write */
-	no_write = TRUE;		/* don't allow any writing back during startup */
-
-	if (!batch_mode) {
-#ifdef M_UNIX
-#	ifndef USE_CURSES
-		if (!get_termcaps()) {
-			error_message(_(txt_screen_init_failed), tin_progname);
-			giveup();
-		}
-#	endif /* !USE_CURSES */
-#endif /* M_UNIX */
-
-		/*
-		 * Init curses emulation
-		 */
-		if (!InitScreen()) {
-			error_message(_(txt_screen_init_failed), tin_progname);
-			giveup();
-		}
-
-		EndInverse();
-
-		/*
-		 * This depends on various things in tinrc
-		 */
-		setup_screen();
-	}
-
-	if (!batch_mode || verbose)
-		wait_message(0, "%s\n", cvers);
-
-	/*
-	 * Connect to nntp server?
-	 */
-	nntp_server = getserverbyfile(NNTP_SERVER_FILE);
-	if (read_news_via_nntp && !read_saved_news && nntp_open())
-		giveup();
-
-	read_server_config();
-
-	/*
-	 * exit early - unfortunately we can't do that in read_cmd_line_options()
-	 * as nntp_caps.over_cmd is set in nntp_open()
-	 */
-	if (update_index && nntp_caps.over_cmd && !tinrc.cache_overview_files) {
-		error_message(_(txt_batch_update_unavail), tin_progname);
-		giveup();
-	}
-
-	/*
-	 * Check if overview indexes contain Xref: lines
-	 */
-	if (nntp_caps.over_cmd)
-		xref_supported = overview_xref_support();
-
-#ifdef DEBUG_NEWSRC
-	{
-		char file[PATH_LEN];
-
-		joinpath(file, TMPDIR, "BITMAP");
-		unlink(file);
-#	if 0
-		newsrc_test_harness();
-#	endif /* 0 */
-	}
-#endif /* DEBUG_NEWSRC */
-
-	/*
-	 * avoid empty regexp, we also need to do this in batch_mode
-	 * as read_overview() calls eat_re() which uses a regexp to
-	 * modify the subject *sigh*
-	 */
-	postinit_regexp();
-
-	if (!(batch_mode || post_postponed_and_exit)) {
-		/*
-		 * Read user specific keybindings and input history
-		 */
-		wait_message(0, _(txt_reading_keymap_file));
-		read_keymap_file();
-		read_input_history_file();
-
-		/*
-		 * Load the mail & news active files into active[]
-		 *
-		 * create_save_active_file cannot write to active.save
-		 * if no_write != FALSE, so restore original value temporarily
-		 */
-		if (read_saved_news) {
-			no_write = tmp_no_write;
-			create_save_active_file();
-			no_write = TRUE;
-		}
-	}
-
-#ifdef HAVE_MH_MAIL_HANDLING
-	read_mail_active_file();
-#endif /* HAVE_MH_MAIL_HANDLING */
-
-	/*
-	 * Initialise active[] and add new newsgroups to start of my_group[]
-	 * also reads attributes
-	 */
-	selmenu.max = 0;
-	/*
-	 * we need to restore the original no_write mode to be able to handle
-	 * $AUTOSUBSCRIBE groups
-	 */
-	no_write = tmp_no_write;
-	read_news_active_file();
-#ifdef DEBUG
-	debug_print_active();
-#endif /* DEBUG */
-
-	/*
-	 * Read in users filter preferences file. This has to be done before
-	 * quick post because the filters might be updated.
-	 */
-	filtered_articles = read_filter_file(filter_file);
-
-	no_write = TRUE;
-#ifdef DEBUG
-	debug_print_filters();
-#endif /* DEBUG */
-
-	/*
-	 * Quick post an article and exit if -w or -o specified
-	 */
-	if (post_article_and_exit || post_postponed_and_exit) {
-		no_write = tmp_no_write; /* restore original value */
-		quick_post_article(post_postponed_and_exit);
-		wait_message(2, _(txt_exiting));
-		no_write = TRUE; /* disable newsrc updates */
-		tin_done(EXIT_SUCCESS);
-	}
-
-	/* TODO: replace hardcoded key-name in txt_info_postponed */
-	if ((count = count_postponed_articles()))
-		wait_message(3, _(txt_info_postponed), count, PLURAL(count, txt_article));
-
-	/*
-	 * Read text descriptions for mail and/or news groups
-	 */
-	if (show_description && !batch_mode) {
-		no_write = tmp_no_write; /* restore original value */
-		read_descriptions(TRUE);
-		no_write = TRUE; /* disable newsrc updates */
-	}
-
-	/*
-	 * TODO: what has write_config_file() to do with create_mail_save_dirs ()
-	 */
-	if (create_mail_save_dirs())
-		write_config_file(local_config_file);
-
-	/*
-	 * Preloads active[] with command line groups. They will follow any
-	 * new newsgroups
-	 */
-	num_cmd_line_groups = read_cmd_line_groups();
-
-	backup_newsrc();
-
-	/*
-	 * Load my_groups[] from the .newsrc file. We append these groups to any
-	 * new newsgroups and command line newsgroups already loaded. Also does
-	 * auto-subscribe to groups specified in /usr/lib/news/subscriptions
-	 * locally or via NNTP if reading news remotely (LIST SUBSCRIPTIONS)
-	 */
-	/*
-	 * TODO:
-	 * if (num_cmd_line_groups != 0 && check_any_unread)
-	 * don't read newsrc.
-	 * This makes -Z handle command line newsgroups. Test & document
-	 */
-	read_newsrc_lines = read_newsrc(newsrc, FALSE);
-	no_write = tmp_no_write; /* restore old value */
-
-	/*
-	 * We have to show all groups with command line groups
-	 */
-	if (num_cmd_line_groups)
-		tinrc.show_only_unread_groups = FALSE;
-	else
-		toggle_my_groups(NULL);
-
-	/*
-	 * Check/start if any new/unread articles
-	 */
-	if (check_any_unread)
-		tin_done(check_start_save_any_news(CHECK_ANY_NEWS, catchup));
-
-	if (start_any_unread) {
-		batch_mode = TRUE;			/* Suppress some unwanted on-screen garbage */
-		if ((start_groupnum = check_start_save_any_news(START_ANY_NEWS, catchup)) == -1)
-			giveup();				/* No new/unread news so exit */
-		batch_mode = FALSE;
-	}
-
-	/*
-	 * Mail any new articles to specified user
-	 * or
-	 * Save any new articles to savedir structure for later reading
-	 *
-	 * TODO: should we temporarely set
-	 *       getart_limit=-1,thread_arts=0,sort_art_type=0
-	 *       for speed reasons?
-	 */
-	if (mail_news || save_news) {
-		check_start_save_any_news(mail_news ? MAIL_ANY_NEWS : SAVE_ANY_NEWS, catchup);
-		tin_done(EXIT_SUCCESS);
-	}
-
-	/*
-	 * Catchup newsrc file (-c option)
-	 */
-	if (batch_mode && catchup && !update_index) {
-		catchup_newsrc_file();
-		tin_done(EXIT_SUCCESS);
-	}
-
-	/*
-	 * Update index files (-u option), also does catchup if requested
-	 */
-	if (update_index)
-		update_index_files();
-
-	/*
-	 * the code below this point can't be reached in batch mode
-	 */
-
-	/*
-	 * If first time print welcome screen
-	 */
-	if (created_rcdir)
-		show_intro_page();
-
-#ifdef XFACE_ABLE
-	if (tinrc.use_slrnface && !batch_mode)
-		slrnface_start();
-#endif /* XFACE_ABLE */
-
-#ifdef USE_CURSES
-	/* Turn scrolling off now the startup messages have been displayed */
-	scrollok(stdscr, FALSE);
-#endif /* USE_CURSES */
-
-	/*
-	 * Work loop
-	 */
-	selection_page(start_groupnum, num_cmd_line_groups);
-	/* NOTREACHED */
-	return 0;
-}
+///*
+// * OK lets start the ball rolling...
+// */
+//int
+//main(
+//	int argc,
+//	char *argv[])
+//{
+//	int count;
+//	int num_cmd_line_groups;
+//	int start_groupnum = 0;
+//	t_bool tmp_no_write;
+//
+//	cmd_line = TRUE;
+//
+//	/* initialize locale support */
+//#if defined(HAVE_SETLOCALE) && !defined(NO_LOCALE)
+//	if (setlocale(LC_ALL, "")) {
+//#	ifdef ENABLE_NLS
+//		bindtextdomain(PACKAGE, LOCALEDIR);
+//		textdomain(PACKAGE);
+//#	endif /* ENABLE_NLS */
+//	} else {
+//		error_message(txt_error_locale);
+//		//sleep(2);
+//	}
+//#endif /* HAVE_SETLOCALE && !NO_LOCALE */
+//
+//	set_signal_handlers();
+//
+//	debug = 0;	/* debug OFF */
+//
+//	base_name(argv[0], tin_progname);
+//#ifdef VMS
+//	argv[0] = tin_progname;
+//#endif /* VMS */
+//
+//#ifdef NNTP_ONLY
+//	read_news_via_nntp = TRUE;
+//#else
+//	/*
+//	 * If called as rtin, read news remotely via NNTP
+//	 */
+//	if (tin_progname[0] == 'r') {
+//#	ifdef NNTP_ABLE
+//		read_news_via_nntp = TRUE;
+//#	else
+//		error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
+//		giveup();
+//#	endif /* NNTP_ABLE */
+//	}
+//#endif /* NNTP_ONLY */
+//
+//	/*
+//	 * Set up initial array sizes, char *'s: homedir, newsrc, etc.
+//	 */
+//	init_alloc();
+//	hash_init();
+//	init_selfinfo();
+//	init_group_hash();
+//	setup_default_keys(); /* preinit keybindings */
+//
+//	/*
+//	 * Read user local & global config files
+//	 * These override the compiled in defaults
+//	 */
+//	read_config_file(global_config_file, TRUE);
+//	read_config_file(local_config_file, FALSE);
+//
+//	/*
+//	 * Process envargs & command line options
+//	 * These override the configured in values
+//	 */
+//	read_cmd_line_options(argc, argv);
+//
+//	tmp_no_write = no_write; /* keep no_write */
+//	no_write = TRUE;		/* don't allow any writing back during startup */
+//
+//	if (!batch_mode) {
+//#ifdef M_UNIX
+//#	ifndef USE_CURSES
+//		if (!get_termcaps()) {
+//			error_message(_(txt_screen_init_failed), tin_progname);
+//			giveup();
+//		}
+//#	endif /* !USE_CURSES */
+//#endif /* M_UNIX */
+//
+//		/*
+//		 * Init curses emulation
+//		 */
+//		if (!InitScreen()) {
+//			error_message(_(txt_screen_init_failed), tin_progname);
+//			giveup();
+//		}
+//
+//		EndInverse();
+//
+//		/*
+//		 * This depends on various things in tinrc
+//		 */
+//		setup_screen();
+//	}
+//
+//	if (!batch_mode || verbose)
+//		wait_message(0, "%s\n", cvers);
+//
+//	/*
+//	 * Connect to nntp server?
+//	 */
+//	nntp_server = getserverbyfile(NNTP_SERVER_FILE);
+//	if (read_news_via_nntp && !read_saved_news && nntp_open())
+//		giveup();
+//
+//	read_server_config();
+//
+//	/*
+//	 * exit early - unfortunately we can't do that in read_cmd_line_options()
+//	 * as nntp_caps.over_cmd is set in nntp_open()
+//	 */
+//	if (update_index && nntp_caps.over_cmd && !tinrc.cache_overview_files) {
+//		error_message(_(txt_batch_update_unavail), tin_progname);
+//		giveup();
+//	}
+//
+//	/*
+//	 * Check if overview indexes contain Xref: lines
+//	 */
+//	if (nntp_caps.over_cmd)
+//		xref_supported = overview_xref_support();
+//
+//#ifdef DEBUG_NEWSRC
+//	{
+//		char file[PATH_LEN];
+//
+//		joinpath(file, TMPDIR, "BITMAP");
+//		unlink(file);
+//#	if 0
+//		newsrc_test_harness();
+//#	endif /* 0 */
+//	}
+//#endif /* DEBUG_NEWSRC */
+//
+//	/*
+//	 * avoid empty regexp, we also need to do this in batch_mode
+//	 * as read_overview() calls eat_re() which uses a regexp to
+//	 * modify the subject *sigh*
+//	 */
+//	postinit_regexp();
+//
+//	if (!(batch_mode || post_postponed_and_exit)) {
+//		/*
+//		 * Read user specific keybindings and input history
+//		 */
+//		wait_message(0, _(txt_reading_keymap_file));
+//		read_keymap_file();
+//		read_input_history_file();
+//
+//		/*
+//		 * Load the mail & news active files into active[]
+//		 *
+//		 * create_save_active_file cannot write to active.save
+//		 * if no_write != FALSE, so restore original value temporarily
+//		 */
+//		if (read_saved_news) {
+//			no_write = tmp_no_write;
+//			create_save_active_file();
+//			no_write = TRUE;
+//		}
+//	}
+//
+//#ifdef HAVE_MH_MAIL_HANDLING
+//	read_mail_active_file();
+//#endif /* HAVE_MH_MAIL_HANDLING */
+//
+//	/*
+//	 * Initialise active[] and add new newsgroups to start of my_group[]
+//	 * also reads attributes
+//	 */
+//	selmenu.max = 0;
+//	/*
+//	 * we need to restore the original no_write mode to be able to handle
+//	 * $AUTOSUBSCRIBE groups
+//	 */
+//	no_write = tmp_no_write;
+//	read_news_active_file();
+//#ifdef DEBUG
+//	debug_print_active();
+//#endif /* DEBUG */
+//
+//	/*
+//	 * Read in users filter preferences file. This has to be done before
+//	 * quick post because the filters might be updated.
+//	 */
+//	filtered_articles = read_filter_file(filter_file);
+//
+//	no_write = TRUE;
+//#ifdef DEBUG
+//	debug_print_filters();
+//#endif /* DEBUG */
+//
+//	/*
+//	 * Quick post an article and exit if -w or -o specified
+//	 */
+//	if (post_article_and_exit || post_postponed_and_exit) {
+//		no_write = tmp_no_write; /* restore original value */
+//		quick_post_article(post_postponed_and_exit);
+//		wait_message(2, _(txt_exiting));
+//		no_write = TRUE; /* disable newsrc updates */
+//		tin_done(EXIT_SUCCESS);
+//	}
+//
+//	/* TODO: replace hardcoded key-name in txt_info_postponed */
+//	if ((count = count_postponed_articles()))
+//		wait_message(3, _(txt_info_postponed), count, PLURAL(count, txt_article));
+//
+//	/*
+//	 * Read text descriptions for mail and/or news groups
+//	 */
+//	if (show_description && !batch_mode) {
+//		no_write = tmp_no_write; /* restore original value */
+//		read_descriptions(TRUE);
+//		no_write = TRUE; /* disable newsrc updates */
+//	}
+//
+//	/*
+//	 * TODO: what has write_config_file() to do with create_mail_save_dirs ()
+//	 */
+//	if (create_mail_save_dirs())
+//		write_config_file(local_config_file);
+//
+//	/*
+//	 * Preloads active[] with command line groups. They will follow any
+//	 * new newsgroups
+//	 */
+//	num_cmd_line_groups = read_cmd_line_groups();
+//
+//	backup_newsrc();
+//
+//	/*
+//	 * Load my_groups[] from the .newsrc file. We append these groups to any
+//	 * new newsgroups and command line newsgroups already loaded. Also does
+//	 * auto-subscribe to groups specified in /usr/lib/news/subscriptions
+//	 * locally or via NNTP if reading news remotely (LIST SUBSCRIPTIONS)
+//	 */
+//	/*
+//	 * TODO:
+//	 * if (num_cmd_line_groups != 0 && check_any_unread)
+//	 * don't read newsrc.
+//	 * This makes -Z handle command line newsgroups. Test & document
+//	 */
+//	read_newsrc_lines = read_newsrc(newsrc, FALSE);
+//	no_write = tmp_no_write; /* restore old value */
+//
+//	/*
+//	 * We have to show all groups with command line groups
+//	 */
+//	if (num_cmd_line_groups)
+//		tinrc.show_only_unread_groups = FALSE;
+//	else
+//		toggle_my_groups(NULL);
+//
+//	/*
+//	 * Check/start if any new/unread articles
+//	 */
+//	if (check_any_unread)
+//		tin_done(check_start_save_any_news(CHECK_ANY_NEWS, catchup));
+//
+//	if (start_any_unread) {
+//		batch_mode = TRUE;			/* Suppress some unwanted on-screen garbage */
+//		if ((start_groupnum = check_start_save_any_news(START_ANY_NEWS, catchup)) == -1)
+//			giveup();				/* No new/unread news so exit */
+//		batch_mode = FALSE;
+//	}
+//
+//	/*
+//	 * Mail any new articles to specified user
+//	 * or
+//	 * Save any new articles to savedir structure for later reading
+//	 *
+//	 * TODO: should we temporarely set
+//	 *       getart_limit=-1,thread_arts=0,sort_art_type=0
+//	 *       for speed reasons?
+//	 */
+//	if (mail_news || save_news) {
+//		check_start_save_any_news(mail_news ? MAIL_ANY_NEWS : SAVE_ANY_NEWS, catchup);
+//		tin_done(EXIT_SUCCESS);
+//	}
+//
+//	/*
+//	 * Catchup newsrc file (-c option)
+//	 */
+//	if (batch_mode && catchup && !update_index) {
+//		catchup_newsrc_file();
+//		tin_done(EXIT_SUCCESS);
+//	}
+//
+//	/*
+//	 * Update index files (-u option), also does catchup if requested
+//	 */
+//	if (update_index)
+//		update_index_files();
+//
+//	/*
+//	 * the code below this point can't be reached in batch mode
+//	 */
+//
+//	/*
+//	 * If first time print welcome screen
+//	 */
+//	if (created_rcdir)
+//		show_intro_page();
+//
+//#ifdef XFACE_ABLE
+//	if (tinrc.use_slrnface && !batch_mode)
+//		slrnface_start();
+//#endif /* XFACE_ABLE */
+//
+//#ifdef USE_CURSES
+//	/* Turn scrolling off now the startup messages have been displayed */
+//	scrollok(stdscr, FALSE);
+//#endif /* USE_CURSES */
+//
+//	/*
+//	 * Work loop
+//	 */
+//	selection_page(start_groupnum, num_cmd_line_groups);
+//	/* NOTREACHED */
+//	return 0;
+//}
 
 
 /*

@@ -130,6 +130,7 @@ submit_inews(
 		if (ptr - line == 4 && !strncasecmp(line, "From", 4)) {
 			STRCPY(from_name, line);
 			//fake the 'sender' to mimic the from.....
+			//Will
 			snprintf(sender_hdr, sizeof(sender_hdr), "Sender: %s", ptr);
 		}
 

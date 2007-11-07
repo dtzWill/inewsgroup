@@ -42,6 +42,14 @@
 #ifndef TIN_H
 #define TIN_H 1
 
+
+//ouch
+//Will
+#ifndef INT_DEBUG
+#define INT_DEBUG
+int debug;
+#endif
+
 #ifdef HAVE_CONFIG_H
 #	ifndef TIN_AUTOCONF_H
 #		include	<autoconf.h>	/* FIXME: normally we use 'config.h' */
@@ -51,7 +59,6 @@
 #		include	"oldconfig.h"
 #	endif /* !HAVE_CONFDEFS_H */
 #endif /* HAVE_CONFIG_H */
-
 
 /*
  * this causes trouble on Linux (forces nameserver lookups even for local

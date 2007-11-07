@@ -72,7 +72,7 @@ X		= $(BUILD_EXEEXT)
 CANLIB		= # -L../libcanlock -lcanlock
 INTL_LIBS	= $(top_builddir)/intl/libintl.a -liconv
 PCRE_LIBS	=   -L../pcre -lpcre
-LIBS		= -lcurses   -liconv
+LIBS		= -liconv -lcurses   -liconv
 LINK_LIBS	= $(PCRE_LIBS) $(CANLIB) -lcurses   -liconv  $(INTL_LIBS)
 
 # Where do you want the binary & manual page installed?
@@ -216,8 +216,8 @@ OFILES	=  $(EXTRAOBJS) \
 	$(OBJDIR)/color$o \
 	$(OBJDIR)/config$o \
 	$(OBJDIR)/cook$o \
-	$(OBJDIR)/curses$o \
 	$(OBJDIR)/debug$o \
+	$(OBJDIR)/curses$o \
 	$(OBJDIR)/envarg$o \
 	$(OBJDIR)/feed$o \
 	$(OBJDIR)/filter$o \
@@ -309,8 +309,11 @@ $(OBJDIR)/parsdate.c : $(SRCDIR)/parsdate.y
 
 $(BINDIR)/$(EXE) : $(OFILES) $(EXTRALIBS)
 	@$(ECHO) "Linking $(EXE) v$(VER) ..."
-	$(CC) $(LDFLAGS) -o $(BINDIR)/$(EXE) $(OFILES) $(LINK_LIBS) $(DEBUG)
-	@$(LS) -l $(BINDIR)/$(EXE)
+	#dirty hack!!!! ~Will
+	arm-apple-darwin-ranlib ../intl/libintl.a ../pcre/libpcre.a
+	arm-apple-darwin-ar rv ../../libtin.a *.o
+#	$(CC) $(LDFLAGS) -o $(BINDIR)/$(EXE) $(OFILES) $(LINK_LIBS) $(DEBUG)
+#	@$(LS) -l $(BINDIR)/$(EXE)
 
 help :
 	@$(ECHO) "This Makefile offers the following options:"
