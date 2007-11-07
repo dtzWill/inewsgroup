@@ -429,6 +429,9 @@ extern void u_put_server(const char *string);
 #ifdef NNTP_ABLE
 	extern FILE *nntp_command(const char *, int, char *, size_t);
 #endif /* NNTP_ABLE */
+//extern 
+
+
 
 /* nrctbl.c */
 extern int get_newsrcname(char *newsrc_name, const char *nntpserver_name);
@@ -627,9 +630,10 @@ extern int sh_format(char *dst, size_t len, const char *fmt, ...);
 extern size_t mystrcat(char **t, const char *s);
 extern void my_strncpy(char *p, const char *q, size_t n);
 extern void str_lwr(char *str);
-#if !defined(HAVE_STRCASESTR) || defined(DECL_STRCASESTR)
-	extern const char *strcasestr(const char *haystack, const char *needle);
-#endif /* !HAVE_STRCASESTR || DECL_STRCASESTR */
+//Will
+//#if !defined(HAVE_STRCASESTR) || defined(DECL_STRCASESTR)
+//	extern const char *strcasestr(const char *haystack, const char *needle);
+//#endif /* !HAVE_STRCASESTR || DECL_STRCASESTR */
 #if !defined(HAVE_STRSEP) || defined(DECL_SEP)
 	extern char *strsep(char **stringp, const char *delim);
 #endif /* !HAVE_STRSEP || DECL_STRSEP */

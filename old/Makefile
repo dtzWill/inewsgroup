@@ -4,23 +4,15 @@ ARMLD=$(ARMCC)
 CC=gcc
 LD=$(CC)
 LDFLAGS=-Wl,-syslibroot,/usr/local/share/iphone-filesystem -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit
-TINDIR = tin-1.8.3/src
-TININC = -I tin-1.8.3/include -I tin-1.8.3/pcre -I tin-1.8.3/src -I tin-1.8.3/intl
-TINLIB = ./libtin.a
-PCRELIB = tin-1.8.3/pcre/libpcre.a 
-INTLLIB = tin-1.8.3/intl/libintl.a -liconv
 
 all:    clean iNewsGroup 
 
-iNewsGroup:  $(TINLIB)  iNewsApp.o  datastructures.o  inewsgroup.o newsfunctions.o
-	$(ARMLD) $(LDFLAGS) -o $@ $(PCRELIB) $(INTLLIB) -lcurses $(TINLIB) $^
+iNewsGroup:  iNewsApp.o NewsDefaults.o datastructures.o NewsListView.o inewsgroup.o newsfunctions.o
+	$(ARMLD) $(LDFLAGS) -o $@ $^
 #	cp UIUCMapApp UIUCMap.app
 
 %.o:    %.m
-	$(ARMCC) -c $(FLAGS)  $(TININC) $< -o $@
-
-$(TINLIB):
-	cd $(TINDIR) && make
+	$(ARMCC) -c $(FLAGS)  $< -o $@
 
 clean:
 	rm -f *.o iNewsGroup iNewsGroup-x86

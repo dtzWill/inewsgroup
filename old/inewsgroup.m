@@ -2,58 +2,24 @@
 //inewsgroup.m --wrapper/launcher for main application
 #import <UIKit/UIKit.h>
 
+#import "connection/AbstractConnectionProtocol.h"
+#import "connection/AbstractConnection.h"
+#import "connection/NNTPConnection.h"
 
 /*
 #import "iNewsApp.h"
 #import "newsfunctions.h"
 #import "datastructures.h"
 */
-#import "tin.h"
+
 
 int main(int argc, char **argv)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-	NSLog( @"starting... \n" );	
-	set_signal_handlers();
-	
-	read_news_via_nntp = true;
-	nntp_server = "news.cs.uiuc.edu";
 
-	batch_mode = true;//silence/speed things up...?
-	
-	init_alloc();
-	hash_init();
-	init_selfinfo();
-	init_group_hash();
-	setup_default_keys(); /* preinit keybindings */
 
-	if ( !nntp_open() )
-	{
-		NSLog( @"opened successfully!\n" );
-	}
-	else
-	{
-		NSLog( @"error!\n");
-//		exit( 0 );
-	}
 
-	char user[30], pass[30];
-//	read_newsauth_file( nntp_server, user, pass);
-
-	char response[1000];
-	FILE * file;
-	if ( file = nntp_command("list",215, response, 1000 ) ) 
-		NSLog( @"worked:%s\n", response );
-	else
-		NSLog( @"failure\n" );
-	char * line;
-
-	while ( line = tin_fgets( file, FALSE ) )
-	{
-		printf( "%s\n", line );
-
-	}
 
 //old testing code:
 /*
