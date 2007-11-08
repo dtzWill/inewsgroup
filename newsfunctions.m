@@ -66,7 +66,7 @@ int init_server()
 	//batch_mode = true;//silence/speed things up...?
 
 	nntp_server =  getserverbyfile(NNTP_SERVER_FILE);
-	
+	NSLog ( @"server: %s\n", nntp_server ) ;	
 //	read_server_config();
 
 	if ( !nntp_open() )
