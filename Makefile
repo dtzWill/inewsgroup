@@ -8,16 +8,22 @@ TINDIR = tin-1.8.3/src
 TININC = -I tin-1.8.3/include -I tin-1.8.3/pcre -I tin-1.8.3/src -I tin-1.8.3/intl
 TINLIB = ./libtin.a
 PCRELIB = tin-1.8.3/pcre/libpcre.a 
-INTLLIB = tin-1.8.3/intl/libintl.a -liconv
+INTLLIB = tin-1.8.3/intl/libintl.a
+INTLFLAGS = $(INTLLIB) -liconv
 
 all:    local_clean iNewsGroup 
 
-iNewsGroup:  $(TINLIB)  iNewsApp.o  datastructures.o  inewsgroup.o newsfunctions.o
-	$(ARMLD) $(LDFLAGS) -o $@ $(PCRELIB) $(INTLLIB) -lcurses $(TINLIB) $^
+iNewsGroup:  $(TINLIB)  iNewsApp.o  datastructures.o  inewsgroup.o newsfunctions.o $(PCRELIB) $(INTLLIB) $(TINLIB)
+	$(ARMLD) $(LDFLAGS) -o $@ $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^
 #	cp UIUCMapApp UIUCMap.app
 
 %.o:    %.m
 	$(ARMCC) -c $(FLAGS)  $(TININC) $< -o $@
+
+$(PCRELIB): 
+	cd $(TINDIR) && make
+$(INTLLIB):
+	cd $(TINDIR) && make
 
 $(TINLIB):
 	cd $(TINDIR) && make
