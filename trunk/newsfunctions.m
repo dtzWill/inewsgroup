@@ -26,11 +26,30 @@ int numActive()
 void readNewsRC()
 {
 	//TODO: do something with this number?
-	int num_subscribed = read_newsrc( newsrc, true );
+	read_news_via_nntp = true;
+	list_active = true;
+	newsrc_active = false;
+/*	newsrc_active = true;
+	list_active = false; */
+	int num_subscribed = read_newsrc( newsrc, false );
+	list_active = true;
+	newsrc_active = false;
 
 }
 
 
+void init()
+{
+	init_alloc();
+	hash_init();
+	init_selfinfo();
+	init_group_hash();
+	//no we don't want anything keybinding-related, but for now
+	//leaving this here so any code in tin depending on it doesn't
+	//die horribly.
+	setup_default_keys(); /* preinit keybindings */
+
+}
 
 
 int init_server()
@@ -48,15 +67,6 @@ int init_server()
 
 	nntp_server =  getserverbyfile(NNTP_SERVER_FILE);
 	
-	init_alloc();
-	hash_init();
-	init_selfinfo();
-	init_group_hash();
-	//no we don't want anything keybinding-related, but for now
-	//leaving this here so any code in tin depending on it doesn't
-	//die horribly.
-	setup_default_keys(); /* preinit keybindings */
-
 //	read_server_config();
 
 	if ( !nntp_open() )
@@ -71,6 +81,7 @@ int init_server()
 
 	postinit_regexp();
 
+	return true;//it worked!!! \o/
 }
 
 
@@ -99,7 +110,7 @@ int init_server()
 
 	//read_descriptions(TRUE);
 
-void updateData()
+int updateData()
 {
 	
 	newsrc_active = false;
@@ -111,6 +122,8 @@ void updateData()
 
 	//TODO: use this value (and check that it means what the variable name suggests it emans)	
 	int num_subscribed = read_newsrc( newsrc, true );
+
+	create_save_active_file();
 
 	return true;//it worked!!! \o/
 /* print out response of all the groups on this server
