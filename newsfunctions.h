@@ -6,9 +6,11 @@ int numSubscribed();
 
 int numActive();
 
+void init();
+
 int init_server();
 
-void updateData();
+int updateData();
 
 void printActive();
 

@@ -12,9 +12,10 @@
 #import "iNewsApp.h"
 
 @interface iNewsApp : UIApplication {
-    NSMutableArray * rows;// holds the row objects for our table 
-    UINavigationItem * titleItem;//title
-//    UITable * table;
+    NSMutableArray * _rows;// holds the row objects for our table 
+    UINavigationItem * _titleItem;//title
+	int _count;
+    UITable * _table;
 //    NewsListView * root;//root view
 }
 
