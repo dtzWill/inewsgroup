@@ -15,7 +15,7 @@
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 
-	_connect = [[UIAlertSheet alloc]initWithTitle:@"Connecting..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
+	_connect = [[UIAlertSheet alloc]initWithTitle:@"Refreshing..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
 	
 	[_connect setDimsBackground:YES];
 
@@ -56,7 +56,9 @@
 - (void) setGroupNum: (int) groupnum
 {
 	_groupnum = groupnum;
-	//clear array...?
+	[ _rows removeAllObjects];//ignoring cases where re-entering same group, we don't care about old articles
+	[ _titleItem setTitle: [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ]];	
+	
 }
 
 - (void) getArticles
@@ -67,14 +69,13 @@
 
 	//build rows....
 
-	//find_base --implement threading later...
-
 	int i;
 	UIImageAndTextTableCell * row;
-	for ( i = 0; i < top_art; i++ )
+	[_rows removeAllObjects];
+	for ( i = 0; i < grpmenu.max; i++ )
 	{
 		row = [[UIImageAndTextTableCell alloc] init];
-		[row setTitle: [NSString stringWithCString: arts[i].subject ] ];
+		[row setTitle: [NSString stringWithCString: arts[ base[i] ].subject ] ];
 		[ _rows addObject: row ];
 	}
 	
