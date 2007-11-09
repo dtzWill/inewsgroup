@@ -28,6 +28,8 @@
 
 - (void) returnToMain;
 
+- (void) setView: (UIView *) view;
+
 - (void) connect;
 
 @end

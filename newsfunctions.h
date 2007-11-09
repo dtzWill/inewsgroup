@@ -31,3 +31,5 @@ void setPassword( NSString * pass );
 void saveSettingsToFiles();
 
 void loadGroup( int groupnum );
+
+int artsInThread( int threadnum );

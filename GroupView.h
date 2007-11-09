@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <UIKit/UIView.h>
+#import "ThreadView.h"
 
 @interface GroupView: UIView
 {
@@ -13,6 +14,7 @@
 	
     NSMutableArray * _rows;// holds the row objects for our table 
     UINavigationItem * _titleItem;//title
+	ThreadView * _threadView;
     UITable * _table;
 	id _delegate;
 	UIAlertSheet * _connect;
@@ -28,5 +30,7 @@
 - (void) getArticles; 
 
 - (void) setDelegate: (id) delegate;
+
+- (void) returnToGroup;
 
 @end

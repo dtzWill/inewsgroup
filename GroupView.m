@@ -18,6 +18,9 @@
 	_connect = [[UIAlertSheet alloc]initWithTitle:@"Refreshing..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
 	
 	[_connect setDimsBackground:YES];
+	
+	_threadView = [[ThreadView alloc] initWithFrame: rect];
+	[ _threadView setDelegate: self];
 
 
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"GroupView" ];
@@ -29,7 +32,7 @@
 	_rows = [ [ NSMutableArray alloc] init ];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 480.0f - 16.0f - 32.0f)];
+	    320.0f, 480.0f - 16.0f - 48.0f)];
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"articles"
 	    identifier: @"articles" width: 320.0f];
 	
@@ -75,7 +78,8 @@
 	for ( i = 0; i < grpmenu.max; i++ )
 	{
 		row = [[UIImageAndTextTableCell alloc] init];
-		[row setTitle: [NSString stringWithCString: arts[ base[i] ].subject ] ];
+		[row setTitle: [ NSString stringWithFormat: @"%s -- %d" , arts[ base[i] ].subject , artsInThread( i ) ] ] ;
+
 		[ _rows addObject: row ];
 	}
 	
@@ -100,6 +104,16 @@
 	return [ _rows objectAtIndex: row]; 
 }
 
+- (void)tableRowSelected:(NSNotification *)notification {
+//  NSLog(@"tableRowSelected!");
+	//build url....
+
+	[ _threadView setGroupNum: _groupnum andThreadNum: [_table selectedRow] ];
+	[ _threadView refresh ];
+	[ _delegate setView: _threadView ];
+}
+
+
 //nav bar button handler
 - (void)navigationBar:(UINavigationBar*)bar buttonClicked:(int) which;
 {
@@ -120,6 +134,13 @@
 {
 
 	_delegate = delegate;
+
+}
+
+- (void) returnToGroup
+{
+
+	[ _delegate setView: self];
 
 }
 @end
