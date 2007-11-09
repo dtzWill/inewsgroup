@@ -179,6 +179,7 @@ int init_server()
 	newsrc_active = false;
 	list_active = true;
 //	tinrc.auto_reconnect = true;
+	tinrc.thread_articles = 3;//subject and reference
 	
 	//batch_mode = true;//silence/speed things up...?
 

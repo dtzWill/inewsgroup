@@ -34,7 +34,8 @@ clean: local_clean
 local_clean:
 	rm -f *.o iNewsGroup iNewsGroup-x86
 install: all
-	scp iNewsGroup root@192.168.255.2:
+	scp iNewsGroup root@10.5.16.180: 
+# used to be 192.168.255.2
 #
 #
 #x86: iNewsGroup-x86

@@ -1217,6 +1217,7 @@ extern constext txt_uu_success[];
 #endif /* !NO_SHELL_ESCAPE */
 
 extern int *my_group;
+//extern long *base;//threads --Will
 extern int NOTESLINES;
 extern int _hp_glitch;
 extern int cCOLS;

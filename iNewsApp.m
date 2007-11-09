@@ -88,7 +88,7 @@
 //	rect.origin.x = rect.origin.y = 0.0f;
 	_prefs = [[PrefsView alloc] initWithFrame: rect];
 	_group = [[GroupView alloc] initWithFrame: rect];
-
+	[_group setDelegate: self];
 	
 	[_mainView addSubview:  nav ];
 	[_mainView addSubview: _table ];
