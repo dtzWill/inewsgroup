@@ -332,6 +332,10 @@ extern char **news_headers_to_not_display_array;
 extern char *OPT_CHAR_list[];
 extern char *OPT_STRING_list[];
 extern char *nntp_server;
+//********* Will ***************
+extern char authusername[PATH_LEN];
+extern char authpassword[PATH_LEN];
+//******************************
 extern char active_times_file[PATH_LEN];
 extern char article_name[PATH_LEN];
 extern char bug_addr[LEN];

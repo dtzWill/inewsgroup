@@ -827,8 +827,8 @@ reconnect(
 	 * Exit tin if the user says no to reconnect. The exit code stops tin from trying
 	 * to disconnect again - the connection is already dead
 	 */
-	if (!tinrc.auto_reconnect && prompt_yn(_(txt_reconnect_to_news_server), TRUE) != 1)
-		tin_done(NNTP_ERROR_EXIT);		/* user said no to reconnect */
+//	if (!tinrc.auto_reconnect && prompt_yn(_(txt_reconnect_to_news_server), TRUE) != 1)
+//		tin_done(NNTP_ERROR_EXIT);		/* user said no to reconnect */
 
 	clear_message();
 
@@ -1247,6 +1247,8 @@ nntp_open(
 	t_bool sec = FALSE;
 	/* It appears that is_reconnect guards code that should be run only once */
 	static t_bool is_reconnect = FALSE;
+//	t_bool is_reconnect = false;//Will--yes yes I know, but since we could've change the server info.. we need to start over. 
+					//nevermind, that didn't fix my problem.. reverting to original
 
 	if (!read_news_via_nntp)
 		return 0;
@@ -1349,7 +1351,14 @@ nntp_open(
 #	ifdef DEBUG
 		debug_nntp("nntp_open", "authenticate");
 #	endif /* DEBUG */
-		authenticate(nntp_server, userid, TRUE);
+		if ( !authenticate(nntp_server, userid, TRUE) )
+		{//clean up....
+			if (nntp_wr_fp)
+				s_fclose(nntp_wr_fp);
+			if (nntp_rd_fp)
+				s_fclose(nntp_rd_fp);
+			return -1;//Will
+		}
 		if ((ret = mode_reader(&sec)))
 			return ret; /* "MODE READER" failed, exit */
 	}
@@ -1657,8 +1666,9 @@ get_respcode(
 
 		} else {
 			error_message(_(txt_auth_failed), ERR_ACCESS);
-			/*	return -1; */
-			tin_done(EXIT_FAILURE);
+				return -1; 
+		//Will.. exiting isn't an option. return failure and let the gui try and fix.	
+			//tin_done(EXIT_FAILURE);
 		}
 	}
 #endif /* NNTP_ABLE */

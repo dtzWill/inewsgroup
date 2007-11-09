@@ -292,12 +292,21 @@ do_authinfo_original(
  * If username/passwd already given, and server wasn't changed, retry those.
  * Otherwise, read password from ~/.newsauth or, if not present or no matching
  * server found, from console.
+	static char authusername[PATH_LEN] = "";
+	static char authpassword[PATH_LEN] = "";
+	static char last_server[PATH_LEN] = "";
  *
  * The ~/.newsauth authorization file has the format:
  *   nntpserver1 password [user]
  *   nntpserver2 password [user]
  *   etc.
  */
+
+
+char authusername[PATH_LEN] = "";
+char authpassword[PATH_LEN] = "";
+char last_server[PATH_LEN] = "";
+
 static t_bool
 authinfo_original(
 	char *server,
@@ -306,9 +315,6 @@ authinfo_original(
 {
 	char *authpass;
 	int ret = ERR_AUTHBAD, changed;
-	static char authusername[PATH_LEN] = "";
-	static char authpassword[PATH_LEN] = "";
-	static char last_server[PATH_LEN] = "";
 	static t_bool already_failed = FALSE;
 	static t_bool initialized = FALSE;
 
@@ -326,8 +332,10 @@ authinfo_original(
 	 * Else, proceed to the other mechanisms.
 	 */
 	if (initialized && !changed && !already_failed && do_authinfo_original(server, authusername, authpassword))
+/*
+	if ( do_authinfo_original( server, authusername, authpassword ) ) 
 		return TRUE;
-
+*/
 	authpassword[0] = '\0';
 	authuser = strncpy(authusername, authuser, sizeof(authusername) - 1);
 	authpass = authpassword;
@@ -382,32 +390,32 @@ authinfo_original(
 #ifdef USE_CURSES
 		Raw(TRUE);
 #endif /* USE_CURSES */
-
-		if (!prompt_default_string(_(txt_auth_user), authuser, PATH_LEN, authusername, HIST_NONE)) {
-#ifdef DEBUG
-			debug_nntp("authorization", "failed: no username");
-#endif /* DEBUG */
-			return FALSE;
-		}
-
-#ifdef USE_CURSES
-		Raw(state);
-		my_printf("%s", _(txt_auth_pass));
-		wgetnstr(stdscr, authpassword, sizeof(authpassword));
-		Raw(TRUE);
-#else
-#	if 0
-		/*
-		 * on some systems (i.e. Solaris) getpass(3) is limited to 8 chars ->
-		 * we use tin_getline() till we have a config check
-		 * for getpass() or our own getpass()
-		 */
-		authpass = strncpy(authpassword, getpass(_(txt_auth_pass)), sizeof(authpassword) - 1);
-#	else
-		authpass = strncpy(authpassword, tin_getline(_(txt_auth_pass), FALSE, NULL, PATH_LEN, TRUE, HIST_NONE), sizeof(authpassword) - 1);
-#	endif /* 0 */
-#endif /* USE_CURSES */
-
+// Will---there will be no command line prompting the user for anything--not on my watch! :) 
+// 		if (!prompt_default_string(_(txt_auth_user), authuser, PATH_LEN, authusername, HIST_NONE)) {
+// #ifdef DEBUG
+// 			debug_nntp("authorization", "failed: no username");
+// #endif /* DEBUG */
+// 			return FALSE;
+// 		}
+// 
+// #ifdef USE_CURSES
+// 		Raw(state);
+// 		my_printf("%s", _(txt_auth_pass));
+// 		wgetnstr(stdscr, authpassword, sizeof(authpassword));
+// 		Raw(TRUE);
+// #else
+// #	if 0
+// 		/*
+// 		 * on some systems (i.e. Solaris) getpass(3) is limited to 8 chars ->
+// 		 * we use tin_getline() till we have a config check
+// 		 * for getpass() or our own getpass()
+// 		 */
+// 		authpass = strncpy(authpassword, getpass(_(txt_auth_pass)), sizeof(authpassword) - 1);
+// #	else
+// 		authpass = strncpy(authpassword, tin_getline(_(txt_auth_pass), FALSE, NULL, PATH_LEN, TRUE, HIST_NONE), sizeof(authpassword) - 1);
+// #	endif /* 0 */
+// #endif /* USE_CURSES */
+// 
 		ret = do_authinfo_original(server, authuser, authpass);
 		initialized = TRUE;
 		my_retouch();			/* Get rid of the chaff */
