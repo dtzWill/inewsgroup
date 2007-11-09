@@ -67,7 +67,7 @@
 	[self connect ];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 480.0f - 16.0f - 32.0f)];
+	    320.0f, 480.0f - 16.0f - 48.0f)];
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"subscribedgroups"
 	    identifier: @"subscribedgroups" width: 320.0f];
 
@@ -154,6 +154,12 @@
 - (void) returnToMain
 {
 	[ _window setContentView: _mainView ]; 
+}
+
+- (void) setView: (UIView *) view
+{
+	[ _window setContentView: view];
+
 }
 
 

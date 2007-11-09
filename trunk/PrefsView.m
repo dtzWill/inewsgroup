@@ -11,7 +11,7 @@
 
 	//TODO: make this relative to rect
 	_prefTable = [[UIPreferencesTable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	320.0f, 480.0f - 16.0f - 32.0f)  ];
+	320.0f, 480.0f - 16.0f - 48.0f)  ];
 	[_prefTable setDataSource: self];
     [_prefTable setDelegate: self];
 	[_prefTable setBottomBufferHeight:44.0f];

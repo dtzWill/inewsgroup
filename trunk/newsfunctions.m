@@ -133,6 +133,15 @@ void loadGroup( int groupnum )
 }
 
 
+int artsInThread( int threadnum )
+{
+	int i, count = 0;
+	for_each_art_in_thread( i, threadnum )
+	{
+		count++;
+	}
+	return count;
+}
 
 
 void readNewsRC()
