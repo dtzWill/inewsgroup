@@ -13,46 +13,67 @@
 #import <UIKit/UITable.h>
 #import <UIKit/UITableCell.h>
 #import <UIKit/UITableColumn.h>
+#import <UIKit/UIAlertSheet.h>
 #import "iNewsApp.h"
 //#import "NewsListView.h"
 #import "newsfunctions.h"
+
 
 @implementation iNewsApp
 
 - (void) applicationDidFinishLaunching: (id) unused
 {
-	UIWindow *window;
 	
 	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
 	rect.origin. x = rect.origin.y = 0;
-	window = [[UIWindow alloc] initWithContentRect: rect];
+	_window = [[UIWindow alloc] initWithContentRect: rect];
 
+	_mainView = [[UIView alloc] initWithFrame: rect];
+	[_window setContentView: _mainView];
+
+
+	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
+	    0.0f, 0.0f, 320.0f, 48.0f)];
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"iNewsGroup" ];
+	[nav showButtonsWithLeftTitle: @"Prefs" rightTitle: @"Quit" leftBack: YES ]; 
+	[nav pushNavigationItem: _titleItem];
+	[nav setDelegate: self];	
+	[nav setBarStyle: 0];
+
+
+
+	
 	init();
-	_count = 1;
 
-	NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
+	_count = 0;//1;
+
+	_connect = [[UIAlertSheet alloc]initWithTitle:@"Connecting..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
+	
+	[_connect setDimsBackground:YES];
+
+//	NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
 	//build tree of current news.... and create views
 //	root = [ [NewsListView alloc] initWithFrame: rect andDelegate: window ];
 
 //	NSLog( @"Created views!" );
 
 	_rows = [ [ NSMutableArray alloc] init ];
-	int i;
+/*	int i;
 	UIImageAndTextTableCell * row;
 	row = [[UIImageAndTextTableCell alloc] init];
 	[row setTitle: @"Connecting... (Please Wait)" ];
 	[ _rows addObject : row ];
-
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
+*/	
+	[self connect ];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
 	    320.0f, 480.0f - 16.0f - 32.0f)];
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"subscribedgroups"
 	    identifier: @"subscribedgroups" width: 320.0f];
 
-	[window orderFront: self];
-	[window makeKey: self];
-	[window _setHidden: NO];
+	[_window orderFront: self];
+	[_window makeKey: self];
+	[_window _setHidden: NO];
 	
 	[_table addTableColumn: col]; 
 	[_table setDataSource: self];
@@ -60,58 +81,37 @@
 	[_table reloadData];
 
 	
-	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
-	    0.0f, 0.0f, 320.0f, 48.0f)];
-	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"iNewsGroup" ];
-	[nav showButtonsWithLeftTitle: @"Exit" rightTitle: nil leftBack: YES ]; 
-	[nav pushNavigationItem: _titleItem];
-	
-	[nav setBarStyle: 0];
+
 
 	
 //	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
 //	rect.origin.x = rect.origin.y = 0.0f;
-	UIView *mainView;
-	mainView = [[UIView alloc] initWithFrame: rect];
+	_prefs = [[PrefsView alloc] initWithFrame: rect];
+	_group = [[GroupView alloc] initWithFrame: rect];
 
-	[mainView addSubview:  nav ];
-	[mainView addSubview: _table ];
+	
+	[_mainView addSubview:  nav ];
+	[_mainView addSubview: _table ];
 
-	[window setContentView: mainView];
 //	[window setContentView: root];
 	NSLog( @"Done with applicationDidFinishLaunching" ); 
-/*
-	if ( init_server() )
-	{
-		NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
-		//[root refresh];
-	}
-	else
-	{//error!
-		NSLog( @"Error connecting. If this is your frist time using iNewsGroup make suer to set your user/pass/server correctly" );
-	
-	}
-*/
-/*
-	init_server();
-	readNewsRC();
-	NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
-
-*/
 }
 
-/*
+
 - (void)tableRowSelected:(NSNotification *)notification {
 //  NSLog(@"tableRowSelected!");
 	//build url....
-	char url[200];
-	strcpy( url, "maps:q=");//prefix
-	strncat( url, uiucBuildings[[table selectedRow]].location, 200-strlen(url) );
-	
-	//go there!
-	[self openURL:[[NSURL alloc] initFileURLWithPath:[NSString stringWithCString:url]]];
+
+	int groupnum = [_table selectedRow];
+	[ _group setGroupNum: groupnum ];
+
+	[_window setContentView: _group ];
+
+	[_group refreshMe ];
 }
-*/
+
+
+
 //Methods to make table work...:
 - (int) numberOfRowsInTable: (UITable *)table
 {
@@ -129,7 +129,13 @@
 	return [ _rows objectAtIndex: row]; 
 }
 
+- (void) connect
+{
+	[_connect presentSheetInView: _mainView ];	 
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
+	NSLog( @" set timer....%d", self );
 
+}
 
 - (void)dealloc {
 	//TODO: MAKE THIS DO WHAT IT'S SUPPOSED TO  
@@ -144,13 +150,29 @@
 	[super dealloc];
 
 }
+
+- (void) returnToMain
+{
+	[ _window setContentView: _mainView ]; 
+}
+
+
 - (void) delayedInit
 {
-	init_server();
-//	readNewsRC();
-//	readNewsRC();
-	updateData();
-	[self refreshTable ];
+	if(	!init_server() )
+	{//if fail.. just go to prefs page
+		NSLog( @"connection failed... showing prefs view" );
+		[ _window setContentView: _prefs];	
+		[_prefs setDelegate: self];
+	}
+	else
+	{
+//		readNewsRC();
+		updateData();
+		[self refreshTable ];
+	}
+	[ _connect dismiss ];
+	[_prefs loadSettings ];
 }
 - (void) refreshTable
 {
@@ -176,21 +198,22 @@
 	[ _table reloadData ];
 }
 
-- (void)navigationBar:(UINavigationBar*)bar buttonClicked:(int)which;
+- (void)navigationBar:(UINavigationBar*)bar buttonClicked:(int) which;
 {
-	if ( which == 1 ) //left
+//	NSLog( @"button pressed, which: %d", which );
+	if ( which == 0 ) //right
 	{
 		write_config_file(local_config_file);
-		tin_done(EXIT_SUCCESS);
+		tin_done(EXIT_SUCCESS); //doesn't close the app gracefully.... o_O
+		//TODO: close the app gracefully.
 	}
-	/*
 	else
 	{
-		tinCheckForMessages();
-
+		[ _window setContentView: _prefs];
+		[_prefs setDelegate: self];
 
 	}
-*/
+
 }
 
 @end

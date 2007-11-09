@@ -586,11 +586,12 @@ tin_done(
 					prompt_continue();
 				break;
 			}
-
+/*
 			if (!batch_mode) {
 				if (prompt_yn(_(txt_newsrc_again), TRUE) <= 0)
 					break;
 			}
+*/
 		}
 
 		write_input_history_file();

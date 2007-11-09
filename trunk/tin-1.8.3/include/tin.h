@@ -50,6 +50,8 @@
 int debug;
 #endif
 
+#define NNTP_ABLE 1
+
 #ifdef HAVE_CONFIG_H
 #	ifndef TIN_AUTOCONF_H
 #		include	<autoconf.h>	/* FIXME: normally we use 'config.h' */

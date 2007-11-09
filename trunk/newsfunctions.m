@@ -5,6 +5,17 @@
 #import "datastructures.h"
 #import "newsfunctions.h"
 #import "tin.h"
+#import "extern.h"
+
+bool m_hasConnected;
+
+bool hasConnected()
+{
+	return m_hasConnected;
+}
+
+
+
 
 int numSubscribed()
 {//TODO: Better way??
@@ -23,6 +34,107 @@ int numActive()
 
 }
 
+NSString * getServer()
+{
+	if ( nntp_server && strlen( nntp_server ) > 0 )
+		return [NSString stringWithCString: nntp_server ];
+	return nil;
+}
+
+NSString * getUserName()
+{
+	if ( authusername[0] != '\0' )
+		return [NSString stringWithCString: (char *)authusername ]; 
+	return nil;
+}
+
+NSString * getPass()
+{
+	if ( authpassword[0] != '\0' )
+		return [NSString stringWithCString: (char *)authpassword ];
+	return nil; 
+}
+
+//bool weCreatedNNTPServer = false;
+void setServer( NSString * server )
+{
+	//TODO:
+	//necessary?? better way?!?! gah
+/*	if ( nntp_server && weCreatedNNTPServer )
+		free( nntp_server );
+*/
+	//the above doesn't work.. and maybe eventually I'll got through the tin code..
+	//for now.. potential leak :-/
+	nntp_server = (char *)malloc( strlen( [server cString] ) + 1 );
+	strcpy( nntp_server, [server cString] );
+//	[server release];
+//	weCreatedNNTPServer = true;
+//	NSLog( @" new server: %s\n", nntp_server );
+}
+
+void setUserName( NSString * user )
+{
+	authusername[0] = '\0';
+	if (user && [ user cString ] )
+		strncpy( authusername, [user cString], PATH_LEN );
+//	NSLog( @" new username: %s\n", authusername );	
+//	[user release];
+}
+
+void setPassword( NSString * pass )
+{
+	authpassword[0] = '\0';
+	if ( pass && [pass cString] )
+		strncpy( authpassword, [pass cString], PATH_LEN );
+//	NSLog( @" new pass: %s\n", authpassword );
+
+//	[pass release];
+
+}
+
+
+void saveSettingsToFiles()
+{
+	//by 'update' I mean 'overwrite' and 'replace'
+//	NSLog( @" saving settings...\n");
+	FILE * f_nntpserver, * f_newsauth;
+	NSLog( @"\ntrying to save...." );	 
+	//update /etc/nntpserver
+	
+	if ( ( f_nntpserver = fopen( "/etc/nntpserver", "w" ) ) == 0 )
+	{
+		//error! :(
+		return;
+	}
+	//else
+	fprintf( f_nntpserver, "%s\n", nntp_server );
+
+	fclose( f_nntpserver); //yay that was fun
+
+	//update ~/.newsauth
+	
+	if ( ( f_newsauth = fopen( "/var/root/.newsauth", "w" ) )== 0 )
+	{
+		//error :(
+		return;
+	}
+	fprintf( f_newsauth, "%s\t%s\t%s\n",nntp_server, authpassword, authusername ); 	
+
+	fclose( f_newsauth );
+	NSLog( @"save successful!\n");
+}
+
+
+void loadGroup( int groupnum )
+{
+	index_group( &active[ my_group[ groupnum ] ] );
+
+
+}
+
+
+
+
 void readNewsRC()
 {
 	//TODO: do something with this number?
@@ -40,6 +152,7 @@ void readNewsRC()
 
 void init()
 {
+	m_hasConnected = false;
 	init_alloc();
 	hash_init();
 	init_selfinfo();
@@ -49,19 +162,23 @@ void init()
 	//die horribly.
 	setup_default_keys(); /* preinit keybindings */
 
+	set_signal_handlers();
+//	read_newsauth_file( nntp_server, user, pass );
+
 }
 
 
 int init_server()
 {
-	set_signal_handlers();
 	
 	read_news_via_nntp = true;
 	check_for_new_newsgroups = true;
 	read_saved_news = false;
+	force_auth_on_conn_open = true;
 
 	newsrc_active = false;
 	list_active = true;
+//	tinrc.auto_reconnect = true;
 	
 	//batch_mode = true;//silence/speed things up...?
 
@@ -69,7 +186,7 @@ int init_server()
 	NSLog ( @"server: %s\n", nntp_server ) ;	
 //	read_server_config();
 
-	if ( !nntp_open() )
+	if ( nntp_open() == 0 )
 	{
 		NSLog( @"Established connection to %s\n", nntp_server );
 	}
@@ -81,59 +198,33 @@ int init_server()
 
 	postinit_regexp();
 
+	m_hasConnected = true;
 	return true;//it worked!!! \o/
 }
 
 
-//	read_server_config();
-
-
-	//char user[30], pass[30];
-
-/*	//test connection by sending 'list' command
-	char response[100];
-	FILE * file;
-	if ( file = nntp_command("list",215, response, 100 ) ) 
-		NSLog( @"worked:%s\n", response );
-	else
-	{
-		NSLog( @"failure\n" );
-		return false; // :(
-	}
-	drain_buffer( file );
-
-	TIN_FCLOSE( file );
-*/
-//	load_newnews_info();
-
-//	create_save_active_file();
-
-	//read_descriptions(TRUE);
-
 int updateData()
 {
+	if ( hasConnected() )
+	{	
+		newsrc_active = false;
+		list_active = true;
+		
+		read_news_active_file();
 	
-	newsrc_active = false;
-	list_active = true;
+		read_newsgroups_file( true );
 	
-	read_news_active_file();
-
-	read_newsgroups_file( true );
-
-	//TODO: use this value (and check that it means what the variable name suggests it emans)	
-	int num_subscribed = read_newsrc( newsrc, true );
-
-	create_save_active_file();
-
-	return true;//it worked!!! \o/
-/* print out response of all the groups on this server
-	char * line;
-	while ( line = tin_fgets( file, FALSE ) )
-	{
-		printf( "%s\n", line );
-
+		//TODO: use this value (and check that it means what the variable name suggests it emans)	
+		int num_subscribed = read_newsrc( newsrc, true );
+	
+		create_save_active_file();
+	
+		//don't update, it takes too long, let's do it when viewing a group..
+	//	do_update( false );
+	
+		return true;//it worked!!! \o/
 	}
-*/
+	return false;
 };
 
 
@@ -149,3 +240,7 @@ void printActive()
 
 
 };
+
+//TODO: add function to fix all memory that's part of
+//		--newsfunctions
+//		--tin code, since this should be the layer between our code and tin's
