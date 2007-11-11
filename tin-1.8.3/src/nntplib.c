@@ -853,8 +853,9 @@ reconnect(
 		return 0;
 	}
 
-	if (--retry == 0)					/* No more tries? */
-		tin_done(NNTP_ERROR_EXIT);
+	--retry;
+//	if (--retry == 0)					/* No more tries? */
+//		tin_done(NNTP_ERROR_EXIT);
 
 	return retry;
 }
@@ -883,6 +884,9 @@ get_server(
 	reconnected_in_last_get_server = FALSE;
 	errno = 0;
 
+	//Will--debug
+//	wait_message( 0, "in get server!\n" );
+
 	/*
 	 * NULL socket reads indicates socket has closed. Try a few times more
 	 */
@@ -903,7 +907,9 @@ get_server(
 		 * when user is quitting tin if tinrc.auto_reconnect is false.
 		 */
 		if (strncmp(last_put, "QUIT", 4)) {
-			retry = reconnect(retry);		/* Will abort when out of tries */
+			retry = reconnect(retry);
+			wait_message( 0, "retries left: %d\n", retry );
+			if (retry == 0 ) return NULL;	
 			reconnected_in_last_get_server = TRUE;
 		} else {
 			/*
@@ -1353,6 +1359,7 @@ nntp_open(
 #	endif /* DEBUG */
 		if ( !authenticate(nntp_server, userid, TRUE) )
 		{//clean up....
+			wait_message( 0, "authentication failed!\n\n" );
 			if (nntp_wr_fp)
 				s_fclose(nntp_wr_fp);
 			if (nntp_rd_fp)

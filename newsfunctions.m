@@ -92,6 +92,29 @@ void setPassword( NSString * pass )
 
 }
 
+void readSettingsFromFile()
+{
+
+	FILE * f_newsauth;
+
+	//update ~/.newsauth
+	
+	if ( ( f_newsauth = fopen( "/var/root/.newsauth", "r" ) )== 0 )
+	{
+		//error :(
+		return;
+	}
+	//for now, we only allow for /1/ line
+	//TODO: change this if/when we support multiple servers
+
+	
+	//TODO: do a better job error handling than this!!
+	fscanf( f_newsauth, "%s\t%s\t%s\n", nntp_server, authpassword, authusername );
+
+
+	fclose( f_newsauth );
+
+}
 
 void saveSettingsToFiles()
 {
@@ -118,7 +141,10 @@ void saveSettingsToFiles()
 		//error :(
 		return;
 	}
-	fprintf( f_newsauth, "%s\t%s\t%s\n",nntp_server, authpassword, authusername ); 	
+	//TODO: smarter behavior here?
+	if (authpassword && strcmp( authpassword, "" ) &&
+		authusername && strcmp( authusername, "" ) ) //don't bother writing if no username or password
+		fprintf( f_newsauth, "%s\t%s\t%s\n",nntp_server, authpassword, authusername ); 	
 
 	fclose( f_newsauth );
 	NSLog( @"save successful!\n");
@@ -267,7 +293,7 @@ int init_server()
 
 	newsrc_active = false;
 	list_active = true;
-//	tinrc.auto_reconnect = true;
+	tinrc.auto_reconnect = true;
 	tinrc.cache_overview_files = true;
 	tinrc.thread_articles = 3;//subject and reference
 	

@@ -148,7 +148,7 @@
 {
 	[_connect presentSheetInView: _mainView ];	 
     [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
-	NSLog( @" set timer....%d", self );
+//	NSLog( @" set timer....%d", self );
 
 }
 
