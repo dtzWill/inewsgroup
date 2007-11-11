@@ -133,11 +133,18 @@
 
 - (void) saveSettings
 {
-/*	setServer( [ [ [ _rows objectAtIndex: SERVER_ROW ] textField ] text ] );
-	setUserName( [ [ [ _rows objectAtIndex: USER_ROW ] textField ] text ] );
-	setPassword( [ [ [ _rows objectAtIndex: PASS_ROW ] textField ] text ] );
-*/
-//	saveSettingsToFiles();
+	int i;
+	for_each_group( i )
+	{
+		bool value = [ [ [ _rows objectAtIndex: i ] control ] value ];
+		if ( value != active[ i ].subscribed )//if it's changed...
+		{
+				doSubscribe( &active[ i ], value );
+		}	
+	}
+//update listing...?
+//	readNewsRC();
+
 }
 
 
@@ -173,25 +180,12 @@
 		[self saveSettings ];
 
 		//TODO: refresh main window
-		//necessary? what to do?
+		[_delegate refreshTable ];	
 
 		//go back
 		[_delegate returnToMain];
 		
-/*		if( !hasConnected() )
-		{//maybe this made things better..?
-			[ _delegate connect ];
-		}
-*/
 	}
-	/*
-	else
-	{
-		tinCheckForMessages();
-
-
-	}
-*/
 }
 @end
 
