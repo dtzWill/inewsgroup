@@ -143,7 +143,7 @@
 		}	
 	}
 //update listing...?
-//	readNewsRC();
+	readNewsRC();
 
 }
 
