@@ -31,10 +31,24 @@
 
 - (void) getArticles; 
 
+- (void) refreshTitles;
+
 - (void) setDelegate: (id) delegate;
 
 - (void) setView: (UIView *) view;
 
 - (void) returnToPage;
 
+@end
+
+
+@interface GroupItem: UISimpleTableCell
+{
+	int _threadnum;
+
+}
+
+- (id) initWithThreadNum: (int) threadnum;
+
+- (int) threadNum;
 @end

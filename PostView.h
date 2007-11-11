@@ -31,7 +31,12 @@
 
 - (void) refresh;
 
+- (void) getPost;
+
 - (void) setDelegate: (id) delegate; //are YOU my mommmy?
+
+//- (void) returnToPage;
+
 
 @end
 

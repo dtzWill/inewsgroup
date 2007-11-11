@@ -2,6 +2,10 @@
 //SubscriptionView.m
 
 #include "SubscriptionView.h"
+#import <UIKit/UIPreferencesControlTableCell.h>
+#import <UIKit/UISwitchControl.h>
+//TODO: GET RID OF THIS:
+#import "tin.h"
 
 @implementation SubscriptionView
 
@@ -108,17 +112,32 @@
 
 - (void) loadSettings
 {
+	[ _rows removeAllObjects ];//clear it out...
 
+	int i;
+	UIPreferencesControlTableCell * row;
+	UISwitchControl * button;
+	for_each_group( i )
+	{
+		row = [[UIPreferencesControlTableCell alloc] init];
+		button = [[UISwitchControl alloc] initWithFrame: CGRectMake( 320.f - 
+114.0, 11.0f, 114.0f, 48.0f ) ];
+		[button setValue: active[ i ].subscribed ];
+		[ row setTitle: [NSString stringWithCString: active[ i ].name ] ];
+		[ row setControl: button ];
+		[ _rows addObject: row ];
+	}
 
+	[ _prefTable reloadData ];
 }
 
 - (void) saveSettings
 {
-	setServer( [ [ [ _rows objectAtIndex: SERVER_ROW ] textField ] text ] );
+/*	setServer( [ [ [ _rows objectAtIndex: SERVER_ROW ] textField ] text ] );
 	setUserName( [ [ [ _rows objectAtIndex: USER_ROW ] textField ] text ] );
 	setPassword( [ [ [ _rows objectAtIndex: PASS_ROW ] textField ] text ] );
-
-	saveSettingsToFiles();
+*/
+//	saveSettingsToFiles();
 }
 
 
@@ -151,18 +170,19 @@
 	{
 		//commit changes
 		
-
-		//refresh main window
-
 		[self saveSettings ];
+
+		//TODO: refresh main window
+		//necessary? what to do?
 
 		//go back
 		[_delegate returnToMain];
 		
-		if( !hasConnected() )
+/*		if( !hasConnected() )
 		{//maybe this made things better..?
 			[ _delegate connect ];
 		}
+*/
 	}
 	/*
 	else
