@@ -13,7 +13,7 @@ INTLFLAGS = $(INTLLIB) -liconv
 
 all:    local_clean iNewsGroup 
 
-iNewsGroup:  $(TINLIB)  ThreadView.o GroupView.o PrefsView.o iNewsApp.o  datastructures.o  inewsgroup.o newsfunctions.o $(PCRELIB) $(INTLLIB) $(TINLIB)
+iNewsGroup:  $(TINLIB)  PostView.o ThreadView.o GroupView.o PrefsView.o iNewsApp.o  datastructures.o  inewsgroup.o newsfunctions.o $(PCRELIB) $(INTLLIB) $(TINLIB)
 	$(ARMLD) $(LDFLAGS) -o $@ $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^
 #	cp UIUCMapApp UIUCMap.app
 
@@ -34,7 +34,8 @@ clean: local_clean
 local_clean:
 	rm -f *.o iNewsGroup iNewsGroup-x86
 install: all
-	scp iNewsGroup root@10.5.16.180: 
+	scp iNewsGroup root@192.168.255.2:
+#	scp iNewsGroup root@10.5.16.180: 
 # used to be 192.168.255.2
 #
 #

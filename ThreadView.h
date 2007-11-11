@@ -6,6 +6,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <UIKit/UIView.h>
+#import <UIKit/UISimpleTableCell.h>
+#import "PostView.h";
 
 @interface ThreadView: UIView
 {
@@ -16,6 +18,7 @@
     UINavigationItem * _titleItem;//title
     UITable * _table;
 	id _delegate;
+	PostView * _postView;
 
 }
 
@@ -27,11 +30,13 @@
 
 - (void) setDelegate: (id) delegate; //are YOU my mommmy?
 
+- (void) returnToPage;
+
 @end
 
 //a basically useless class to link together the article number with the cell
 //possibly this will be useful later for adding other things to it
-@interface ThreadViewItem: UIImageAndTextTableCell
+@interface ThreadViewItem: UISimpleTableCell
 {
 	int _articleID;
 

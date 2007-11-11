@@ -1,0 +1,30 @@
+//Will Dietz'
+//SubscriptionView.h
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <UIKit/UIPreferencesTable.h>
+#import <UIKit/UIPreferencesTextTableCell.h>
+
+
+@interface SubscriptionView : UIView
+{
+	UIPreferencesTable * _prefTable;
+	UIPreferencesTableCell * _prefHeader;
+	NSMutableArray * _rows;
+	UINavigationItem * _titleItem;
+	id _delegate; //go back to main view! :)
+} 
+
+- (id) initWithFrame: (CGRect) rect;
+
+- (void) setDelegate: (id) delegate;
+
+
+- (void) loadSettings;
+
+- (void) saveSettings;
+
+
+@end
+@interface

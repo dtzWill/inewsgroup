@@ -1176,6 +1176,8 @@ art_open(
 		return ART_ABORT;
 	}
 	progress_mesg = NULL;
+//debug --will
+//	wait_message( 0, "Right before \"TODO\"\n" );
 
 	/*
 	 * TODO: compare art->msgid and artinfo->hdr.messageid and issue a
@@ -1184,11 +1186,12 @@ art_open(
 
 	if ((artinfo->tex2iso = ((group->attribute->tex2iso_conv) ? is_art_tex_encoded(artinfo->raw) : FALSE)))
 		wait_message(0, _(txt_is_tex_encoded));
-
+//	wait_message( 0, "text shizit");//debug --will
 	/* Maybe fix it so if this fails, we default to raw? */
 	if (!cook_article(wrap_lines, artinfo, 8, tinrc.hide_uue))
 		return ART_ABORT;
-
+	//debug --will
+//	wait_message( 0, "cooked article!");
 #ifdef DEBUG_ART
 	dump_art(artinfo);
 #endif /* DEBUG_ART */

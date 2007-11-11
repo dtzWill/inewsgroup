@@ -692,6 +692,7 @@ cook_article(
 		}
 	}
 
+	
 	if (tin_errno != 0)
 		return FALSE;
 
@@ -724,12 +725,17 @@ cook_article(
 		/*
 		 * A regular single-body article
 		 */
+//	wait_message( 0, "gah i'm polluting this code with my debug statements :-/ --about to check if plaintext" );
 		if (IS_PLAINTEXT(hdr->ext))
+		{
+//			wait_message( 0, "gah i'm polluting this code with my debug statements :-/... it's plaintext, apparently" );
 			process_text_body_part(wrap_lines, artinfo->raw, hdr->ext, hide_uue, tabs);
+		}
 		else {
 			/*
 			 * Non-textual main body
 			 */
+//	wait_message( 0, "gah i'm polluting this code with my debug statements :-/... it's not plaintext, apparently" );
 			name = get_filename(hdr->ext->params);
 			if (!strcmp(content_types[hdr->ext->type], "text"))
 				charset = get_param(hdr->ext->params, "charset");

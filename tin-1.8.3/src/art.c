@@ -132,19 +132,20 @@ find_base(
 		if (grpmenu.max >= max_art)
 			expand_art();
 
-		if (group->attribute->show_only_unread) {
-			if (arts[i].status != ART_READ)
-				base[grpmenu.max++] = i;
-			else {
-				/* Find 1st unread art in thread */
-				for (j = i; j >= 0; j = arts[j].thread) {
-					if (arts[j].status != ART_READ) {
-						base[grpmenu.max++] = i;
-						break;
-					}
-				}
-			}
-		} else
+//Will--removed the 'only_unread' checking--we always want to read everything
+//		if (group->attribute->show_only_unread) {
+//			if (arts[i].status != ART_READ)
+//				base[grpmenu.max++] = i;
+//			else {
+//				/* Find 1st unread art in thread */
+//				for (j = i; j >= 0; j = arts[j].thread) {
+//					if (arts[j].status != ART_READ) {
+//						base[grpmenu.max++] = i;
+//						break;
+//					}
+//				}
+//			}
+//		} else
 			base[grpmenu.max++] = i;
 	}
 	/* sort base[] */
@@ -394,9 +395,13 @@ index_group(
 	 * When reading local spool, this will pull in the system wide overview
 	 * cache (if found) otherwise the private overview cache will be read
 	 */
-	caching_xover = (tinrc.cache_overview_files && nntp_caps.over_cmd && group->type == GROUP_TYPE_NEWS);
+	//for some reason I can't get tinrc.cache_overview_files to stay 'true', so it's been removed from the following conditional.
+	caching_xover = (nntp_caps.over_cmd && group->type == GROUP_TYPE_NEWS);
+	wait_message( 0 , "WHY NOT LOCAL??\n\tcaching_xover: %d\n\ttinrc.cache_overview_files: %d\n\tnnp_caps.over_cmd: %d\n\tgroup->type: %d (%d)\n\n\n", caching_xover, tinrc.cache_overview_files, nntp_caps.over_cmd, group->type, GROUP_TYPE_NEWS );
 	if ((changed = read_overview(group, min, max, &last_read_article, caching_xover)) == -1)
 		return FALSE;	/* user aborted indexing */
+
+	wait_message( 0, "last read article: %d\n", last_read_article );
 
 	/*
 	 * Fill in the range last_read_article...max using XOVER
@@ -1401,6 +1406,8 @@ read_overview(
 	/*
 	 * open the overview file (whether it be local or via nntp)
 	 */
+	//Will--debug :-/
+	wait_message( 0, "using local? %d\n\n", local );
 	if ((fp = open_xover_fp(group, "r", min, max, local)) == NULL)
 		return expired;
 
@@ -1557,6 +1564,8 @@ read_overview(
 
 	TIN_FCLOSE(fp);
 
+//	wait_message( 0, "top: %d\n", *top );
+
 	if (tin_errno)
 		return -1;
 
@@ -1607,7 +1616,7 @@ write_overview(
 	/*
 	 * Can't write or caching is off
 	 */
-	if (no_write || !tinrc.cache_overview_files)
+	if (no_write )
 		return;
 
 	if ((fp = open_xover_fp(group, "w", 0L, 0L, FALSE)) == NULL)
@@ -1766,9 +1775,9 @@ find_nov_file(
 			 * We only get here when private overviews are going to be used
 			 * Go no further if they are explicitly turned off
 			 */
-			if (!tinrc.cache_overview_files)
+		/*	if (!tinrc.cache_overview_files)
 				return NULL;
-
+*/
 			/*
 			 * Append -<nntpserver> to private cache dir
 			 */

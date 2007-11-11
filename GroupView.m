@@ -2,9 +2,12 @@
 //GroupView.m
 
 #import "GroupView.h"
+#import "datastructures.h"
 
 //TODO: move any functionality that needs this into newsfunctions where it belongs!
 #import "tin.h"
+
+
 
 @implementation GroupView
 
@@ -20,8 +23,12 @@
 	[_connect setDimsBackground:YES];
 	
 	_threadView = [[ThreadView alloc] initWithFrame: rect];
-	[ _threadView setDelegate: self];
+	[ _threadView setDelegate: self ];
 
+	_postView = [[PostView alloc] initWithFrame: rect];
+	[ _postView setDelegate: self ];
+	_postView = [[PostView alloc] initWithFrame: rect];
+	[ _postView setDelegate: self ];
 
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"GroupView" ];
 	[nav showButtonsWithLeftTitle: @"Back" rightTitle: @"Refresh" leftBack: YES ]; 
@@ -73,16 +80,23 @@
 	//build rows....
 
 	int i;
-	UIImageAndTextTableCell * row;
+	UISimpleTableCell * row;
 	[_rows removeAllObjects];
 	for ( i = 0; i < grpmenu.max; i++ )
 	{
-		row = [[UIImageAndTextTableCell alloc] init];
-		[row setTitle: [ NSString stringWithFormat: @"%s -- %d" , arts[ base[i] ].subject , artsInThread( i ) ] ] ;
-
+		row = [[UISimpleTableCell alloc] init];
+		[row setTitle: [ NSString stringWithFormat: @"%s%s" , 
+			arts[ base[i] ].status == ART_READ ? " ": "*",//star if unread (or other non-read status)
+			arts[ base[i] ].subject , artsInThread( i ) ] ] ;
+	//	[row setFont: smaller_font ];
+		if ( artsInThread( i ) > 1 )
+		{
+			[row setDisclosureStyle: 1];
+			[row setShowDisclosure: YES];
+		}
 		[ _rows addObject: row ];
 	}
-	
+
 	[ _table reloadData ];
 
 }
@@ -106,11 +120,22 @@
 
 - (void)tableRowSelected:(NSNotification *)notification {
 //  NSLog(@"tableRowSelected!");
-	//build url....
-
-	[ _threadView setGroupNum: _groupnum andThreadNum: [_table selectedRow] ];
-	[ _threadView refresh ];
-	[ _delegate setView: _threadView ];
+	int i = [ _table selectedRow ];
+	if ( artsInThread( i ) > 1 ) //if actually is /in/ a thead
+	{
+		[ _threadView setGroupNum: _groupnum andThreadNum: i ];
+		[ _threadView refresh ];
+		[ _delegate setView: _threadView ];
+	}
+	else
+	{
+		[ _postView setArticleNum: base[ i ] andGroupnum: _groupnum ];
+		[ _delegate setView: _postView ];
+		//remove the '*' part of it.. right now /attempting/ to view it counts as 'read'
+		[ [ _rows objectAtIndex: i ] setTitle: [NSString stringWithCString: arts[ base[i] ].subject ] ];
+		[ _postView refresh ];
+		//
+	}
 }
 
 
@@ -137,10 +162,16 @@
 
 }
 
-- (void) returnToGroup
+- (void) returnToPage
 {
 
 	[ _delegate setView: self];
 
+}
+
+- (void) setView: (UIView *) view
+{
+
+	[ _delegate setView: view ];
 }
 @end

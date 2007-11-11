@@ -127,6 +127,7 @@ void saveSettingsToFiles()
 
 void loadGroup( int groupnum )
 {
+	tinrc.cache_overview_files = true;
 	index_group( &active[ my_group[ groupnum ] ] );
 
 
@@ -142,6 +143,68 @@ int artsInThread( int threadnum )
 	}
 	return count;
 }
+
+bool openArticle( int groupnum, int articlenum )
+{
+/*	NSLog( @"attempting to open article: %s\ from group: %s\n", 
+		arts[ articlenum].subject,
+		active[ my_group[ groupnum ] ].name );
+*/
+	//This line looks worthless, but some code we call here needs this to be set appropriately.  Sigh... 
+	curr_group = &active[ my_group[ groupnum ] ];
+	//DAMN YOU CURR_GROUP :-(
+	return art_open( false, &arts[ articlenum ], //which article? THIS article
+		curr_group,//grab the group
+		&_curArt,//store it in our article data structure
+		false, "Test" )//hell no progress meter :)
+		== 0; //success??
+
+}
+
+
+NSString *	readArticleContent()
+{
+	NSMutableString * body = [[NSMutableString alloc] init];
+	char * line;
+	int i; 
+	for (i = 0; i < _curArt.cooked_lines; i++) {
+		fseek(_curArt.cooked, _curArt.cookl[i].offset, SEEK_SET);
+		line = tin_fgets(_curArt.cooked, FALSE);
+		[ body appendString: [ NSMutableString stringWithFormat: @"%s\n", line ] ];
+	}
+	return body;
+}
+
+NSString * articleFrom()
+{
+	return [NSString stringWithCString: _curArt.hdr.from ];
+
+}
+
+NSString * articleSubject()
+{
+	return [NSString stringWithCString: _curArt.hdr.subj ];
+
+}
+
+
+
+void closeArticle()
+{
+	art_close( &_curArt );
+
+}
+
+void markArticleRead( int groupnum, int postnum )
+{
+//TODO: mark it read, but don't make it disappear from lists!!! :(
+	art_mark( &active[ my_group[ groupnum ] ], &arts[ postnum ], ART_READ );
+
+}
+
+
+
+
 
 
 void readNewsRC()
@@ -188,6 +251,7 @@ int init_server()
 	newsrc_active = false;
 	list_active = true;
 //	tinrc.auto_reconnect = true;
+	tinrc.cache_overview_files = true;
 	tinrc.thread_articles = 3;//subject and reference
 	
 	//batch_mode = true;//silence/speed things up...?
