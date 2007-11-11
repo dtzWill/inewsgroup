@@ -168,6 +168,8 @@
 
 - (void) returnToMain
 {
+	
+	[ self refreshTable ];//TODO: only do this when needed
 	[ _window setContentView: _mainView ]; 
 }
 
@@ -197,7 +199,6 @@
 
 - (void) refreshTable
 {
-	readNewsRC();//re-read this..
 	_count = numSubscribed();
 	if ( _rows)
 		[_rows release ];//TODO: why not just empty it...?
