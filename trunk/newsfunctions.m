@@ -212,6 +212,14 @@ bool isThreadRead( int threadnum )
 	return true;
 }
 
+void doSubscribe( struct t_group *  group, int status )
+{
+
+	subscribe( group, SUB_CHAR( status ), true );
+
+
+}
+
 
 
 
@@ -220,13 +228,13 @@ void readNewsRC()
 {
 	//TODO: do something with this number?
 	read_news_via_nntp = true;
-	list_active = true;
-	newsrc_active = false;
+//	list_active = true;
+	newsrc_active = true;
 /*	newsrc_active = true;
 	list_active = false; */
-	int num_subscribed = read_newsrc( newsrc, false );
-	list_active = true;
-	newsrc_active = false;
+	int num_subscribed = read_newsrc( newsrc, true );
+//	list_active = true;
+//	newsrc_active = false;
 
 }
 

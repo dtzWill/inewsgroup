@@ -194,12 +194,14 @@
 	[ _connect dismiss ];
 	[_prefs loadSettings ];
 }
+
 - (void) refreshTable
 {
+	readNewsRC();//re-read this..
 	_count = numSubscribed();
 	if ( _rows)
-		[_rows release ];
-	_rows = [ [ NSMutableArray alloc] init ];
+		[_rows release ];//TODO: why not just empty it...?
+	_rows = [ [ NSMutableArray alloc] init ];//TODO: why malloc /every/ time here??
 	int i;
 	UIImageAndTextTableCell * row;
 	for( i=0; i < _count; i++ )
