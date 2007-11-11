@@ -29,6 +29,8 @@ void setUserName( NSString * user );
 
 void setPassword( NSString * pass );
 
+void readSettingsFromFile();
+
 void saveSettingsToFiles();
 
 void loadGroup( int groupnum );

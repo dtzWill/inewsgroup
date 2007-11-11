@@ -331,13 +331,14 @@ authinfo_original(
 	 * Let's try the previous auth pair first, if applicable.
 	 * Else, proceed to the other mechanisms.
 	 */
-	if (initialized && !changed && !already_failed && do_authinfo_original(server, authusername, authpassword))
+//	if (initialized && !changed && !already_failed && do_authinfo_original(server, authusername, authpassword))
+//		return TRUE;
 /*
 	if ( do_authinfo_original( server, authusername, authpassword ) ) 
 		return TRUE;
 */
 	authpassword[0] = '\0';
-	authuser = strncpy(authusername, authuser, sizeof(authusername) - 1);
+//	authuser = strncpy(authusername, authuser, sizeof(authusername) - 1);
 	authpass = authpassword;
 
 	/*
@@ -387,6 +388,7 @@ authinfo_original(
 #endif /* USE_CURSES */
 
 		wait_message(0, _(txt_auth_needed));
+
 #ifdef USE_CURSES
 		Raw(TRUE);
 #endif /* USE_CURSES */
@@ -415,10 +417,12 @@ authinfo_original(
 // 		authpass = strncpy(authpassword, tin_getline(_(txt_auth_pass), FALSE, NULL, PATH_LEN, TRUE, HIST_NONE), sizeof(authpassword) - 1);
 // #	endif /* 0 */
 // #endif /* USE_CURSES */
-// 
-		ret = do_authinfo_original(server, authuser, authpass);
-		initialized = TRUE;
-		my_retouch();			/* Get rid of the chaff */
+//
+		return false;
+
+	//	ret = do_authinfo_original(server, authuser, authpass);
+//		initialized = TRUE;
+	//	my_retouch();			/* Get rid of the chaff */
 	}
 
 #ifdef DEBUG

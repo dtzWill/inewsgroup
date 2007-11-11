@@ -135,14 +135,12 @@
 
 - (void) loadSettings
 {
+	readSettingsFromFile();//if anything has messed things up... pull from file again
+
 	[ [ [ _rows objectAtIndex: SERVER_ROW ] textField ] setText: getServer() ]; 
-	NSLog( @"reload"); 
 	[ [ [ _rows objectAtIndex: USER_ROW ] textField ] setText: getUserName() ];
-	NSLog( @"reload"); 
 	[ [ [ _rows objectAtIndex: PASS_ROW ] textField ] setText: getPass() ];
-	NSLog( @"reload"); 
 	[ _prefTable reloadData ];
-	NSLog( @"PrefsView: exiting loadSettings " );
 }
 
 - (void) saveSettings
