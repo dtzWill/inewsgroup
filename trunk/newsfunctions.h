@@ -33,3 +33,17 @@ void saveSettingsToFiles();
 void loadGroup( int groupnum );
 
 int artsInThread( int threadnum );
+
+t_openartinfo _curArt;
+
+bool openArticle( int groupnum, int articlenum);
+
+NSString * readArticleContent();
+
+NSString * articleFrom();
+
+NSString * articleSubject();
+
+void closeArticle();
+
+void markArticleRead( int groupnum, int articlenum ); 

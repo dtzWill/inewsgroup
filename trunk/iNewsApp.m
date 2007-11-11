@@ -81,6 +81,7 @@
 	[_table reloadData];
 
 	
+ 	smaller_font = [NSClassFromString(@"WebFontCache") createFontWithFamily:@"Helvetica" traits:0 size:13];
 
 
 	
@@ -103,11 +104,18 @@
 	//build url....
 
 	int groupnum = [_table selectedRow];
-	[ _group setGroupNum: groupnum ];
+	if ( groupnum == [ _rows count] - 1 )//the more/less bar...
+	{
 
-	[_window setContentView: _group ];
-
-	[_group refreshMe ];
+	}
+	else
+	{
+		[ _group setGroupNum: groupnum ];
+	
+		[_window setContentView: _group ];
+	
+		[_group refreshMe ];
+	}
 }
 
 
@@ -115,7 +123,7 @@
 //Methods to make table work...:
 - (int) numberOfRowsInTable: (UITable *)table
 {
-	return  _count ;
+	return  [ _rows count] ;
 }
 
 - (UITableCell *) table: (UITable *)table cellForRow: (int)row column: (int)col
@@ -191,7 +199,10 @@
 	for( i=0; i < _count; i++ )
 	{
 		row = [[UIImageAndTextTableCell alloc] init];
-		[row setTitle: [NSString stringWithCString:active[my_group[i]].name ] ];
+		
+		[row setTitle: [NSString stringWithFormat: @"%s%s",
+			active[ my_group[i] ].newsrc.num_unread > 0 ? "*":" " , //put "*" if unread arts
+			active[my_group[i]].name ] ];
 		//[row addTarget:self action:@selector(go) ];
 
 	//TODO: WHY DOESNT THIS WORK???
@@ -201,6 +212,14 @@
 */ 
 		[ _rows addObject : row ];
 	}
+
+
+	row = [[UIImageAndTextTableCell alloc] init];
+	[ row setTitle: @"\tAdd/Remove..."];
+//	[ row setAlignment: 2 ];
+	
+	[_rows addObject: row ];	
+
 	[ _table reloadData ];
 }
 

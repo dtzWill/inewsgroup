@@ -25,6 +25,8 @@ static NSString * NEWSROOT = @"/var/root/News/";
 
 static const int MAX_VIEW_DEPTH=8;
 
+struct __GSFont * smaller_font;
+
 
 typedef enum
 {

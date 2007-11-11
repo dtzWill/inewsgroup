@@ -24,12 +24,22 @@
 	[nav setDelegate: self];	
 	[nav setBarStyle: 0];
 
+	_postView = [[PostView alloc] initWithFrame: rect];
+	[ _postView setDelegate: self ];
+	
 	_rows = [ [ NSMutableArray alloc] init ];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
 	    320.0f, 480.0f - 16.0f - 48.0f)];
-	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"thread"
-	    identifier: @"thread" width: 320.0f];
+	//col_subj
+	UITableColumn * col = [[UITableColumn alloc] initWithTitle: @"thread"
+	    identifier: @"thread" width: 320.0f]; //200.0f or so
+
+	//later show more information via multiple columns..
+
+//	UITableColumn * col_from = [[UITableColumn alloc] initWithTitle: @"from"
+//		identifier: @"from" width: 50.0f ];
+//	UITableColumn * col_date = [[UITableColumn alloc	
 	
 	[_table addTableColumn: col]; 
 	[_table setDataSource: self];
@@ -43,18 +53,51 @@
 }
 
 
+- (void)tableRowSelected:(NSNotification *)notification {
+//  NSLog(@"tableRowSelected!");
+	int i = [ _table selectedRow ], j, k=0;
+	for_each_art_in_thread( j, _threadnum )
+	{
+		NSLog( @"considering article: %d\n\n", j );
+		if ( i == k ) break;
+		k++;
+	}
+	if ( i == k )
+	{
+		NSLog ( @"opening article : %d\n\n", j );	
+		[_postView setArticleNum: j  andGroupnum: _groupnum ];
+		[_delegate setView: _postView ];
+		[_postView refresh ];
+	}
+	else
+	{
+		NSLog ( @"Error finding article in thread! :-(" );
+	}
+
+}
+
 - (void) refresh
 {
-
+	NSLog( @"refreshing thread view..." );
 	int i;
 	ThreadViewItem * row;
 	[_rows removeAllObjects];
 	for_each_art_in_thread( i, _threadnum )
 	{
 		row = [[ThreadViewItem alloc] initWithArticle: i ];
-		[row setTitle: [NSString stringWithCString: arts[ i ].subject ] ];
+		[row setTitle: [NSString stringWithFormat: @"%s\n", //"%s%s\n"
+//				arts[ i ].status == ART_READ ? " ": "*" ,
+				arts[ i ].subject ] ];
+/*
+		if ( arts[ i ].status )
+		{
+			NSLog( @"unread article found!" );
+			 exit(0);
+		}
+*/
 		[ _rows addObject: row ];
 	}
+	[ _titleItem setTitle: [NSString stringFromCString: arts[ base[ _threadnum ] ].subject ] ];
 	
 	[ _table reloadData ];
 
@@ -67,16 +110,6 @@
 	[ _rows removeAllObjects];//ignoring cases where re-entering same group, we don't care about old articles
 //	[ _titleItem setTitle: [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ]];	
 	//something cool here??	
-}
-
-- (void) getArticles
-{
-	loadGroup( _groupnum );
-
-
-	//build rows....
-
-
 }
 
 //Methods to make table work...:
@@ -106,7 +139,7 @@
 	}
 	else
 	{
-		[ _delegate returnToGroup ];	
+		[ _delegate returnToPage ];	
 	}
 
 }
@@ -117,6 +150,11 @@
 
 	_delegate = delegate;
 
+}
+
+- (void) returnToPage
+{
+	[ _delegate setView: self];
 }
 @end
 

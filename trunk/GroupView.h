@@ -7,6 +7,7 @@
 #import <UIKit/UIKit.h>
 #import <UIKit/UIView.h>
 #import "ThreadView.h"
+#import "PostView.h"
 
 @interface GroupView: UIView
 {
@@ -15,6 +16,7 @@
     NSMutableArray * _rows;// holds the row objects for our table 
     UINavigationItem * _titleItem;//title
 	ThreadView * _threadView;
+	PostView * _postView;
     UITable * _table;
 	id _delegate;
 	UIAlertSheet * _connect;
@@ -31,6 +33,8 @@
 
 - (void) setDelegate: (id) delegate;
 
-- (void) returnToGroup;
+- (void) setView: (UIView *) view;
+
+- (void) returnToPage;
 
 @end
