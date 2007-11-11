@@ -85,9 +85,6 @@
 	for_each_art_in_thread( i, _threadnum )
 	{
 		row = [[ThreadViewItem alloc] initWithArticle: i ];
-		[row setTitle: [NSString stringWithFormat: @"%s\n", //"%s%s\n"
-//				arts[ i ].status == ART_READ ? " ": "*" ,
-				arts[ i ].subject ] ];
 /*
 		if ( arts[ i ].status )
 		{
@@ -97,11 +94,31 @@
 */
 		[ _rows addObject: row ];
 	}
-	[ _titleItem setTitle: [NSString stringFromCString: arts[ base[ _threadnum ] ].subject ] ];
+	[ _titleItem setTitle: [NSString stringWithCString: arts[ base[ _threadnum ] ].subject ] ];
+	[ self refreshTitles ];
 	
 	[ _table reloadData ];
 
 }
+
+
+- (void) refreshTitles
+{
+	int i = 0, art;
+	ThreadViewItem * cell;
+	for(; i < [ _rows count]; i++)
+	{
+		cell = [ _rows objectAtIndex: i ];
+		art = [cell article];
+		[ cell setTitle: [NSString stringWithFormat: @"%s%s\n", 
+				arts[ art ].status == ART_READ ? " ": "*" ,
+				arts[ art ].subject ] ];
+
+	}
+
+}
+
+
 
 - (void) setGroupNum: (int) groupnum andThreadNum: (int) threadnum
 {
@@ -154,6 +171,7 @@
 
 - (void) returnToPage
 {
+	[ self refreshTitles ];
 	[ _delegate setView: self];
 }
 @end

@@ -58,8 +58,10 @@
 - (void) refreshMe
 {
 
-	[_connect presentSheetInView: self ];	 
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(getArticles) userInfo:nil repeats:NO];	
+	[_connect presentSheetInView: self ];
+	[_rows removeAllObjects];
+	[_table reloadData ]; 
+    [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(getArticles) userInfo:nil repeats:NO];	
 
 }
 
@@ -67,6 +69,7 @@
 {
 	_groupnum = groupnum;
 	[ _rows removeAllObjects];//ignoring cases where re-entering same group, we don't care about old articles
+
 	[ _titleItem setTitle: [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ]];	
 	
 }
@@ -80,14 +83,13 @@
 	//build rows....
 
 	int i;
-	UISimpleTableCell * row;
+	GroupItem * row;
 	[_rows removeAllObjects];
 	for ( i = 0; i < grpmenu.max; i++ )
 	{
-		row = [[UISimpleTableCell alloc] init];
-		[row setTitle: [ NSString stringWithFormat: @"%s%s" , 
-			arts[ base[i] ].status == ART_READ ? " ": "*",//star if unread (or other non-read status)
-			arts[ base[i] ].subject , artsInThread( i ) ] ] ;
+		row = [[GroupItem alloc] initWithThreadNum: i ];
+	//	[row setTitle: [ NSString stringWithFormat: @"%s%s" , 
+
 	//	[row setFont: smaller_font ];
 		if ( artsInThread( i ) > 1 )
 		{
@@ -96,8 +98,26 @@
 		}
 		[ _rows addObject: row ];
 	}
+	[self refreshTitles];
 
 	[ _table reloadData ];
+
+}
+
+- (void) refreshTitles
+{
+	int i = 0, threadnum;
+	GroupItem * cell;
+	for(; i < [ _rows count ]; i++)
+	{
+		cell = [ _rows objectAtIndex: i ];
+		threadnum = [cell threadNum];
+		[ cell setTitle: [NSString stringWithFormat: @"%s%s\n",
+			isThreadRead( threadnum ) ? " ": "*",//star if unread (or other non-read status)
+			arts[ base[threadnum] ].subject ] ];
+		//artsInThread( threadnum ) ] ] ; //write # unread articles at some point..?
+	}
+	
 
 }
 
@@ -109,18 +129,18 @@
 
 - (UITableCell *) table: (UITable *)table cellForRow: (int)row column: (int)col
 {
-	return [_rows objectAtIndex: row];
+	return [_rows objectAtIndex: [ _rows count ] - 1 - row ];
 }
 
 - (UITableCell *) table: (UITable *)table cellForRow: (int)row column: (int)col
 	reusing: (BOOL) reusing
 {
-	return [ _rows objectAtIndex: row]; 
+	return [ _rows objectAtIndex: [ _rows count ] - 1 - row ]; 
 }
 
 - (void)tableRowSelected:(NSNotification *)notification {
 //  NSLog(@"tableRowSelected!");
-	int i = [ _table selectedRow ];
+	int i = [ [ _rows objectAtIndex: [_rows count] - 1 - [ _table selectedRow ] ] threadNum ];
 	if ( artsInThread( i ) > 1 ) //if actually is /in/ a thead
 	{
 		[ _threadView setGroupNum: _groupnum andThreadNum: i ];
@@ -131,8 +151,6 @@
 	{
 		[ _postView setArticleNum: base[ i ] andGroupnum: _groupnum ];
 		[ _delegate setView: _postView ];
-		//remove the '*' part of it.. right now /attempting/ to view it counts as 'read'
-		[ [ _rows objectAtIndex: i ] setTitle: [NSString stringWithCString: arts[ base[i] ].subject ] ];
 		[ _postView refresh ];
 		//
 	}
@@ -164,7 +182,7 @@
 
 - (void) returnToPage
 {
-
+	[self refreshTitles ];
 	[ _delegate setView: self];
 
 }
@@ -174,4 +192,21 @@
 
 	[ _delegate setView: view ];
 }
+@end
+
+@implementation GroupItem
+
+- (id) initWithThreadNum: (int) threadnum
+{
+	[super init];
+	_threadnum = threadnum;
+	return self;
+}
+
+- (int) threadNum
+{
+
+	return _threadnum;
+}
+
 @end

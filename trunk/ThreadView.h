@@ -9,6 +9,7 @@
 #import <UIKit/UISimpleTableCell.h>
 #import "PostView.h";
 
+
 @interface ThreadView: UIView
 {
 	int _groupnum;
@@ -28,6 +29,8 @@
 
 - (void) refresh;//for consistency's sake, this should be called BEFORE switching to this view.  Since this is a fast operation, that shouldn't be a problem.
 
+- (void) refreshTitles;
+
 - (void) setDelegate: (id) delegate; //are YOU my mommmy?
 
 - (void) returnToPage;
@@ -44,6 +47,6 @@
 
 - (id) initWithArticle: (id) artnum;
 
-- (void) article;
+- (int) article;
 
 @end

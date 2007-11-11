@@ -46,4 +46,6 @@ NSString * articleSubject();
 
 void closeArticle();
 
-void markArticleRead( int groupnum, int articlenum ); 
+void markArticleRead( int groupnum, int articlenum );
+
+bool isThreadRead( int threadnum ); 

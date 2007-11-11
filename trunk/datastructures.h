@@ -27,6 +27,7 @@ static const int MAX_VIEW_DEPTH=8;
 
 struct __GSFont * smaller_font;
 
+static const double REFRESH_TIME = 0.3;
 
 typedef enum
 {

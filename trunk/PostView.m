@@ -57,9 +57,17 @@
 
 - (void) refresh
 {
+	[_message presentSheetInView: self ];	
+	[_rows removeAllObjects ];
+	[_titleItem setTitle: @"Loading..." ];
+	[_table reloadData ];
+	[_textView setText: @""];
+    [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(getPost) userInfo:nil repeats:NO];	
+}
+- (void) getPost
+{
 	NSLog( @" trying to open article %d of group %d", _postnum, _groupnum );
 
-	[_message presentSheetInView: self ];	
 
 	openArticle( _groupnum, _postnum );
 	
@@ -138,7 +146,7 @@
 //	NSLog( @"button pressed, which: %d", which );
 	if ( which == 0 ) //right
 	{
-//		[ self refreshMe ];
+	//
 	}
 	else
 	{
@@ -154,12 +162,13 @@
 	_delegate = delegate;
 
 }
+/*
+- (void) returnToPage
+{
+	[_delegate setView: self ];
 
 
-
-
-
-
-
+}
+*/
 
 @end

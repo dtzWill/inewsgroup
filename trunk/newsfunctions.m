@@ -197,16 +197,25 @@ void closeArticle()
 
 void markArticleRead( int groupnum, int postnum )
 {
-//TODO: mark it read, but don't make it disappear from lists!!! :(
 	art_mark( &active[ my_group[ groupnum ] ], &arts[ postnum ], ART_READ );
 
+}
+
+bool isThreadRead( int threadnum )
+{
+	int i;
+	for_each_art_in_thread( i, threadnum )
+	{
+		if ( arts[ i ].status == ART_UNREAD ) return false;//one unread article makes thread unread
+
+	}
+	return true;
 }
 
 
 
 
-
-
+//TODO: do we care about this function??
 void readNewsRC()
 {
 	//TODO: do something with this number?

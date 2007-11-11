@@ -88,8 +88,14 @@
 //	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
 //	rect.origin.x = rect.origin.y = 0.0f;
 	_prefs = [[PrefsView alloc] initWithFrame: rect];
+	[_prefs setDelegate: self];
+	
 	_group = [[GroupView alloc] initWithFrame: rect];
 	[_group setDelegate: self];
+
+	_subs = [[SubscriptionView alloc] initWithFrame: rect];
+	[_subs setDelegate: self];
+
 	
 	[_mainView addSubview:  nav ];
 	[_mainView addSubview: _table ];
@@ -106,7 +112,8 @@
 	int groupnum = [_table selectedRow];
 	if ( groupnum == [ _rows count] - 1 )//the more/less bar...
 	{
-
+		[ _subs loadSettings ];
+		[ self setView : _subs ];
 	}
 	else
 	{
@@ -140,7 +147,7 @@
 - (void) connect
 {
 	[_connect presentSheetInView: _mainView ];	 
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
+    [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
 	NSLog( @" set timer....%d", self );
 
 }
@@ -177,7 +184,6 @@
 	{//if fail.. just go to prefs page
 		NSLog( @"connection failed... showing prefs view" );
 		[ _window setContentView: _prefs];	
-		[_prefs setDelegate: self];
 	}
 	else
 	{
@@ -215,7 +221,7 @@
 
 
 	row = [[UIImageAndTextTableCell alloc] init];
-	[ row setTitle: @"\tAdd/Remove..."];
+	[ row setTitle: @"Add/Remove"];
 //	[ row setAlignment: 2 ];
 	
 	[_rows addObject: row ];	
