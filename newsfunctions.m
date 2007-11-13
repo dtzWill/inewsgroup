@@ -285,38 +285,28 @@ void init()
 
 }
 
+//ty rss for code structure
 void fakeHTTPRequest( char * url )
 {
-	CFHTTPMessageRef message;
-	CFReadStreamRef	stream;
+	NSURLResponse *response=0;
+	NSError *error=0;
+	NSData * responsedata;
 	NSString * urlstr = [NSString stringWithFormat: @"http://%s", url ];
-	NSLog( urlstr );
 	NSURL * newsserverurl = [NSURL URLWithString: urlstr];
-	message = CFHTTPMessageCreateRequest(
-		kCFAllocatorDefault,
-		CFSTR("POST"),
-		(CFURLRef) newsserverurl,
-		kCFHTTPVersion1_1);
-
-//	CFDataRef data = CFHTTPMessageCopySerializedMessage( message );
-
-
-	stream = CFReadStreamCreateForHTTPRequest( kCFAllocatorDefault, message );
-
-//	CFReadStreamOpen( stream);
-//TODO: CLOSE THIS???	
-
-	//if ( message == NULL ) return;//failure
-		
-	// Create the stream for the request.
-//	if ( stream == NULL ) return;//failure
 	
-	// Schedule the stream
-	CFReadStreamScheduleWithRunLoop( stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes );
-    
-	// Start the HTTP connection
-	if ( CFReadStreamOpen( stream ) == false )
-//	    return;
+	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL: newsserverurl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0];
+	
+	responsedata = [NSURLConnection sendSynchronousRequest: theRequest returningResponse: &response error: &error];
+	
+	if ( responsedata == nil )
+	{
+		//ERROR! show alert and handle gracefully
+		/*_eyeCandy = [[EyeCandy alloc] init];
+		[_eyeCandy showStandardAlertWithString: @"An Error Occurred" closeBtnTitle: @"Close" withError: [error localizedFailureReason]];
+
+		*/
+	}
+	
 
 //	CFRelease( message );
 //	CFRelease( newsserverurl );
