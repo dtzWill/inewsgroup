@@ -175,6 +175,8 @@
 
 - (void) setView: (UIView *) view
 {
+
+
 	[ _window setContentView: view];
 
 }
