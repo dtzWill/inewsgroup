@@ -2,10 +2,13 @@
 //Will Dietz
 //#import <unistd.h>
 //#import <stdio.h>
+//#import <CFNetwork/CFNetwork.h>
+//#import <CFNetwork/CFHTTPMessage.h>
 #import "datastructures.h"
 #import "newsfunctions.h"
 #import "tin.h"
 #import "extern.h"
+
 
 bool m_hasConnected;
 
@@ -282,6 +285,47 @@ void init()
 
 }
 
+void fakeHTTPRequest( char * url )
+{
+	CFHTTPMessageRef message;
+	CFReadStreamRef	stream;
+	NSString * urlstr = [NSString stringWithFormat: @"http://%s", url ];
+	NSLog( urlstr );
+	NSURL * newsserverurl = [NSURL URLWithString: urlstr];
+	message = CFHTTPMessageCreateRequest(
+		kCFAllocatorDefault,
+		CFSTR("POST"),
+		(CFURLRef) newsserverurl,
+		kCFHTTPVersion1_1);
+
+//	CFDataRef data = CFHTTPMessageCopySerializedMessage( message );
+
+
+	stream = CFReadStreamCreateForHTTPRequest( kCFAllocatorDefault, message );
+
+//	CFReadStreamOpen( stream);
+//TODO: CLOSE THIS???	
+
+	//if ( message == NULL ) return;//failure
+		
+	// Create the stream for the request.
+//	if ( stream == NULL ) return;//failure
+	
+	// Schedule the stream
+	CFReadStreamScheduleWithRunLoop( stream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes );
+    
+	// Start the HTTP connection
+	if ( CFReadStreamOpen( stream ) == false )
+//	    return;
+
+//	CFRelease( message );
+//	CFRelease( newsserverurl );
+//	CFRelease( data );
+	
+//	[urlstr release];
+
+	NSLog( @"done with httprequest");
+}
 
 int init_server()
 {
@@ -301,7 +345,13 @@ int init_server()
 
 	nntp_server =  getserverbyfile(NNTP_SERVER_FILE);
 	NSLog ( @"server: %s\n", nntp_server ) ;	
-//	read_server_config();
+	fakeHTTPRequest( (char *)nntp_server );
+	NSLog ( @"server: %s\n", nntp_server ) ;	
+
+//make httprequest we don't care about.  doesn't matter if it works or not--this fixes the dns resolution by using the apple api to try to resolve it.
+//it's a little slower, but /works/ which until libresolv.a gets figured out is plenty sufficient.
+
+
 
 	if ( nntp_open() == 0 )
 	{
