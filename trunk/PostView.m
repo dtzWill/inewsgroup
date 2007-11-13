@@ -4,7 +4,7 @@
 #import "PostView.h"
 
 #import <UIKit/UISimpleTableCell.h>
-#import "datastructures.h"
+#import "newsfunctions.h"
 
 @implementation PostView
 

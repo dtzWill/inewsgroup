@@ -81,7 +81,7 @@
 	[_table reloadData];
 
 	
- 	smaller_font = [NSClassFromString(@"WebFontCache") createFontWithFamily:@"Helvetica" traits:0 size:13];
+ 	smaller_font = [NSClassFromString(@"WebFontCache") createFontWithFamily:@"Helvetica" traits:2 size:12];
 
 
 	

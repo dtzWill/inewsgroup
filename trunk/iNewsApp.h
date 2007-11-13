@@ -8,7 +8,6 @@
 #import <UIKit/UITableCell.h>
 #import <UIKit/UIImageAndTextTableCell.h>
 
-#import "datastructures.h"
 #import "iNewsApp.h"
 #import "PrefsView.h"
 #import "GroupView.h"

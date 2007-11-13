@@ -3,6 +3,12 @@
 #import "tin.h"
 #import "extern.h"
 
+struct __GSFont * smaller_font;
+
+CGColorSpaceRef colorSpace;
+
+static const double REFRESH_TIME = 0.3;
+
 bool hasConnected();
 
 int numSubscribed();
