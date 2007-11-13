@@ -1,0 +1,2 @@
+//Will Dietz
+//ComposeView.h
