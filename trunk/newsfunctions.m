@@ -323,7 +323,8 @@ int init_server()
 	read_news_via_nntp = true;
 	check_for_new_newsgroups = true;
 	read_saved_news = false;
-	force_auth_on_conn_open = true;
+//why was this ever a good idea??
+	//force_auth_on_conn_open = true;
 
 	newsrc_active = false;
 	list_active = true;
