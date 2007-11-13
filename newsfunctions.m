@@ -4,7 +4,9 @@
 //#import <stdio.h>
 //#import <CFNetwork/CFNetwork.h>
 //#import <CFNetwork/CFHTTPMessage.h>
-#import "datastructures.h"
+//#import "datastructures.h"
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "newsfunctions.h"
 #import "tin.h"
 #import "extern.h"
@@ -282,6 +284,8 @@ void init()
 
 	set_signal_handlers();
 //	read_newsauth_file( nntp_server, user, pass );
+
+	colorSpace = CGColorSpaceCreateDeviceRGB();
 
 }
 

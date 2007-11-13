@@ -14,7 +14,7 @@ INTLFLAGS = $(INTLLIB) -liconv
 
 all:   iNewsGroup 
 
-iNewsGroup:  $(TINLIB)  SubscriptionView.o PostView.o ThreadView.o GroupView.o PrefsView.o iNewsApp.o  datastructures.o  inewsgroup.o newsfunctions.o $(PCRELIB) $(INTLLIB) $(TINLIB)
+iNewsGroup:  $(TINLIB)  SubscriptionView.o PostView.o ThreadView.o GroupView.o PrefsView.o iNewsApp.o  inewsgroup.o newsfunctions.o $(PCRELIB) $(INTLLIB) $(TINLIB)
 	$(ARMLD) $(LDFLAGS) -o $@ $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^  
 #	cp UIUCMapApp UIUCMap.app
 

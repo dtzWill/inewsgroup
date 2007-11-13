@@ -2,7 +2,7 @@
 //GroupView.m
 
 #import "GroupView.h"
-#import "datastructures.h"
+#import "newsfunctions.h"
 
 //TODO: move any functionality that needs this into newsfunctions where it belongs!
 #import "tin.h"
@@ -68,7 +68,7 @@
 - (void) setGroupNum: (int) groupnum
 {
 	_groupnum = groupnum;
-	[ _rows removeAllObjects];//ignoring cases where re-entering same group, we don't care about old articles
+	[ _rows removeAllObjects];//ignoring cases where re-entering same group, we don't care about old articles (reload anyway.. stupid user shouldnt've left in the first place ;-))
 
 	[ _titleItem setTitle: [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ]];	
 	
@@ -90,7 +90,7 @@
 		row = [[GroupItem alloc] initWithThreadNum: i ];
 	//	[row setTitle: [ NSString stringWithFormat: @"%s%s" , 
 
-	//	[row setFont: smaller_font ];
+		[row setFont: smaller_font ];
 		if ( artsInThread( i ) > 1 )
 		{
 			[row setDisclosureStyle: 1];
