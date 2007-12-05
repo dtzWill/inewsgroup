@@ -42,7 +42,7 @@
 @end
 
 
-@interface GroupItem: UISimpleTableCell
+@interface GroupItem: UIImageAndTextTableCell
 {
 	int _threadnum;
 

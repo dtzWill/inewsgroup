@@ -4,17 +4,30 @@ ARMLD=$(ARMCC)
 CC=gcc
 LD=$(CC)
 RESOLVLIB = ./libresolv.a 
-LDFLAGS= -Wl,-syslibroot,/usr/local/share/iphone-filesystem  -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit -framework CFNetwork
+LDFLAGS= -Wl,-syslibroot,/usr/local/share/iphone-filesystem  -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit -framework CFNetwork -framework Message
 TINDIR = tin-1.8.3/src
 TININC = -I tin-1.8.3/include -I tin-1.8.3/pcre -I tin-1.8.3/src -I tin-1.8.3/intl
 TINLIB = ./libtin.a
 PCRELIB = tin-1.8.3/pcre/libpcre.a 
 INTLLIB = tin-1.8.3/intl/libintl.a
 INTLFLAGS = $(INTLLIB) -liconv
+OBJS = \
+	$(TINLIB) \
+	MessageController.o \
+	SubscriptionView.o \
+	PostView.o \
+	ThreadView.o \
+	GroupView.o \
+	PrefsView.o \
+	iNewsApp.o \
+	inewsgroup.o \
+	newsfunctions.o \
+	$(PCRELIB) \
+	$(INTLLIB) 
 
 all:   iNewsGroup 
 
-iNewsGroup:  $(TINLIB)  SubscriptionView.o PostView.o ThreadView.o GroupView.o PrefsView.o iNewsApp.o  inewsgroup.o newsfunctions.o $(PCRELIB) $(INTLLIB) $(TINLIB)
+iNewsGroup:  $(OBJS) 
 	$(ARMLD) $(LDFLAGS) -o $@ $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^  
 #	cp UIUCMapApp UIUCMap.app
 

@@ -17,7 +17,7 @@
 #import "iNewsApp.h"
 //#import "NewsListView.h"
 #import "newsfunctions.h"
-
+#import "MessageController.h"
 
 @implementation iNewsApp
 
@@ -31,6 +31,9 @@
 	_mainView = [[UIView alloc] initWithFrame: rect];
 	[_window setContentView: _mainView];
 
+	[_window orderFront: self];
+	[_window makeKey: self];
+	[_window _setHidden: NO];
 
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
@@ -41,15 +44,18 @@
 	[nav setBarStyle: 0];
 
 
-
+	NSLog(@"initing...");
 	
 	init();
+	
+	NSLog(@"done with init");
 
 	_count = 0;//1;
 
 	_connect = [[UIAlertSheet alloc]initWithTitle:@"Connecting..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
-	
-	[_connect setDimsBackground:YES];
+	//[_connect setNumberOfRows: 1];	
+	[_connect setDimsBackground: NO];
+
 
 //	NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
 	//build tree of current news.... and create views
@@ -71,17 +77,14 @@
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"subscribedgroups"
 	    identifier: @"subscribedgroups" width: 320.0f];
 
-	[_window orderFront: self];
-	[_window makeKey: self];
-	[_window _setHidden: NO];
 	
 	[_table addTableColumn: col]; 
 	[_table setDataSource: self];
 	[_table setDelegate: self];
 	[_table reloadData];
-
+//	smaller_font = GSFontCreateWithName("Helvetica", 2, 24.0f);
 	
- 	smaller_font = [NSClassFromString(@"WebFontCache") createFontWithFamily:@"Helvetica" traits:2 size:12];
+// 	smaller_font = [NSClassFromString(@"WebFontCache") createFontWithFamily:@"Helvetica" traits:2 size:12];
 
 
 	
@@ -146,8 +149,12 @@
 
 - (void) connect
 {
-	[_connect presentSheetInView: _mainView ];	 
-    [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
+//	[ _connect setBlocksInteraction: NO ];
+//	[ _connect setRunsModal: NO ];
+	[_connect presentSheetFromAboveView: _mainView ];	 
+//	[ _connect popupAlertAnimated: YES ];
+	[[MessageController sharedInstance] setSheet: _connect withView: _mainView ];
+	[NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
 //	NSLog( @" set timer....%d", self );
 
 }
@@ -181,8 +188,18 @@
 
 }
 
+- (void) setTitle: (NSString *) title
+{
+	[ _titleItem setTitle: title];
+
+}
 
 - (void) delayedInit
+{
+	[self performSelectorOnMainThread: @selector(delayedInitSel) withObject: nil waitUntilDone: YES];
+}
+
+- (void) delayedInitSel
 {
 	if(	!init_server() )
 	{//if fail.. just go to prefs page
@@ -195,6 +212,7 @@
 		updateData();
 		[self refreshTable ];
 	}
+	[[MessageController sharedInstance] sheetClosed ];
 	[ _connect dismiss ];
 	[_prefs loadSettings ];
 }
