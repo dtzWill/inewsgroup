@@ -3,11 +3,23 @@
 #import "tin.h"
 #import "extern.h"
 
-struct __GSFont * smaller_font;
+//Interaction between iNewsGroup and the tin code... also declare global variables here
 
-CGColorSpaceRef colorSpace;
+
+//globals:
+
+//struct __GSFont * smaller_font;
+
+//CGColorSpaceRef colorSpace;
 
 static const double REFRESH_TIME = 0.3;
+
+//This already exists, apparently.  From /where/ though?
+//static const float col_bkgd[4] = {0.0, 0.0, 0.0, 0.0};
+
+//static const float col_gray[4] = {0.34, 0.34, 0.34, 1.0};
+
+//methods:
 
 bool hasConnected();
 

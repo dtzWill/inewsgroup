@@ -397,7 +397,7 @@ index_group(
 	 */
 	//for some reason I can't get tinrc.cache_overview_files to stay 'true', so it's been removed from the following conditional.
 	caching_xover = (nntp_caps.over_cmd && group->type == GROUP_TYPE_NEWS);
-	wait_message( 0 , "WHY NOT LOCAL??\n\tcaching_xover: %d\n\ttinrc.cache_overview_files: %d\n\tnnp_caps.over_cmd: %d\n\tgroup->type: %d (%d)\n\n\n", caching_xover, tinrc.cache_overview_files, nntp_caps.over_cmd, group->type, GROUP_TYPE_NEWS );
+//	wait_message( 0 , "WHY NOT LOCAL??\n\tcaching_xover: %d\n\ttinrc.cache_overview_files: %d\n\tnnp_caps.over_cmd: %d\n\tgroup->type: %d (%d)\n\n\n", caching_xover, tinrc.cache_overview_files, nntp_caps.over_cmd, group->type, GROUP_TYPE_NEWS );
 	if ((changed = read_overview(group, min, max, &last_read_article, caching_xover)) == -1)
 		return FALSE;	/* user aborted indexing */
 

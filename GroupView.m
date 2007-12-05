@@ -2,7 +2,9 @@
 //GroupView.m
 
 #import "GroupView.h"
+#import "MessageController.h"
 #import "newsfunctions.h"
+#import <GraphicsServices/GraphicsServices.h>
 
 //TODO: move any functionality that needs this into newsfunctions where it belongs!
 #import "tin.h"
@@ -19,6 +21,7 @@
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 
 	_connect = [[UIAlertSheet alloc]initWithTitle:@"Refreshing..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
+
 	
 	[_connect setDimsBackground:YES];
 	
@@ -59,6 +62,7 @@
 {
 
 	[_connect presentSheetInView: self ];
+//	[ [MessageController sharedInstance] setSheet: _connect ];
 	[_rows removeAllObjects];
 	[_table reloadData ]; 
     [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(getArticles) userInfo:nil repeats:NO];	
@@ -78,6 +82,8 @@
 {
 	loadGroup( _groupnum );
 
+
+	[ [MessageController sharedInstance] sheetClosed ];
 	[ _connect dismiss ];
 
 	//build rows....
@@ -88,9 +94,10 @@
 	for ( i = 0; i < grpmenu.max; i++ )
 	{
 		row = [[GroupItem alloc] initWithThreadNum: i ];
-	//	[row setTitle: [ NSString stringWithFormat: @"%s%s" , 
 
-		[row setFont: smaller_font ];
+		
+	//	[row setTitleColor: CGColorCreate(colorSpace, col_gray)];
+
 		if ( artsInThread( i ) > 1 )
 		{
 			[row setDisclosureStyle: 1];
@@ -110,12 +117,21 @@
 	GroupItem * cell;
 	for(; i < [ _rows count ]; i++)
 	{
+//		NSLog( @"refreshing cell %d\n", i );
 		cell = [ _rows objectAtIndex: i ];
 		threadnum = [cell threadNum];
-		[ cell setTitle: [NSString stringWithFormat: @"%s%s\n",
+//		struct __GSFont * cell_font = GSFontCreateWithName("Helvetica", 1, 14.0f);
+//        [ [ cell titleTextLabel ] setFont: cell_font ];
+  //      float forecolor[4] = { 0.0, 0.0, 0.0, 1.0 };
+  //      [ [ cell titleTextLabel ] setBackgroundColor: CGColorCreate(colorSpace, col_bkgd)];
+    //    [ [cell titleTextLabel ] setHighlightedColor: CGColorCreate(colorSpace, col_gray)];
+  //      [ [cell titleTextLabel ] setColor: CGColorCreate(colorSpace, forecolor)];
+//		CFRelease( cell_font );
+		[ [ cell titleTextLabel ] setText: [NSString stringWithFormat: @"%s%s",
 			isThreadRead( threadnum ) ? " ": "*",//star if unread (or other non-read status)
 			arts[ base[threadnum] ].subject ] ];
 		//artsInThread( threadnum ) ] ] ; //write # unread articles at some point..?
+		
 	}
 	
 
@@ -198,7 +214,16 @@
 
 - (id) initWithThreadNum: (int) threadnum
 {
-	[super init];
+	[super initWithFrame: CGRectMake(0.0f,0.0f, 320.0f, 64.0f)];
+//	smaller_font = GSFontCreateWithName("Helvetica", 2, 24.0f);
+//	[ [self titleTextLabel ] setFont: smaller_font ];
+//	float forecolor[4] = { 1.0, 1.0, 1.0, 1.0 };
+//	[ [self titleTextLabel ] setBackgroundColor: CGColorCreate(colorSpace, col_bkgd)];
+//	[ [self titleTextLabel ] setHighlightedColor: CGColorCreate(colorSpace, col_gray)];
+//	[ [self titleTextLabel ] setColor: CGColorCreate(colorSpace, forecolor)];
+	[ [self titleTextLabel]setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];	
+	[ self setTitle: @"News item" ];
+	[ [ self titleTextLabel ]setWrapsText: YES ]; //doesn't seem to do anything
 	_threadnum = threadnum;
 	return self;
 }
