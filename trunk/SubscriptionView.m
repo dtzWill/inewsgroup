@@ -3,6 +3,7 @@
 
 #include "SubscriptionView.h"
 #import <UIKit/UIPreferencesControlTableCell.h>
+#import <GraphicsServices/GraphicsServices.h>
 #import <UIKit/UISwitchControl.h>
 //TODO: GET RID OF THIS:
 #import "tin.h"
@@ -97,13 +98,26 @@
 
 }
 
+- (float)preferencesTable:(UIPreferencesTable *)aTable heightForRow:(int)row inGroup:(int)group withProposedHeight:(float)proposed {
+//	NSLog( @"Proposed height: %d", proposed );
+  switch (group) {
+    case 0:
+      return 30;
+    case 1:
+      if ( row >= 0 ) return 50;
+		return 0;
+     default:
+      return proposed;
+  }
+}
 
 - (UIPreferencesTableCell*) preferencesTable: (UIPreferencesTable*)table cellForRow: (int)row inGroup: (int)group 
 {
+//	NSLog( @"Requested cell: %d", row );
 	switch( group )
 	{
 		case 0: return _prefHeader;
-		case 1: return [[_rows objectAtIndex: row] retain];
+		case 1: return [[[_rows objectAtIndex: row] getRow ] retain];
 		default:
 			NSLog( @"WTF: invalid group count in prefstable" );
 			return nil;
@@ -115,8 +129,23 @@
 	[ _rows removeAllObjects ];//clear it out...
 
 	int i;
-	UIPreferencesControlTableCell * row;
-	UISwitchControl * button;
+
+//	[ _rows release ];
+//	_rows = [NSMutableArray arrayWithCapacity: numActive() ];
+
+	SubPrefItem * item;
+
+	for_each_group( i )
+	{
+//		NSLog( @"Creating item: %d", i );
+		item = [[SubPrefItem alloc] initWithID: i ];
+		[ _rows addObject: item ];
+	}
+
+
+	[ _rows sortUsingSelector: @selector( compareSubscription: ) ];	
+
+/*
 	for_each_group( i )
 	{
 		row = [[UIPreferencesControlTableCell alloc] init];
@@ -127,19 +156,22 @@
 		[ row setControl: button ];
 		[ _rows addObject: row ];
 	}
+*/
 
+	NSLog( @"loaded settings... reloading data" );
 	[ _prefTable reloadData ];
 }
 
 - (void) saveSettings
 {
 	int i;
+	SubPrefItem * item;
 	for_each_group( i )
 	{
-		bool value = [ [ [ _rows objectAtIndex: i ] control ] value ];
-		if ( value != active[ i ].subscribed )//if it's changed...
+		item = [ _rows objectAtIndex: i ];
+		if ( [item isInitialized] && [ item switchValue ] != active[ i ].subscribed )//if it's changed...
 		{
-				doSubscribe( &active[ i ], value );
+				doSubscribe( &active[ [item getIndex ] ], [item switchValue ] );
 		}	
 	}
 //update listing...?
@@ -190,3 +222,72 @@
 @end
 
 
+
+
+@implementation SubPrefItem
+
+-(UIPreferencesControlTableCell *) getRow
+{
+	//only initializes as needed.. hopefully this helps speed things up
+	if ( ![self isInitialized ] )
+	{
+		row = [[UIPreferencesControlTableCell alloc] initWithFrame: CGRectMake(
+				0.0f, 0.0f, 320.0f , 30.0f ) ];
+		UISwitchControl * button = [[UISwitchControl alloc] initWithFrame: CGRectMake(
+ 320.f - 
+114.0, 24.0f, 114.0f, 48.0f ) ];
+		[button setValue: active[ index ].subscribed ];
+//		[ [row titleTextLabel ] setFrame: CGRectMake( 0.0f, 0.0f, 320.0f - 114.0f, 32.0f ) ];
+		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];
+		[ [row titleTextLabel ] setWrapsText: YES ];
+//		[ row setTitle: @"this.is.a.ridiculously.long.group.name.dear.god.why.doesnt.it.ever.end" ];
+		[ row setTitle: [NSString stringWithCString: active[ index].name ] ];
+		[ row setControl: button ];
+		[ row sizeToFit ];
+	}
+
+	return row;
+}
+
+
+- (id) initWithID: (int) subid
+{
+	[super init];
+	row = 0;
+	index = subid;
+	title = [ NSString stringWithCString: active[index ].name ];
+	return self;
+}
+
+
+- (bool) isInitialized
+{
+	return ( row != 0 );
+}
+
+
+- (bool) switchValue
+{
+	if ( ! [self isInitialized] ) return false;//ERROR
+
+	return [ [  row control ] value ];
+
+}
+
+- (int) getIndex
+{
+	return index;
+}
+
+- (NSComparisonResult)compareSubscription:(SubPrefItem *)s
+{
+//	NSLog( @"Comparer called on: %d vs %d", [self getIndex], [s getIndex] );
+	return [ [ self getTitle ] compare: [ s getTitle] ];
+}
+
+- (NSString *) getTitle
+{
+	return title;
+}
+
+@end

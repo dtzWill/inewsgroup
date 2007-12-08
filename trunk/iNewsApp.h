@@ -16,6 +16,7 @@
 @interface iNewsApp : UIApplication {
     NSMutableArray * _rows;// holds the row objects for our table 
     UINavigationItem * _titleItem;//title
+	UINavigationBar * _navTop,  * _navBottom;
 	int _count;
 	UIWindow * _window;
 	UIView * _mainView;

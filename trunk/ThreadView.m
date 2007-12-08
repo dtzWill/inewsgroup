@@ -110,9 +110,13 @@
 	{
 		cell = [ _rows objectAtIndex: i ];
 		art = [cell article];
-		[ cell setTitle: [NSString stringWithFormat: @"%s%s\n", 
-				arts[ art ].status == ART_READ ? " ": "*" ,
+		[ cell setTitle: [NSString stringWithFormat: @"%s\n", 
 				arts[ art ].subject ] ];
+
+		UIImage * img = [UIImage applicationImageNamed:
+			arts[ art ].status != ART_READ ?
+				@"UnreadIndicator.png" : @"ReadIndicator.png" ];
+		[ cell setImage: img ];
 
 	}
 

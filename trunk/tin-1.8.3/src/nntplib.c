@@ -885,7 +885,7 @@ get_server(
 	errno = 0;
 
 	//Will--debug
-//	wait_message( 0, "in get server!\n" );
+//	wait_message( 0, "in get server! %d\n", retry );
 
 	/*
 	 * NULL socket reads indicates socket has closed. Try a few times more
@@ -1164,6 +1164,9 @@ check_extensions(
 #		ifdef DEBUG
 		debug_print_nntp_extensions();
 #		endif /* DEBUG */
+
+
+
 		if (!*sec)
 			ret = mode_reader(&*sec);
 	}
@@ -1282,6 +1285,8 @@ nntp_open(
 
 	ret = server_init(nntp_server, NNTP_TCP_NAME, nntp_tcp_port, line, sizeof(line));
 	DEBUG_IO((stderr, "server_init returns %d,%s\n", ret, line));
+
+	wait_message(0, "\n\tserver_init returns %d, %s\n", ret, line );
 
 	if (!batch_mode && ret >= 0 && cmd_line)
 		my_fputc('\n', stdout);

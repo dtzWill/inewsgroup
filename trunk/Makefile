@@ -13,7 +13,6 @@ INTLLIB = tin-1.8.3/intl/libintl.a
 INTLFLAGS = $(INTLLIB) -liconv
 OBJS = \
 	$(TINLIB) \
-	MessageController.o \
 	SubscriptionView.o \
 	PostView.o \
 	ThreadView.o \

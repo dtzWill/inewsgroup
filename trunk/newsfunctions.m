@@ -6,7 +6,6 @@
 #import "tin.h"
 #import "extern.h"
 #import "NetworkController.h"
-#import "MessageController.h"
 
 bool m_hasConnected;
 
@@ -339,17 +338,17 @@ int init_server()
 			[[NetworkController sharedInstance]keepEdgeUp];									
 			[[NetworkController sharedInstance]bringUpEdge];
 			NSLog( @"Bringing edge up....");//update message
-			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 5" ];
-			sleep(1);
-			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 4" ];
-			sleep(1);
-			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 3" ];
-			sleep(1);
-			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 2" ];
-			sleep(1);
-			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 1" ];
-			sleep(1);
-			[[MessageController sharedInstance] setAlertText: @"Connecting..." ];
+//			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 5" ];
+//			sleep(1);
+//			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 4" ];
+//			sleep(1);
+//			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 3" ];
+//			sleep(1);
+//			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 2" ];
+//			sleep(1);
+//			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 1" ];
+//			sleep(1);
+//			[[MessageController sharedInstance] setAlertText: @"Connecting..." ];
 		}
 	}
 	
@@ -357,7 +356,7 @@ int init_server()
 	check_for_new_newsgroups = true;
 	read_saved_news = false;
 //why was this ever a good idea??
-	//force_auth_on_conn_open = true;
+	force_auth_on_conn_open = false;
 
 	newsrc_active = false;
 	list_active = true;
@@ -368,17 +367,18 @@ int init_server()
 	//batch_mode = true;//silence/speed things up...?
 
 	char * server = getserverbyfile( NNTP_SERVER_FILE );
-	if( !server )
+	if( !server )https://netfiles.uiuc.edu/wcourtn2/www/testingMaze.bmp
 		return false;//no server name, don't even try it
 	//else
 	nntp_server =  server;
 	NSLog ( @"server: %s\n", nntp_server ) ;	
 	
 	int connect = nntp_open();
+//	NSLog( @"nntp_open: %d", connect );
 	if ( connect < 0 ) //if failed due to system call
 	{
 		NSLog( @"Connect failed in system call, trying http req" );
-		[ [MessageController sharedInstance] setAlertText: @"Can't find server.  Trying to force dns resolution..." ];
+//		[ [MessageController sharedInstance] setAlertText: @"Can't find server.  Trying to force dns resolution..." ];
 		if ( !fakeHTTPRequest( (char *)nntp_server ) )//if we can't connect at all
 		{
 			NSLog( @"Failed to connect!" );
@@ -411,17 +411,17 @@ int updateData()
 		newsrc_active = false;
 		list_active = true;
 	
-		[ [MessageController sharedInstance] setAlertText: @"Reading active file..." ];	
+//		[ [MessageController sharedInstance] setAlertText: @"Reading active file..." ];	
 		read_news_active_file();
 	
-		[ [MessageController sharedInstance] setAlertText: @"Reading newsgroups file..." ];	
+//		[ [MessageController sharedInstance] setAlertText: @"Reading newsgroups file..." ];	
 		read_newsgroups_file( true );
 	
 		//TODO: use this value (and check that it means what the variable name suggests it emans)	
-		[ [MessageController sharedInstance] setAlertText: @"Reading newsrc file..." ];	
+//		[ [MessageController sharedInstance] setAlertText: @"Reading newsrc file..." ];	
 		int num_subscribed = read_newsrc( newsrc, true );
 	
-		[ [MessageController sharedInstance] setAlertText: @"Updating active file.." ];	
+//		[ [MessageController sharedInstance] setAlertText: @"Updating active file.." ];	
 		create_save_active_file();
 	
 		//don't update, it takes too long, let's do it when viewing a group..
