@@ -14,10 +14,10 @@
 #import <UIKit/UITableCell.h>
 #import <UIKit/UITableColumn.h>
 #import <UIKit/UIAlertSheet.h>
+#import <GraphicsServices/GraphicsServices.h>
 #import "iNewsApp.h"
 //#import "NewsListView.h"
 #import "newsfunctions.h"
-#import "MessageController.h"
 
 @implementation iNewsApp
 
@@ -35,13 +35,16 @@
 	[_window makeKey: self];
 	[_window _setHidden: NO];
 
-	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
+	_navTop = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"iNewsGroup" ];
-	[nav showButtonsWithLeftTitle: @"Prefs" rightTitle: @"Quit" leftBack: YES ]; 
-	[nav pushNavigationItem: _titleItem];
-	[nav setDelegate: self];	
-	[nav setBarStyle: 0];
+	[_navTop showButtonsWithLeftTitle: @"Prefs" rightTitle: @"Quit" leftBack: YES ]; 
+	[_navTop pushNavigationItem: _titleItem];
+	[_navTop setDelegate: self];	
+	[_navTop setBarStyle: 0];
+
+
+
 
 
 	NSLog(@"initing...");
@@ -53,8 +56,10 @@
 	_count = 0;//1;
 
 	_connect = [[UIAlertSheet alloc]initWithTitle:@"Connecting..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
-	//[_connect setNumberOfRows: 1];	
-	[_connect setDimsBackground: NO];
+//	[_connect setNumberOfRows: 1];	
+	[_connect setDimsBackground: YES];
+
+
 
 
 //	NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
@@ -100,7 +105,7 @@
 	[_subs setDelegate: self];
 
 	
-	[_mainView addSubview:  nav ];
+	[_mainView addSubview:  _navTop ];
 	[_mainView addSubview: _table ];
 
 //	[window setContentView: root];
@@ -115,7 +120,9 @@
 	int groupnum = [_table selectedRow];
 	if ( groupnum == [ _rows count] - 1 )//the more/less bar...
 	{
+		NSLog( @"loading sub settings" );
 		[ _subs loadSettings ];
+		NSLog( @"showing subs" );
 		[ self setView : _subs ];
 	}
 	else
@@ -151,9 +158,8 @@
 {
 //	[ _connect setBlocksInteraction: NO ];
 //	[ _connect setRunsModal: NO ];
-	[_connect presentSheetFromAboveView: _mainView ];	 
-//	[ _connect popupAlertAnimated: YES ];
-	[[MessageController sharedInstance] setSheet: _connect withView: _mainView ];
+	[_connect presentSheetInView: _mainView ];	 
+
 	[NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
 //	NSLog( @" set timer....%d", self );
 
@@ -188,11 +194,6 @@
 
 }
 
-- (void) setTitle: (NSString *) title
-{
-	[ _titleItem setTitle: title];
-
-}
 
 - (void) delayedInit
 {
@@ -211,8 +212,11 @@
 //		readNewsRC();
 		updateData();
 		[self refreshTable ];
+		//TODO: set timer to fire every X seconds, saving the newsrc, as follows:
+		//write_config_file(local_config_file);
+		//long sessions would benefit greatly from this, and it's rather cheap :)
 	}
-	[[MessageController sharedInstance] sheetClosed ];
+//	[[MessageController sharedInstance] sheetClosed ];
 	[ _connect dismiss ];
 	[_prefs loadSettings ];
 }
@@ -229,11 +233,20 @@
 	{
 		row = [[UIImageAndTextTableCell alloc] init];
 		
-		[row setTitle: [NSString stringWithFormat: @"%s%s",
+	/*	[row setTitle: [NSString stringWithFormat: @"%s%s",
 			active[ my_group[i] ].newsrc.num_unread > 0 ? "*":" " , //put "*" if unread arts
-			active[my_group[i]].name ] ];
-		//[row addTarget:self action:@selector(go) ];
+			active[my_group[i]].name ] ];*/
+		UIImage * img = [UIImage applicationImageNamed:
+				active[ my_group[i] ].newsrc.num_unread > 0 ?
+					@"UnreadIndicator.png" : @"ReadIndicator.png" ];  
 
+		[ row setTitle: [NSString stringWithCString: active[ my_group[i] ].name ] ];
+
+		[ row setImage: img ];
+
+
+		//[row addTarget:self action:@selector(go) ];
+		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,15) ];
 	//TODO: WHY DOESNT THIS WORK???
 /*
 		[row disclosureStyle: 2];

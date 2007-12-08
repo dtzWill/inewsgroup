@@ -337,7 +337,7 @@ authinfo_original(
 	if ( do_authinfo_original( server, authusername, authpassword ) ) 
 		return TRUE;
 */
-	authpassword[0] = '\0';
+//	authpassword[0] = '\0';
 //	authuser = strncpy(authusername, authuser, sizeof(authusername) - 1);
 	authpass = authpassword;
 
@@ -382,11 +382,14 @@ authinfo_original(
 	 * TODO: Put questions into do_authinfo_original because it is possible
 	 * that the server doesn't want a password; so only ask for it if needed.
 	 */
-	if (force_auth_on_conn_open || !startup) {
+
+//Will:
+//	if (force_auth_on_conn_open || !startup) {
 #ifdef USE_CURSES
 		int state = RawState();
 #endif /* USE_CURSES */
 
+		wait_message( 0, "have i found it?\n" );
 		wait_message(0, _(txt_auth_needed));
 
 #ifdef USE_CURSES
@@ -423,7 +426,7 @@ authinfo_original(
 	//	ret = do_authinfo_original(server, authuser, authpass);
 //		initialized = TRUE;
 	//	my_retouch();			/* Get rid of the chaff */
-	}
+//	}
 
 #ifdef DEBUG
 	debug_nntp("authorization", (ret == OK_AUTH ? "succeeded" : "failed"));

@@ -2,7 +2,6 @@
 //GroupView.m
 
 #import "GroupView.h"
-#import "MessageController.h"
 #import "newsfunctions.h"
 #import <GraphicsServices/GraphicsServices.h>
 
@@ -62,7 +61,6 @@
 {
 
 	[_connect presentSheetInView: self ];
-//	[ [MessageController sharedInstance] setSheet: _connect ];
 	[_rows removeAllObjects];
 	[_table reloadData ]; 
     [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(getArticles) userInfo:nil repeats:NO];	
@@ -83,7 +81,6 @@
 	loadGroup( _groupnum );
 
 
-	[ [MessageController sharedInstance] sheetClosed ];
 	[ _connect dismiss ];
 
 	//build rows....
@@ -127,9 +124,20 @@
     //    [ [cell titleTextLabel ] setHighlightedColor: CGColorCreate(colorSpace, col_gray)];
   //      [ [cell titleTextLabel ] setColor: CGColorCreate(colorSpace, forecolor)];
 //		CFRelease( cell_font );
-		[ [ cell titleTextLabel ] setText: [NSString stringWithFormat: @"%s%s",
+
+/*		[ [ cell titleTextLabel ] setText: [NSString stringWithFormat: @"%s%s",
 			isThreadRead( threadnum ) ? " ": "*",//star if unread (or other non-read status)
-			arts[ base[threadnum] ].subject ] ];
+			arts[ base[threadnum] ].subject ] ];*/
+
+		UIImage * img = [UIImage applicationImageNamed:
+				isThreadRead( threadnum ) ?
+					@"ReadIndicator.png" : @"UnreadIndicator.png" ];  
+
+
+		[ cell setTitle: [NSString stringWithFormat: @"%s\n", arts[ base[ threadnum ] ].subject ] ];
+
+		[ cell setImage: img ];
+
 		//artsInThread( threadnum ) ] ] ; //write # unread articles at some point..?
 		
 	}

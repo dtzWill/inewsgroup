@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <UIKit/UIView.h>
-#import <UIKit/UISimpleTableCell.h>
+#import <UIKit/UIImageAndTextTableCell.h>
 #import "PostView.h";
 
 
@@ -39,7 +39,7 @@
 
 //a basically useless class to link together the article number with the cell
 //possibly this will be useful later for adding other things to it
-@interface ThreadViewItem: UISimpleTableCell
+@interface ThreadViewItem: UIImageAndTextTableCell
 {
 	int _articleID;
 
