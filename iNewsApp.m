@@ -236,9 +236,10 @@
 	/*	[row setTitle: [NSString stringWithFormat: @"%s%s",
 			active[ my_group[i] ].newsrc.num_unread > 0 ? "*":" " , //put "*" if unread arts
 			active[my_group[i]].name ] ];*/
+
+		bool unread = active[ my_group[i] ].newsrc.num_unread > 0 ;
 		UIImage * img = [UIImage applicationImageNamed:
-				active[ my_group[i] ].newsrc.num_unread > 0 ?
-					@"UnreadIndicator.png" : @"ReadIndicator.png" ];  
+				unread ? @"UnreadIndicator.png" : @"ReadIndicator.png" ];  
 
 		[ row setTitle: [NSString stringWithCString: active[ my_group[i] ].name ] ];
 
@@ -247,11 +248,11 @@
 
 		//[row addTarget:self action:@selector(go) ];
 		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,15) ];
-	//TODO: WHY DOESNT THIS WORK???
-/*
-		[row disclosureStyle: 2];
-		[row showDisclosure: YES];
-*/ 
+
+//		[row setDisclosureStyle: (unread? 1: 2) ];
+		[ row setDisclosureStyle: 1 ]; //BLUE
+		[row setShowDisclosure: YES];
+ 
 		[ _rows addObject : row ];
 	}
 
