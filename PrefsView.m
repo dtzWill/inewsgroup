@@ -49,7 +49,7 @@
 	//put information about iNewsGroup and author here, copyright, etc
 	//about
 	UIPreferencesTableCell * _rowAbout = [[UIPreferencesTableCell alloc] init ];
-	[ _rowAbout setTitle: @"iNewsGroup 0.1.0" ];
+	[ _rowAbout setTitle: @"iNewsGroup 0.0.6" ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 	_rowAbout = [[UIPreferencesTableCell alloc] init ];
