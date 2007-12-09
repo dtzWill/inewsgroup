@@ -210,6 +210,7 @@
 	else
 	{
 //		readNewsRC();
+		[NSTimer scheduledTimerWithTimeInterval: SAVE_TIME target:self selector:@selector(saveConfig) userInfo:nil repeats:YES];	
 		updateData();
 		[self refreshTable ];
 		//TODO: set timer to fire every X seconds, saving the newsrc, as follows:
@@ -220,6 +221,12 @@
 	[ _connect dismiss ];
 	[_prefs loadSettings ];
 }
+
+- (void) saveConfig
+{
+	write_config_file(local_config_file);
+}
+
 
 - (void) refreshTable
 {
@@ -271,7 +278,7 @@
 //	NSLog( @"button pressed, which: %d", which );
 	if ( which == 0 ) //right
 	{
-		write_config_file(local_config_file);
+
 		tin_done(EXIT_SUCCESS); //doesn't close the app gracefully.... o_O
 		//TODO: close the app gracefully.
 	}
