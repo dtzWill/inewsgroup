@@ -18,6 +18,7 @@
 
 
 	_rows = [[NSMutableArray alloc] init];
+	_rowsAbout = [[NSMutableArray alloc] init];
 
 	UIPreferencesTextTableCell * _row;
 	//server
@@ -38,11 +39,28 @@
 	[[_row textField] setText: @""];
 	[_rows addObject: _row];
 
-/* //put information about iNewsGroup and author here, copyright, etc
+
+	//email
+	_row = [[UIPreferencesTextTableCell alloc] init ];
+	[_row setTitle: @"Email:"];
+	[[_row textField] setText: @""];
+	[_rows addObject: _row];
+
+	//put information about iNewsGroup and author here, copyright, etc
 	//about
-	_row = [[UIPreferencesTableCell alloc] init ];
-	
-*/
+	UIPreferencesTableCell * _rowAbout = [[UIPreferencesTableCell alloc] init ];
+	[ _rowAbout setTitle: @"iNewsGroup 0.1.0" ];
+	[ _rowsAbout addObject: _rowAbout ];
+
+	_rowAbout = [[UIPreferencesTableCell alloc] init ];
+	[ _rowAbout setTitle: @"Will Dietz" ];
+	[ _rowsAbout addObject: _rowAbout ];
+
+	_rowAbout = [[UIPreferencesTableCell alloc] init ];
+	[ _rowAbout setTitle: @"inewsgroupdev@gmail.com" ];
+	[ _rowsAbout addObject: _rowAbout ];
+
+
 
 	[_prefTable reloadData];
 
@@ -50,6 +68,9 @@
 	_prefHeader = [[UIPreferencesTableCell alloc] init];
 	[_prefHeader setTitle: @"NewsGroup Settings"];
 
+
+	_prefAboutHeader = [[UIPreferencesTableCell alloc] init];
+	[_prefAboutHeader setTitle: @"About:" ];
 
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
@@ -76,7 +97,7 @@
 - (int) numberOfGroupsInPreferencesTable: (UIPreferencesTable*)table 
 {
 //	NSLog( @"numberOfGroups Called\n" );
-	return 2;
+	return 4;
 }
 
 - (int) preferencesTable: (UIPreferencesTable*)table numberOfRowsInGroup: (int)group 
@@ -86,6 +107,8 @@
 	{
 		case 0: return 0;
 		case 1: return [_rows count];
+		case 2: return 0;
+		case 3: return [_rowsAbout count];
 		default:
 			NSLog( @"WTF: invalid group count in prefstable" );
 			return 0;
@@ -100,6 +123,8 @@
 	{
 		case 0: return _prefHeader;
 		case 1: return _prefHeader;
+		case 2: return _prefAboutHeader;
+		case 3: return _prefAboutHeader;
 		default: return nil;
 	}
 
@@ -113,6 +138,8 @@
 	{
 		case 0: return true;
 		case 1: return false;
+		case 2: return true;
+		case 3: return false;
 		default:
 			NSLog( @"WTF: invalid group count in prefstable" );
 			return true;
@@ -127,6 +154,8 @@
 	{
 		case 0: return _prefHeader;
 		case 1: return [[_rows objectAtIndex: row] retain];
+		case 2:	return _prefAboutHeader;
+		case 3:	return [[_rowsAbout objectAtIndex: row] retain ];
 		default:
 			NSLog( @"WTF: invalid group count in prefstable" );
 			return nil;
@@ -140,6 +169,7 @@
 	[ [ [ _rows objectAtIndex: SERVER_ROW ] textField ] setText: getServer() ]; 
 	[ [ [ _rows objectAtIndex: USER_ROW ] textField ] setText: getUserName() ];
 	[ [ [ _rows objectAtIndex: PASS_ROW ] textField ] setText: getPass() ];
+	[ [ [ _rows objectAtIndex: EMAIL_ROW ] textField ] setText: getEmail() ]; 
 	[ _prefTable reloadData ];
 }
 
@@ -148,6 +178,7 @@
 	setServer( [ [ [ _rows objectAtIndex: SERVER_ROW ] textField ] text ] );
 	setUserName( [ [ [ _rows objectAtIndex: USER_ROW ] textField ] text ] );
 	setPassword( [ [ [ _rows objectAtIndex: PASS_ROW ] textField ] text ] );
+	setEmail( [ [ [ _rows objectAtIndex: EMAIL_ROW ] textField ] text ] );
 
 	saveSettingsToFiles();
 }
@@ -164,9 +195,21 @@
 		[_rows removeObjectAtIndex: 0 ];
 		[row release ];	
 	}
+
+	while( [_rowsAbout count] > 0 )
+	{
+		id row = [_rowsAbout objectAtIndex: 0 ];
+		[_rowsAbout removeObjectAtIndex: 0 ];
+		[row release ];	
+
+	}
+
 	[_rows release];
+	[_rowsAbout release];
+
 
 	[_prefHeader release];
+	[_prefAboutHeader release];	
 
 	[_titleItem release];
 
