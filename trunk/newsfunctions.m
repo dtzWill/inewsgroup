@@ -276,6 +276,12 @@ void markArticleRead( int groupnum, int postnum )
 
 }
 
+
+void markGroupRead( int groupnum )
+{
+	grp_mark_read( &active[ my_group[ groupnum ] ], NULL );
+}
+
 bool isThreadRead( int threadnum )
 {
 	int i;

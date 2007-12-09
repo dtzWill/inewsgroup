@@ -8,6 +8,18 @@
 
 //globals:
 
+//TODO: these don't really belong here	
+extern NSString *kUIButtonBarButtonAction;
+extern NSString *kUIButtonBarButtonInfo;
+extern NSString *kUIButtonBarButtonInfoOffset;
+extern NSString *kUIButtonBarButtonSelectedInfo;
+extern NSString *kUIButtonBarButtonStyle;
+extern NSString *kUIButtonBarButtonTag;
+extern NSString *kUIButtonBarButtonTarget;
+extern NSString *kUIButtonBarButtonTitle;
+extern NSString *kUIButtonBarButtonTitleVerticalHeight;
+extern NSString *kUIButtonBarButtonTitleWidth;
+extern NSString *kUIButtonBarButtonType;
 //struct __GSFont * smaller_font;
 
 //CGColorSpaceRef colorSpace;
@@ -77,6 +89,8 @@ NSString * articleSubject();
 void closeArticle();
 
 void markArticleRead( int groupnum, int articlenum );
+
+void markGroupRead( int groupnum );
 
 bool isThreadRead( int threadnum ); 
 

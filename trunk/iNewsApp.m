@@ -35,15 +35,61 @@
 	[_window makeKey: self];
 	[_window _setHidden: NO];
 
+
+	//top navigation bar.
 	_navTop = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"iNewsGroup" ];
 	[_navTop showButtonsWithLeftTitle: @"Prefs" rightTitle: @"Quit" leftBack: YES ]; 
 	[_navTop pushNavigationItem: _titleItem];
 	[_navTop setDelegate: self];	
-	[_navTop setBarStyle: 0];
+	[_navTop setBarStyle: 3];
 
+	//bottom bar:
+	_selectedRow = -1; //invalid
+	//create buttons...
+    NSDictionary *btnSubs = [NSDictionary dictionaryWithObjectsAndKeys:
+            //self, kUIButtonBarButtonTarget,
+            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
+            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonTag,
+            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
+            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
+            @"Subscriptions...", kUIButtonBarButtonInfo,
+            nil
+    ];
 
+    NSDictionary *btnMarkRead = [NSDictionary dictionaryWithObjectsAndKeys:
+            //self, kUIButtonBarButtonTarget,
+            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
+            [NSNumber numberWithUnsignedInt:2], kUIButtonBarButtonTag,
+            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
+            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
+            @"Mark Read", kUIButtonBarButtonInfo,
+            nil
+    ];
+
+    NSDictionary *btnView = [NSDictionary dictionaryWithObjectsAndKeys:
+            //self, kUIButtonBarButtonTarget,
+            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
+            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonTag,
+            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
+            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
+            @"View...", kUIButtonBarButtonInfo,
+            nil
+    ];
+	NSArray *items = [NSArray arrayWithObjects:btnSubs,btnMarkRead,btnView, nil];
+	UIButtonBar *buttonBar = [[UIButtonBar alloc] initInView: _mainView withFrame:CGRectMake(0.0f, 480.0f-16.0f-48.0f, 320.0f, 48.0f) withItemList:items];
+	
+	int buttons[3] = { 1, 2, 3 };
+	[buttonBar registerButtonGroup:1 withButtons:buttons withCount:3];
+	[buttonBar showButtonGroup:1 withDuration:0.];
+	[buttonBar setDelegate: self];
+//    [buttonBar setBarStyle:1];
+    [buttonBar setButtonBarTrackingMode: 2];
+
+	[ [ buttonBar viewWithTag: 3 ]//3='view' button
+            setFrame:CGRectMake( 320.0f	-70.0f, 0.0f, 64.0f, 48.0f) //right-align
+        ]; 
 
 
 
@@ -62,23 +108,15 @@
 
 
 
-//	NSLog( @"Subcribed to: %d\nTotal Groups: %d\n", numSubscribed(), numActive() );
-	//build tree of current news.... and create views
-//	root = [ [NewsListView alloc] initWithFrame: rect andDelegate: window ];
-
-//	NSLog( @"Created views!" );
 
 	_rows = [ [ NSMutableArray alloc] init ];
-/*	int i;
-	UIImageAndTextTableCell * row;
-	row = [[UIImageAndTextTableCell alloc] init];
-	[row setTitle: @"Connecting... (Please Wait)" ];
-	[ _rows addObject : row ];
-*/	
+
+
+
 	[self connect ];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 480.0f - 16.0f - 48.0f)];
+	    320.0f, 480.0f - 16.0f - 48.0f - 48.0f)];
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"subscribedgroups"
 	    identifier: @"subscribedgroups" width: 320.0f];
 
@@ -87,14 +125,9 @@
 	[_table setDataSource: self];
 	[_table setDelegate: self];
 	[_table reloadData];
-//	smaller_font = GSFontCreateWithName("Helvetica", 2, 24.0f);
-	
-// 	smaller_font = [NSClassFromString(@"WebFontCache") createFontWithFamily:@"Helvetica" traits:2 size:12];
 
 
-	
-//	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
-//	rect.origin.x = rect.origin.y = 0.0f;
+	//initialize other views...
 	_prefs = [[PrefsView alloc] initWithFrame: rect];
 	[_prefs setDelegate: self];
 	
@@ -115,8 +148,9 @@
 
 - (void)tableRowSelected:(NSNotification *)notification {
 //  NSLog(@"tableRowSelected!");
-	//build url....
-
+	//don't do anything, actions are taken via the buttonbar
+	_selectedRow = [_table selectedRow];
+/*
 	int groupnum = [_table selectedRow];
 	if ( groupnum == [ _rows count] - 1 )//the more/less bar...
 	{
@@ -133,8 +167,41 @@
 	
 		[_group refreshMe ];
 	}
+*/
 }
 
+//handle various buttons:
+- (void)buttonBarItemTapped:(id) sender {
+	int button = [ sender tag ];
+	switch (button) {
+		case 1://subscription manager
+			NSLog( @"loading sub settings" );
+			[ _subs loadSettings ];
+			NSLog( @"showing subs" );
+			[ self setView : _subs ];
+		
+			break;
+
+        case 2://mark selected group read
+			if( _selectedRow >= 0 )
+			{
+				markGroupRead( _selectedRow );	
+				[ self refreshTable ];
+			}
+			break;
+        case 3://view articles in selected group
+			if( _selectedRow >= 0 ) //if valid group number
+			{
+				[ _group setGroupNum: _selectedRow ];
+		
+				[_window setContentView: _group ];
+		
+				[_group refreshMe ];
+			}
+			break;
+	}
+   
+}
 
 
 //Methods to make table work...:
@@ -259,16 +326,11 @@
 //		[row setDisclosureStyle: (unread? 1: 2) ];
 		[ row setDisclosureStyle: 1 ]; //BLUE
 		[row setShowDisclosure: YES];
+		[row setDisclosureClickable: YES];
  
 		[ _rows addObject : row ];
 	}
 
-
-	row = [[UIImageAndTextTableCell alloc] init];
-	[ row setTitle: @"Add/Remove"];
-//	[ row setAlignment: 2 ];
-	
-	[_rows addObject: row ];	
 
 	[ _table reloadData ];
 }
