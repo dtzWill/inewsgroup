@@ -16,6 +16,10 @@ static const double REFRESH_TIME = 0.3;
 static const double SAVE_TIME = 20.0;
 static const double HTTP_REQUEST_TIMEOUT = 10.0;
 
+#define MAX_EMAIL 100
+//if your email is longer than this, too bad
+char email[ MAX_EMAIL ];
+
 //This already exists, apparently.  From /where/ though?
 //static const float col_bkgd[4] = {0.0, 0.0, 0.0, 0.0};
 
@@ -42,12 +46,15 @@ void readNewsRC();
 NSString * getServer();
 NSString * getUserName();
 NSString * getPassword();
+NSString * getEmail();
 
 void setServer( NSString * server );
 
 void setUserName( NSString * user );
 
 void setPassword( NSString * pass );
+
+void setEmail( NSString * ns_email );
 
 void readSettingsFromFile();
 

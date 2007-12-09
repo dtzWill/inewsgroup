@@ -338,7 +338,7 @@ authinfo_original(
 		return TRUE;
 */
 //	authpassword[0] = '\0';
-//	authuser = strncpy(authusername, authuser, strlen(authusername) );
+	authuser = strncpy(authuser, authusername, strlen(authusername) );
 
 	
 	authpass = authpassword;

@@ -9,12 +9,15 @@
 #define SERVER_ROW 0
 #define USER_ROW 1
 #define PASS_ROW 2
+#define EMAIL_ROW 3
 
 @interface PrefsView: UIView
 {
 	UIPreferencesTable * _prefTable;
 	UIPreferencesTableCell * _prefHeader;
+	UIPreferencesTableCell * _prefAboutHeader;
 	NSMutableArray * _rows;
+	NSMutableArray * _rowsAbout;
 	UINavigationItem * _titleItem;
 	id _delegate; //go back to main view! :)
 } 

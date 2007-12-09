@@ -55,6 +55,15 @@ NSString * getPass()
 	return nil; 
 }
 
+NSString * getEmail()
+{
+	if ( email[0] != '\0' )
+		return [NSString stringWithCString: (char *)email ];
+	return nil; 
+}
+
+
+
 //bool weCreatedNNTPServer = false;
 void setServer( NSString * server )
 {
@@ -92,6 +101,15 @@ void setPassword( NSString * pass )
 
 }
 
+void setEmail( NSString * ns_email )
+{
+	email[0] = '\0';
+	if( ns_email && [ns_email cString] )
+		strncpy( email, [ns_email cString], MAX_EMAIL );
+
+}
+
+
 void readSettingsFromFile()
 {
 
@@ -114,13 +132,31 @@ void readSettingsFromFile()
 
 	fclose( f_newsauth );
 
+
+	FILE * f_email;
+
+	//read from ~/.newsemail
+
+	if ( ( f_email = fopen( "/var/root/.newsemail", "r" ) ) == 0 )
+	{
+		//error :(
+		return;
+	}
+
+	fscanf( f_email, "%s\n", email );
+
+	fclose( f_newsauth );
+
+
+
+
 }
 
 void saveSettingsToFiles()
 {
 	//by 'update' I mean 'overwrite' and 'replace'
 //	NSLog( @" saving settings...\n");
-	FILE * f_nntpserver, * f_newsauth;
+	FILE * f_nntpserver, * f_newsauth, * f_newsemail;
 	NSLog( @"\ntrying to save...." );	 
 	//update /etc/nntpserver
 	
@@ -133,6 +169,19 @@ void saveSettingsToFiles()
 	fprintf( f_nntpserver, "%s\n", nntp_server );
 
 	fclose( f_nntpserver); //yay that was fun
+
+	//update ~/.newsemail
+
+	if ( ( f_newsemail = fopen( "/var/root/.newsemail", "w" ) ) == 0 )
+	{
+		//error :(
+		return;
+	}
+
+	fprintf( f_newsemail, "%s\n", email );
+
+	fclose( f_newsemail );//yay more fun
+
 
 	//update ~/.newsauth
 	
@@ -281,6 +330,7 @@ void init()
 	NSLog( @"group hash init completed" );
 	setup_default_keys(); /* preinit keybindings */
 
+	email[0] = '\0'; //empty
 
 	set_signal_handlers();
 	NSLog( @"sig handler init completed" );
