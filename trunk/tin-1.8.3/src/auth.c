@@ -314,7 +314,7 @@ authinfo_original(
 	t_bool startup)
 {
 	char *authpass;
-	int ret = ERR_AUTHBAD, changed;
+	int ret = ERR_AUTHBAD;
 	static t_bool already_failed = FALSE;
 	static t_bool initialized = FALSE;
 
@@ -323,7 +323,7 @@ authinfo_original(
 #endif /* DEBUG */
 
 
-	changed = strcmp(server, last_server);	/* do we need new auth values? */
+//	changed = strcmp(server, last_server);	/* do we need new auth values? */
 	strncpy(last_server, server, PATH_LEN - 1);
 	last_server[PATH_LEN - 1] = '\0';
 
@@ -338,8 +338,15 @@ authinfo_original(
 		return TRUE;
 */
 //	authpassword[0] = '\0';
-//	authuser = strncpy(authusername, authuser, sizeof(authusername) - 1);
+//	authuser = strncpy(authusername, authuser, strlen(authusername) );
+
+	
 	authpass = authpassword;
+
+
+	wait_message( 0 , "user: %s, pass: %s\n", authuser, authpass );
+
+
 
 	/*
 	 * No username/password given yet.
@@ -364,6 +371,7 @@ authinfo_original(
 				debug_nntp("authorization", "succeeded");
 #endif /* DEBUG */
 				initialized = TRUE;
+				changed = false;
 				return TRUE;
 			}
 		}
@@ -420,7 +428,8 @@ authinfo_original(
 // 		authpass = strncpy(authpassword, tin_getline(_(txt_auth_pass), FALSE, NULL, PATH_LEN, TRUE, HIST_NONE), sizeof(authpassword) - 1);
 // #	endif /* 0 */
 // #endif /* USE_CURSES */
-//
+//	
+		changed = false;
 		return false;
 
 	//	ret = do_authinfo_original(server, authuser, authpass);

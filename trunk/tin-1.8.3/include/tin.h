@@ -2081,6 +2081,8 @@ typedef FILE TCP;
 #	include	"nntplib.h"
 #endif /* !NNTPLIB_H */
 
+int changed;
+
 #ifndef __CPROTO__
 #	ifndef PROTO_H
 #		include	"proto.h"

@@ -424,6 +424,7 @@ extern char *get_server(char *string, int size);
 extern int get_respcode(char *, size_t);
 extern int get_only_respcode(char *, size_t);
 extern int nntp_open(void);
+extern int check_auth(void);
 extern void nntp_close(void);
 extern void put_server(const char *string);
 extern void u_put_server(const char *string);

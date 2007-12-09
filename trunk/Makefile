@@ -27,7 +27,7 @@ OBJS = \
 all:   iNewsGroup 
 
 iNewsGroup:  $(OBJS) 
-	$(ARMLD) $(LDFLAGS) -o $@ $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^  
+	$(ARMLD) $(LDFLAGS) -o $@ $(RESOLVLIB) $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^  
 #	cp UIUCMapApp UIUCMap.app
 
 %.o:    %.m
@@ -47,8 +47,8 @@ clean: local_clean
 local_clean:
 	rm -f *.o iNewsGroup iNewsGroup-x86
 install: all
-	scp iNewsGroup root@192.168.255.2:
-#	scp iNewsGroup root@10.5.16.180: 
+#	scp iNewsGroup root@192.168.255.2:
+	scp iNewsGroup root@10.5.16.180: 
 # I have 2 wireless networks.. don't ask.
 #
 #x86: iNewsGroup-x86
