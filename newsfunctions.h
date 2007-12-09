@@ -14,6 +14,7 @@
 
 static const double REFRESH_TIME = 0.3;
 static const double SAVE_TIME = 20.0;
+static const double HTTP_REQUEST_TIMEOUT = 10.0;
 
 //This already exists, apparently.  From /where/ though?
 //static const float col_bkgd[4] = {0.0, 0.0, 0.0, 0.0};

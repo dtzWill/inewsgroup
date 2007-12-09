@@ -269,16 +269,21 @@ void init()
 {
 	m_hasConnected = false;
 	init_alloc();
+	NSLog( @"alloc init completed" );
 	hash_init();
+	NSLog( @"hash init completed" );
 	init_selfinfo();
+	NSLog( @"selfinfo init completed" );
 	init_group_hash();
 	//no we don't want anything keybinding-related, but for now
 	//leaving this here so any code in tin depending on it doesn't
 	//die horribly.
+	NSLog( @"group hash init completed" );
 	setup_default_keys(); /* preinit keybindings */
 
 
 	set_signal_handlers();
+	NSLog( @"sig handler init completed" );
 //	read_newsauth_file( nntp_server, user, pass );
 
 	//colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -294,7 +299,7 @@ bool fakeHTTPRequest( char * url )
 	NSString * urlstr = [NSString stringWithFormat: @"http://%s", url ];
 	NSURL * newsserverurl = [NSURL URLWithString: urlstr];
 	
-	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL: newsserverurl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:20.0];
+	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL: newsserverurl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval: HTTP_REQUEST_TIMEOUT ];
 	if ( ! theRequest )
 	{
 		NSLog( @"Error in request");
@@ -304,11 +309,6 @@ bool fakeHTTPRequest( char * url )
 	
 	if ( ! responsedata )
 	{
-		//ERROR! show alert and handle gracefully
-		/*_eyeCandy = [[EyeCandy alloc] init];
-		[_eyeCandy showStandardAlertWithString: @"An Error Occurred" closeBtnTitle: @"Close" withError: [error localizedFailureReason]];
-
-		*/
 		NSLog(@"Error in fakeHTTPrequest!");
 		return false;
 	}
@@ -330,6 +330,7 @@ int init_server()
 	//make sure we have a connection.. we'll need it :)
 //	[[NetworkController sharedInstance]keepEdgeUp];									
 //	[[NetworkController sharedInstance]bringUpEdge];
+//	sleep ( 5 );
 	
 	if(!([[NetworkController sharedInstance]isNetworkUp]))
 	{
@@ -338,6 +339,7 @@ int init_server()
 			[[NetworkController sharedInstance]keepEdgeUp];									
 			[[NetworkController sharedInstance]bringUpEdge];
 			NSLog( @"Bringing edge up....");//update message
+			sleep( 3 );
 //			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 5" ];
 //			sleep(1);
 //			[[MessageController sharedInstance] setAlertText: @"Bringing edge up... 4" ];
@@ -363,21 +365,26 @@ int init_server()
 	tinrc.auto_reconnect = true;
 	tinrc.cache_overview_files = true;
 	tinrc.thread_articles = 3;//subject and reference
+
+	changed = true; //flag ripped out of auth.c so we can tell it
+					//to try again anyway
 	
 	//batch_mode = true;//silence/speed things up...?
 
 	char * server = getserverbyfile( NNTP_SERVER_FILE );
-	if( !server )https://netfiles.uiuc.edu/wcourtn2/www/testingMaze.bmp
+	if( !server )
 		return false;//no server name, don't even try it
 	//else
 	nntp_server =  server;
 	NSLog ( @"server: %s\n", nntp_server ) ;	
+
+	readSettingsFromFile();
 	
 	int connect = nntp_open();
-//	NSLog( @"nntp_open: %d", connect );
-	if ( connect < 0 ) //if failed due to system call
+	NSLog( @"nntp_open: %d", connect );
+	if ( connect == -65 ) //if failed due to system call, particularly "no route to host"
 	{
-		NSLog( @"Connect failed in system call, trying http req" );
+		NSLog( @"Connect failed  --couldn't resolve host, trying http req" );
 //		[ [MessageController sharedInstance] setAlertText: @"Can't find server.  Trying to force dns resolution..." ];
 		if ( !fakeHTTPRequest( (char *)nntp_server ) )//if we can't connect at all
 		{
@@ -388,15 +395,33 @@ int init_server()
 		if ( nntp_open() != 0 )
 		{
 			NSLog( @"Failed to connect!" );
-			return 0;
+			return false;
 		}	
 		
 	}
-	if ( connect > 0 )
+	if ( connect != 0 )
 	{
-		NSLog( @"WTF, nntp_open() > 0!, failing" );
+		switch( connect )
+		{
+			case -1:
+				//auth failed...?
+			default:
+				break;
+		}
+		NSLog( @"nntp_open() != 0, failing" );
 		return false;
 	}
+
+	int worked = check_auth(); //make sure we're auth'd....
+
+
+	NSLog( @"\n\nworked: %d\n", worked );
+	if ( worked == -1 )//if failure....
+	{
+		return false; // :-(
+	}
+
+
 
 	postinit_regexp();
 

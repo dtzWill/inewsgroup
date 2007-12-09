@@ -564,14 +564,18 @@ init_selfinfo(
 	if ((cptr = get_domain_name()) != NULL)
 		strcpy(domain_name, cptr);
 #endif /* DOMAIN_NAME */
-
-#ifdef HAVE_GETHOSTBYNAME
-	if (domain_name[0] == '\0') {
-		cptr = get_fqdn(get_host_name());
-		if (cptr != NULL)
-			strcpy(domain_name, cptr);
-	}
-#endif /* HAVE_GETHOSTBYNAME */
+//Will:
+////	wait_message( 0, "Got domain name!\n" );
+////
+////#ifdef HAVE_GETHOSTBYNAME
+////	if (domain_name[0] == '\0') {
+////		cptr = get_fqdn(get_host_name());
+////		if (cptr != NULL)
+////			strcpy(domain_name, cptr);
+////	}
+////#endif /* HAVE_GETHOSTBYNAME */
+////
+////	wait_message( 0, "Got host name!\n" );
 
 	process_id = getpid();
 

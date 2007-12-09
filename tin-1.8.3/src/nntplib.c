@@ -243,12 +243,13 @@ server_init(
 	sockt_rd = get_tcp6_socket(machine, (unsigned short) port);
 #		else
 	sockt_rd = get_tcp_socket(machine, service, (unsigned short) port);
+	
 #		endif /* INET6 */
 #	endif /* DECNET */
 
 	if (sockt_rd < 0)
 		return sockt_rd;
-
+	wait_message( 0 , "got tcp socket\n" );
 #	ifndef VMS
 	/*
 	 * Now we'll make file pointers (i.e., buffered I/O) out of
@@ -289,6 +290,7 @@ server_init(
 	/*
 	 * Now get the server's signon message
 	 */
+	wait_message( 0, "waiting for response message..\n" );
 	return (get_respcode(text, mlen));
 }
 #endif /* NNTP_ABLE */
@@ -879,7 +881,8 @@ get_server(
 	char *string,
 	int size)
 {
-	int retry = NNTP_TRY_RECONNECT;
+	//Will: don't retry, takes forever
+	int retry = 0;//NNTP_TRY_RECONNECT;
 
 	reconnected_in_last_get_server = FALSE;
 	errno = 0;
@@ -1111,6 +1114,7 @@ check_extensions(
 
 		buf[0] = '\0';
 		i = new_nntp_command("LIST EXTENSIONS", OK_EXTENSIONS, buf, sizeof(buf));
+		wait_message( 0 , "sent extensions command" );
 		switch (i) {
 			case 215:	/* Netscape-Collabra/3.52 (badly broken); NetWare-News-Server/5.1 */
 #		ifdef DEBUG
@@ -1286,7 +1290,7 @@ nntp_open(
 	ret = server_init(nntp_server, NNTP_TCP_NAME, nntp_tcp_port, line, sizeof(line));
 	DEBUG_IO((stderr, "server_init returns %d,%s\n", ret, line));
 
-	wait_message(0, "\n\tserver_init returns %d, %s\n", ret, line );
+	wait_message(0, "\tserver_init returns %d, %s\n", ret, line );
 
 	if (!batch_mode && ret >= 0 && cmd_line)
 		my_fputc('\n', stdout);
@@ -1804,4 +1808,56 @@ list_motd(
 			break;
 	}
 }
+
+
+//Will
+//use MOTD command to check auth.....
+int
+check_auth(
+	void)
+{
+	char *ptr;
+	char buf[NNTP_STRLEN];
+	int i;
+	unsigned int l = 0;
+
+	buf[0] = '\0';
+	i = new_nntp_command("LIST MOTD", OK_MOTD, buf, sizeof(buf));
+
+	wait_message( 0, "i: %d\n", i );
+
+	switch (i) {
+		//WOW there are a lot of possible "bad auth" error codes o_O
+		case -1://wtf is this?
+		case ERR_NOAUTH:
+		case ERR_AUTHREJ:
+		case ERR_AUTHSYS:
+		case ERR_ACCESS:
+		case ERR_AUTHBAD: 
+			return -1;	
+
+		case OK_MOTD:
+			while ((ptr = tin_fgets(FAKE_NNTP_FP, FALSE)) != NULL) {
+				/*
+				 * TODO: - store a hash value of the entire motd in the server-rc
+				 *         and only if it differs from the old value display the
+				 *         motd?
+				 *       - use some sort of pager?
+				 *       - -> lang.c
+				 */
+				l++;
+			}
+			if (l) {
+				my_flush();
+				sleep((l >> 1) | 0x01);
+			}
+			break;
+		default:	
+		//????	
+			break;
+	}
+
+	return 0;
+}
+
 #endif /* NNTP_ABLE */
