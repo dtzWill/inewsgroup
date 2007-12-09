@@ -16,8 +16,13 @@
 @interface iNewsApp : UIApplication {
     NSMutableArray * _rows;// holds the row objects for our table 
     UINavigationItem * _titleItem;//title
-	UINavigationBar * _navTop,  * _navBottom;
-	int _count;
+	UINavigationBar * _navTop;
+/*	UIButton * _btn_subs,//launch subscription manager
+			* _btn_markread,//mark selectednewsgroup as read
+//			* _btn_refresh, //refresh main view
+			* _btn_view; //view selected newsgroup*/
+//	UIButtonBar  * _barBottom;
+	int _count, _selectedRow;
 	UIWindow * _window;
 	UIView * _mainView;
 	PrefsView * _prefs; 
