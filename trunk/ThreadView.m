@@ -110,7 +110,7 @@
 	{
 		cell = [ _rows objectAtIndex: i ];
 		art = [cell article];
-		[ cell setTitle: [NSString stringWithFormat: @"%s\n", 
+		[ cell setTitle: [NSString stringWithFormat: @"%s", 
 				arts[ art ].subject ] ];
 
 		UIImage * img = [UIImage applicationImageNamed:
