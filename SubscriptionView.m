@@ -169,7 +169,7 @@
 	for_each_group( i )
 	{
 		item = [ _rows objectAtIndex: i ];
-		if ( [item isInitialized] && [ item switchValue ] != active[ i ].subscribed )//if it's changed...
+		if ( [item isInitialized] && [ item switchValue ] != active[ [ item getIndex] ].subscribed )//if it's changed...
 		{
 				doSubscribe( &active[ [item getIndex ] ], [item switchValue ] );
 		}	
