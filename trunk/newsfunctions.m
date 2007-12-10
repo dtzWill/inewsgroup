@@ -319,6 +319,11 @@ void readNewsRC()
 
 }
 
+void saveNews()
+{
+	write_config_file(local_config_file);
+	write_newsrc();
+}
 
 void init()
 {

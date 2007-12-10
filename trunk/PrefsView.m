@@ -49,14 +49,17 @@
 	//put information about iNewsGroup and author here, copyright, etc
 	//about
 	UIPreferencesTableCell * _rowAbout = [[UIPreferencesTableCell alloc] init ];
-	[ _rowAbout setTitle: @"iNewsGroup 0.0.6" ];
+	[ _rowAbout setTitle: @"iNewsGroup 0.0.7" ];
+//	[ [ _rowAbout valueTextLabel ] setCentersHorizontally: YES ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 	_rowAbout = [[UIPreferencesTableCell alloc] init ];
+//	[ [ _rowAbout valueTextLabel ] setCentersHorizontally: YES ];
 	[ _rowAbout setTitle: @"Will Dietz" ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 	_rowAbout = [[UIPreferencesTableCell alloc] init ];
+//	[ [ _rowAbout valueTextLabel ] setCentersHorizontally: YES ];
 	[ _rowAbout setTitle: @"inewsgroupdev@gmail.com" ];
 	[ _rowsAbout addObject: _rowAbout ];
 
