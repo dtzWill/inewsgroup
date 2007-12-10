@@ -32,6 +32,7 @@
 @end
 
 
+
 @interface SubPrefItem: NSObject
 {
 	UIPreferencesControlTableCell * row; //==0 when invalid/not created yet
