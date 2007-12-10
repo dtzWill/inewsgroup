@@ -24,6 +24,7 @@
 
 	_rows = [[NSMutableArray alloc] init];
 
+	_memoryQueue = [[NSMutableArray alloc] init];
 
 	_prefHeader = [[UIPreferencesTableCell alloc] init];
 	[_prefHeader setTitle: @"Subscriptions"];
@@ -113,11 +114,24 @@
 
 - (UIPreferencesTableCell*) preferencesTable: (UIPreferencesTable*)table cellForRow: (int)row inGroup: (int)group 
 {
-//	NSLog( @"Requested cell: %d", row );
+	NSLog( @"Requested cell: %d", row );
 	switch( group )
 	{
 		case 0: return _prefHeader;
-		case 1: return [[[_rows objectAtIndex: row] getRow ] retain];
+		case 1: 
+			if ( [ _memoryQueue count ] > MAX_ROWS_ON_SCREEN )
+			{
+				//if queue is full, remove one and free it's memory
+				SubPrefItem * r = [ _memoryQueue objectAtIndex: 0 ];
+				[ r releaseRow ];
+				[ _memoryQueue removeObjectAtIndex: 0 ];
+
+			}			
+			[ _memoryQueue addObject: [ _rows objectAtIndex: row ] ]; //enqueue this one
+
+			return [[_rows objectAtIndex: row] getRow ];
+
+			break;
 		default:
 			NSLog( @"WTF: invalid group count in prefstable" );
 			return nil;
@@ -126,6 +140,12 @@
 
 - (void) loadSettings
 {
+	while( [_rows count] > 0 )
+	{
+		id row = [_rows objectAtIndex: 0 ];
+		[_rows removeObjectAtIndex: 0 ];
+		[row release ];	
+	}
 	[ _rows removeAllObjects ];//clear it out...
 
 	int i;
@@ -169,7 +189,7 @@
 	for_each_group( i )
 	{
 		item = [ _rows objectAtIndex: i ];
-		if ( [item isInitialized] && [ item switchValue ] != active[ [ item getIndex] ].subscribed )//if it's changed...
+		if ( [ item switchValue ] != active[ [ item getIndex] ].subscribed )//if it's changed...
 		{
 				doSubscribe( &active[ [item getIndex ] ], [item switchValue ] );
 		}	
@@ -233,10 +253,10 @@
 	{
 		row = [[UIPreferencesControlTableCell alloc] initWithFrame: CGRectMake(
 				0.0f, 0.0f, 320.0f , 30.0f ) ];
-		UISwitchControl * button = [[UISwitchControl alloc] initWithFrame: CGRectMake(
+		UISwitchControl * button = [[[UISwitchControl alloc] initWithFrame: CGRectMake(
  320.f - 
-114.0, 24.0f, 114.0f, 48.0f ) ];
-		[button setValue: active[ index ].subscribed ];
+114.0f, 24.0f, 114.0f, 48.0f ) ] autorelease];
+		[button setValue: value ];
 //		[ [row titleTextLabel ] setFrame: CGRectMake( 0.0f, 0.0f, 320.0f - 114.0f, 32.0f ) ];
 		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];
 		[ [row titleTextLabel ] setWrapsText: YES ];
@@ -256,6 +276,7 @@
 	row = 0;
 	index = subid;
 	title = [ NSString stringWithCString: active[index ].name ];
+	value= active[ index ].subscribed;
 	return self;
 }
 
@@ -266,9 +287,20 @@
 }
 
 
+- (void) releaseRow
+{
+	NSLog( @"releasing row: %d", index );
+	if( [self isInitialized] ){
+		value = [ [row control] value ];
+		 [ row release ];
+		row = 0;
+	}
+
+}
+
 - (bool) switchValue
 {
-	if ( ! [self isInitialized] ) return false;//ERROR
+	if ( ! [self isInitialized] ) return value;
 
 	return [ [  row control ] value ];
 
@@ -288,6 +320,15 @@
 - (NSString *) getTitle
 {
 	return title;
+}
+
+- (void) dealloc
+{
+	[ super dealloc ];
+
+	[self rowRelease];
+	[title release];
+
 }
 
 @end

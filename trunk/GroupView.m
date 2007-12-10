@@ -61,7 +61,12 @@
 {
 
 	[_connect presentSheetInView: self ];
-	[_rows removeAllObjects];
+	while( [_rows count] > 0 )
+	{
+		id row = [_rows objectAtIndex: 0 ];
+		[_rows removeObjectAtIndex: 0 ];
+		[row release ];	
+	}
 	[_table reloadData ]; 
     [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(getArticles) userInfo:nil repeats:NO];	
 
@@ -70,7 +75,12 @@
 - (void) setGroupNum: (int) groupnum
 {
 	_groupnum = groupnum;
-	[ _rows removeAllObjects];//ignoring cases where re-entering same group, we don't care about old articles (reload anyway.. stupid user shouldnt've left in the first place ;-))
+	while( [_rows count] > 0 )
+	{
+		id row = [_rows objectAtIndex: 0 ];
+		[_rows removeObjectAtIndex: 0 ];
+		[row release ];	
+	}
 
 	[ _titleItem setTitle: [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ]];	
 	
@@ -87,7 +97,12 @@
 
 	int i;
 	GroupItem * row;
-	[_rows removeAllObjects];
+	while( [_rows count] > 0 )
+	{
+		id row = [_rows objectAtIndex: 0 ];
+		[_rows removeObjectAtIndex: 0 ];
+		[row release ];	
+	}
 	for ( i = 0; i < grpmenu.max; i++ )
 	{
 		row = [[GroupItem alloc] initWithThreadNum: i ];
