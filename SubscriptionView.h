@@ -35,7 +35,7 @@
 
 @interface SubPrefItem: NSObject
 {
-	UIPreferencesControlTableCell * row; //==0 when invalid/not created yet
+	NSMutableArray * rowArray;
 	NSString * title;
 	bool value;//store value even when row is invalid
 	int index;//so we know which one this corresponds to after sorting	
@@ -43,15 +43,11 @@
 }
 -(UIPreferencesControlTableCell *) getRow;
 
-- (id) initWithID: (int) subid;
-
-- (bool) isInitialized;
+- (id) initWithID: (int) subid withRows: (NSMutableArray *) array;
 
 - (bool) switchValue;
 
 - (int) getIndex;
-
-- (void) releaseRow; //used to free unneeded memory
 
 - (NSComparisonResult)compareSubscription:(SubPrefItem *)s;
 
