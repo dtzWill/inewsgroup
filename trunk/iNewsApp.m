@@ -68,27 +68,18 @@
             nil
     ];
 
-    NSDictionary *btnView = [NSDictionary dictionaryWithObjectsAndKeys:
-            //self, kUIButtonBarButtonTarget,
-            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
-            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonTag,
-            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
-            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
-            @"View...", kUIButtonBarButtonInfo,
-            nil
-    ];
-	NSArray *items = [NSArray arrayWithObjects:btnSubs,btnMarkRead,btnView, nil];
+	NSArray *items = [NSArray arrayWithObjects:btnSubs,btnMarkRead, nil];
 	UIButtonBar *buttonBar = [[UIButtonBar alloc] initInView: _mainView withFrame:CGRectMake(0.0f, 480.0f-16.0f-48.0f, 320.0f, 48.0f) withItemList:items];
 	
-	int buttons[3] = { 1, 2, 3 };
-	[buttonBar registerButtonGroup:1 withButtons:buttons withCount:3];
+	int buttons[2] = { 1, 2,};
+	[buttonBar registerButtonGroup:1 withButtons:buttons withCount:2];
 	[buttonBar showButtonGroup:1 withDuration:0.];
 	[buttonBar setDelegate: self];
 //    [buttonBar setBarStyle:1];
     [buttonBar setButtonBarTrackingMode: 2];
 
-	[ [ buttonBar viewWithTag: 3 ]//3='view' button
-            setFrame:CGRectMake( 320.0f	-70.0f, 0.0f, 64.0f, 48.0f) //right-align
+	[ [ buttonBar viewWithTag: 2 ]//2='mark read' button
+            setFrame:CGRectMake( 320.0f	-80.0f, 0.0f, 64.0f, 48.0f) //right-align
         ]; 
 
 
@@ -176,6 +167,7 @@
 	switch (button) {
 		case 1://subscription manager
 			NSLog( @"loading sub settings" );
+			[ self saveConfig ];//commit it to the newsrc, b/c subs might change it, then reload, losing all data (namely read/unread status)
 			[ _subs loadSettings ];
 			NSLog( @"showing subs" );
 			[ self setView : _subs ];
@@ -189,7 +181,7 @@
 				[ self refreshTable ];
 			}
 			break;
-        case 3://view articles in selected group
+     /*   case 3://view articles in selected group
 			if( _selectedRow >= 0 ) //if valid group number
 			{
 				[ _group setGroupNum: _selectedRow ];
@@ -199,10 +191,15 @@
 				[_group refreshMe ];
 			}
 			break;
+*/
 	}
    
 }
 
+- (BOOL)respondsToSelector:(SEL)aSelector {
+//    NSLog(@"respondsToSelector: %@", NSStringFromSelector(aSelector));
+    return [super respondsToSelector: aSelector];
+}
 
 //Methods to make table work...:
 - (int) numberOfRowsInTable: (UITable *)table
@@ -294,7 +291,6 @@
 	write_config_file(local_config_file);
 }
 
-
 - (void) refreshTable
 {
 	_count = numSubscribed();
@@ -319,20 +315,40 @@
 
 		[ row setImage: img ];
 
-
-		//[row addTarget:self action:@selector(go) ];
 		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,15) ];
 
-//		[row setDisclosureStyle: (unread? 1: 2) ];
 		[ row setDisclosureStyle: 1 ]; //BLUE
 		[row setShowDisclosure: YES];
 		[row setDisclosureClickable: YES];
  
+//		[ row setTapDelegate: self ];
+		[ [ row _disclosureView ] setTapDelegate: self ];
 		[ _rows addObject : row ];
 	}
 
 
 	[ _table reloadData ];
+}
+
+- (void)view:(UIView *)view handleTapWithCount:(int)count event:(GSEvent *)event {
+//This should only be called from the disclosures of the rows!
+  /* //DEBUG:
+	CGRect rect = GSEventGetLocationInWindow(event);
+	CGPoint point = rect.origin;
+	NSLog(@"view:%@ handleTapWithCount:%i event:(point.x=%f, point.y=%f)",view, count, point.x, point.y);
+	NSLog( @"clicked on: %@", [ [_rows objectAtIndex: _selectedRow ] title ] );
+*/
+
+	//disclosure clicked on..... go there!
+	if( _selectedRow >= 0 ) //if valid group number
+	{
+		[ _group setGroupNum: _selectedRow ];
+	
+		[_window setContentView: _group ];
+	
+		[_group refreshMe ];
+	}
+
 }
 
 - (void)navigationBar:(UINavigationBar*)bar buttonClicked:(int) which;

@@ -344,7 +344,7 @@ authinfo_original(
 	authpass = authpassword;
 
 
-	wait_message( 0 , "user: %s, pass: %s\n", authuser, authpass );
+//	wait_message( 0 , "user: %s, pass: %s\n", authuser, authpass );
 
 
 

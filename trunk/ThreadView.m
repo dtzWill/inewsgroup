@@ -56,32 +56,42 @@
 - (void)tableRowSelected:(NSNotification *)notification {
 //  NSLog(@"tableRowSelected!");
 	int i = [ _table selectedRow ], j, k=0;
-	for_each_art_in_thread( j, _threadnum )
+	if ( i != 2147483647 ) // 0b1111111111111111111111111111111
 	{
-		NSLog( @"considering article: %d\n\n", j );
-		if ( i == k ) break;
-		k++;
-	}
-	if ( i == k )
-	{
-		NSLog ( @"opening article : %d\n\n", j );	
-		[_postView setArticleNum: j  andGroupnum: _groupnum ];
-		[_delegate setView: _postView ];
-		[_postView refresh ];
-	}
-	else
-	{
-		NSLog ( @"Error finding article in thread! :-(" );
+//		NSLog( @" looking for: %d", i );
+		for_each_art_in_thread( j, _threadnum )
+		{
+	//		NSLog( @"considering article: %d\n\n", j );
+			if ( i == k ) break;
+			k++;
+		}
+		if ( i == k )
+		{
+			NSLog ( @"opening article : %d\n\n", j );	
+			[_postView setArticleNum: j  andGroupnum: _groupnum ];
+			[_delegate setView: _postView ];
+			[_postView refresh ];
+		}
+		else
+		{
+			NSLog ( @"Error finding article in thread! :-(" );
+		}
 	}
 
 }
 
 - (void) refresh
 {
-	NSLog( @"refreshing thread view..." );
+//	NSLog( @"refreshing thread view..." );
 	int i;
 	ThreadViewItem * row;
-	[_rows removeAllObjects];
+	while( [ _rows count ]> 0 )
+	{
+		id rowobj = [ _rows objectAtIndex: 0 ];
+		[ _rows removeObjectAtIndex: 0 ];
+		[ rowobj release ];
+
+	}
 	for_each_art_in_thread( i, _threadnum )
 	{
 		row = [[ThreadViewItem alloc] initWithArticle: i ];
@@ -98,6 +108,8 @@
 	[ self refreshTitles ];
 	
 	[ _table reloadData ];
+
+	[ _table selectRow: -1 byExtendingSelection: NO ];
 
 }
 
@@ -128,7 +140,14 @@
 {
 	_groupnum = groupnum;
 	_threadnum = threadnum;
-	[ _rows removeAllObjects];//ignoring cases where re-entering same group, we don't care about old articles
+	while( [ _rows count ] > 0 )
+	{
+		id row = [ _rows objectAtIndex: 0 ];
+		[ _rows removeObjectAtIndex: 0 ];
+		[ row release ];
+
+	}
+//	[ _rows removeAllObjects];//ignoring cases where re-entering same group, we don't care about old articles
 //	[ _titleItem setTitle: [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ]];	
 	//something cool here??	
 }

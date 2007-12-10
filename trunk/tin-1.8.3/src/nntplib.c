@@ -1824,7 +1824,7 @@ check_auth(
 	buf[0] = '\0';
 	i = new_nntp_command("LIST MOTD", OK_MOTD, buf, sizeof(buf));
 
-	wait_message( 0, "i: %d\n", i );
+//	wait_message( 0, "i: %d\n", i );
 
 	switch (i) {
 		//WOW there are a lot of possible "bad auth" error codes o_O
