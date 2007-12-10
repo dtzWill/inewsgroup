@@ -26,6 +26,27 @@
 
 	_memoryQueue = [[NSMutableArray alloc] init];
 
+	int i =0;
+	UIPreferencesControlTableCell * row;
+	UISwitchControl * button;
+	for(; i < MAX_ROWS_ON_SCREEN; ++i )
+	{
+		row = [[UIPreferencesControlTableCell alloc] initWithFrame: CGRectMake(
+				0.0f, 0.0f, 320.0f - 114.0 , 30.0f ) ];
+		UISwitchControl * button = [[UISwitchControl alloc] initWithFrame: CGRectMake(
+ 320.f - 
+114.0f, 36.0f, 114.0f, 48.0f ) ] ;
+//		[ [row titleTextLabel ] setFrame: CGRectMake( 0.0f, 0.0f, 320.0f - 114.0f, 32.0f ) ];
+		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];
+		[ [row titleTextLabel ] setWrapsText: YES ];
+//		[ [row titleTextLabel ] setVerticallyCenterText: NO ];
+//		[ row setTitle: @"this.is.a.ridiculously.long.group.name.dear.god.why.doesnt.it.ever.end" ];
+		[ row setControl: button ];
+
+		[ _memoryQueue addObject: [ row retain ] ];
+	}
+
+
 	_prefHeader = [[UIPreferencesTableCell alloc] init];
 	[_prefHeader setTitle: @"Subscriptions"];
 
@@ -114,20 +135,11 @@
 
 - (UIPreferencesTableCell*) preferencesTable: (UIPreferencesTable*)table cellForRow: (int)row inGroup: (int)group 
 {
-	NSLog( @"Requested cell: %d", row );
+//	NSLog( @"Requested cell: %d", row );
 	switch( group )
 	{
 		case 0: return _prefHeader;
 		case 1: 
-			if ( [ _memoryQueue count ] > MAX_ROWS_ON_SCREEN )
-			{
-				//if queue is full, remove one and free it's memory
-				SubPrefItem * r = [ _memoryQueue objectAtIndex: 0 ];
-				[ r releaseRow ];
-				[ _memoryQueue removeObjectAtIndex: 0 ];
-
-			}			
-			[ _memoryQueue addObject: [ _rows objectAtIndex: row ] ]; //enqueue this one
 
 			return [[_rows objectAtIndex: row] getRow ];
 
@@ -140,44 +152,47 @@
 
 - (void) loadSettings
 {
-	while( [_rows count] > 0 )
+/*	while( [_rows count] > 0 )
 	{
 		id row = [_rows objectAtIndex: 0 ];
 		[_rows removeObjectAtIndex: 0 ];
 		[row release ];	
 	}
 	[ _rows removeAllObjects ];//clear it out...
-
-	int i;
-
-//	[ _rows release ];
-//	_rows = [NSMutableArray arrayWithCapacity: numActive() ];
-
-	SubPrefItem * item;
-
-	for_each_group( i )
-	{
-//		NSLog( @"Creating item: %d", i );
-		item = [[SubPrefItem alloc] initWithID: i ];
-		[ _rows addObject: item ];
-	}
-
-
-	[ _rows sortUsingSelector: @selector( compareSubscription: ) ];	
-
-/*
-	for_each_group( i )
-	{
-		row = [[UIPreferencesControlTableCell alloc] init];
-		button = [[UISwitchControl alloc] initWithFrame: CGRectMake( 320.f - 
-114.0, 11.0f, 114.0f, 48.0f ) ];
-		[button setValue: active[ i ].subscribed ];
-		[ row setTitle: [NSString stringWithCString: active[ i ].name ] ];
-		[ row setControl: button ];
-		[ _rows addObject: row ];
-	}
 */
-
+	if ( [ _rows count] == 0 ) //if not initialized yet...
+	{
+	
+		int i;
+	
+	//	[ _rows release ];
+	//	_rows = [NSMutableArray arrayWithCapacity: numActive() ];
+	
+		SubPrefItem * item;
+	
+		for_each_group( i )
+		{
+	//		NSLog( @"Creating item: %d", i );
+			item = [[SubPrefItem alloc] initWithID: i withRows: _memoryQueue ];
+			[ _rows addObject: item ];
+		}
+	
+	
+		[ _rows sortUsingSelector: @selector( compareSubscription: ) ];	
+	
+	/*
+		for_each_group( i )
+		{
+			row = [[UIPreferencesControlTableCell alloc] init];
+			button = [[UISwitchControl alloc] initWithFrame: CGRectMake( 320.f - 
+	114.0, 11.0f, 114.0f, 48.0f ) ];
+			[button setValue: active[ i ].subscribed ];
+			[ row setTitle: [NSString stringWithCString: active[ i ].name ] ];
+			[ row setControl: button ];
+			[ _rows addObject: row ];
+		}
+	*/
+	}
 	NSLog( @"loaded settings... reloading data" );
 	[ _prefTable reloadData ];
 }
@@ -248,63 +263,48 @@
 
 -(UIPreferencesControlTableCell *) getRow
 {
-	//only initializes as needed.. hopefully this helps speed things up
-	if ( ![self isInitialized ] )
-	{
-		row = [[UIPreferencesControlTableCell alloc] initWithFrame: CGRectMake(
-				0.0f, 0.0f, 320.0f - 114.0 , 30.0f ) ];
-		UISwitchControl * button = [[[UISwitchControl alloc] initWithFrame: CGRectMake(
- 320.f - 
-114.0f, 36.0f, 114.0f, 48.0f ) ] autorelease];
-		[button setValue: value ];
-//		[ [row titleTextLabel ] setFrame: CGRectMake( 0.0f, 0.0f, 320.0f - 114.0f, 32.0f ) ];
-		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];
-		[ [row titleTextLabel ] setWrapsText: YES ];
-//		[ [row titleTextLabel ] setVerticallyCenterText: NO ];
-//		[ row setTitle: @"this.is.a.ridiculously.long.group.name.dear.god.why.doesnt.it.ever.end" ];
-		[ row setTitle: [NSString stringWithFormat: 
-			@"%s    \n   \n", //I wish I was kidding
-			active[ index].name ] ];
-		[ row setControl: button ];
-	}
+	//really, a circular queue would be /way/ better for this
+//	NSLog( @"Array count: %d\n", [ rowArray count ] );
+	UIPreferencesControlTableCell * row = [ rowArray objectAtIndex: 0 ];		
+
+	[ rowArray removeObjectAtIndex: 0];
+	[ rowArray addObject: row ];
+	//tell me when you change!
+	[ [ row control ] removeTarget: nil forEvents: 1<<6 ];//please remove all for that event?.. yay it works!
+	[ [ row control ] addTarget: self action:@selector(controlChanged:) forEvents:1<<6]; 
+	//set initial button value...
+	[ (UISwitchControl *)[ row control ] setValue: value ];
+	//and title!
+	[ row setTitle: [NSString stringWithFormat: 
+		@"%s    \n   \n", //I wish I was kidding
+		active[ index].name ] ];
+
+//	NSLog( @"Row: %d, title: %s, value: %d", row, [row title], [ [ row control] value ] );
 
 	return row;
 }
 
+- (void) controlChanged: (UISwitchControl *) button
+{
+//	NSLog( @"Button changed!" );
+	value = [ button value ];
+}
 
-- (id) initWithID: (int) subid
+
+- (id) initWithID: (int) subid withRows: (NSMutableArray *) array
+
 {
 	[super init];
-	row = 0;
 	index = subid;
-	title = [ NSString stringWithCString: active[index ].name ];
 	value= active[ index ].subscribed;
+	title = [ NSString stringWithCString: active[index ].name ];
+	rowArray = array;
 	return self;
-}
-
-
-- (bool) isInitialized
-{
-	return ( row != 0 );
-}
-
-
-- (void) releaseRow
-{
-	NSLog( @"releasing row: %d", index );
-	if( [self isInitialized] ){
-		value = [ [row control] value ];
-		 [ row release ];
-		row = 0;
-	}
-
 }
 
 - (bool) switchValue
 {
-	if ( ! [self isInitialized] ) return value;
-
-	return [ [  row control ] value ];
+	return value;
 
 }
 
@@ -313,22 +313,21 @@
 	return index;
 }
 
+- (NSString *) getTitle
+{
+	return title;
+}
+
 - (NSComparisonResult)compareSubscription:(SubPrefItem *)s
 {
 //	NSLog( @"Comparer called on: %d vs %d", [self getIndex], [s getIndex] );
 	return [ [ self getTitle ] compare: [ s getTitle] ];
 }
 
-- (NSString *) getTitle
-{
-	return title;
-}
-
 - (void) dealloc
 {
 	[ super dealloc ];
 
-	[self rowRelease];
 	[title release];
 
 }
