@@ -437,7 +437,7 @@ int init_server()
 	readSettingsFromFile();
 	
 	int connect = nntp_open();
-	NSLog( @"nntp_open: %d", connect );
+//	NSLog( @"nntp_open: %d", connect );
 	if ( connect == -65 ) //if failed due to system call, particularly "no route to host"
 	{
 		NSLog( @"Connect failed  --couldn't resolve host, trying http req" );
@@ -471,7 +471,7 @@ int init_server()
 	int worked = check_auth(); //make sure we're auth'd....
 
 
-	NSLog( @"\n\nworked: %d\n", worked );
+//	NSLog( @"\n\nworked: %d\n", worked );
 	if ( worked == -1 )//if failure....
 	{
 		return false; // :-(

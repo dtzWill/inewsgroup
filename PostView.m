@@ -92,6 +92,14 @@
 	//doesn't seem to have any effect...???
 	//	[ _textView setTextFont: @"Helvetica 10"];//smaller_font ];
 	[ _textView recalculateStyle ];
+
+
+	CGPoint p;
+	p.x = 0.0f;
+	p.y = 0.0f;	
+
+	[ _textView scrollPointVisibleAtTopLeft: p ]; 
+
 	[_message dismiss ];
 
 	[ _titleItem setTitle: articleSubject() ];
