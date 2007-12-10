@@ -105,7 +105,7 @@
     case 0:
       return 30;
     case 1:
-      if ( row >= 0 ) return 50;
+      if ( row >= 0 ) return 70;
 		return 0;
      default:
       return proposed;
@@ -252,18 +252,20 @@
 	if ( ![self isInitialized ] )
 	{
 		row = [[UIPreferencesControlTableCell alloc] initWithFrame: CGRectMake(
-				0.0f, 0.0f, 320.0f , 30.0f ) ];
+				0.0f, 0.0f, 320.0f - 114.0 , 30.0f ) ];
 		UISwitchControl * button = [[[UISwitchControl alloc] initWithFrame: CGRectMake(
  320.f - 
-114.0f, 24.0f, 114.0f, 48.0f ) ] autorelease];
+114.0f, 36.0f, 114.0f, 48.0f ) ] autorelease];
 		[button setValue: value ];
 //		[ [row titleTextLabel ] setFrame: CGRectMake( 0.0f, 0.0f, 320.0f - 114.0f, 32.0f ) ];
 		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];
 		[ [row titleTextLabel ] setWrapsText: YES ];
+//		[ [row titleTextLabel ] setVerticallyCenterText: NO ];
 //		[ row setTitle: @"this.is.a.ridiculously.long.group.name.dear.god.why.doesnt.it.ever.end" ];
-		[ row setTitle: [NSString stringWithCString: active[ index].name ] ];
+		[ row setTitle: [NSString stringWithFormat: 
+			@"%s    \n   \n", //I wish I was kidding
+			active[ index].name ] ];
 		[ row setControl: button ];
-		[ row sizeToFit ];
 	}
 
 	return row;
