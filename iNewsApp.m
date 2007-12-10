@@ -288,7 +288,7 @@
 
 - (void) saveConfig
 {
-	write_config_file(local_config_file);
+	saveNews();
 }
 
 - (void) refreshTable

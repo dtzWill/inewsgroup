@@ -55,6 +55,8 @@ void printActive();
 
 void readNewsRC();
 
+void saveNews();
+
 NSString * getServer();
 NSString * getUserName();
 NSString * getPassword();
