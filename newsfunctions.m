@@ -448,7 +448,7 @@ int init_server()
 			return false;	
 		}
 		NSLog( @"Reconnecting...." );
-		if ( nntp_open() != 0 )
+		if ( ( connect = nntp_open() ) != 0 )
 		{
 			NSLog( @"Failed to connect!" );
 			return false;
