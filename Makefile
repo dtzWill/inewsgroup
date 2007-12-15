@@ -31,7 +31,7 @@ iNewsGroup:  $(OBJS)
 #	cp UIUCMapApp UIUCMap.app
 
 %.o:    %.m
-	$(ARMCC) -c $(FLAGS) $(TININC) $< -o $@
+	$(ARMCC) -c $(RESOLVLIB) $(FLAGS) $(TININC) $< -o $@
 
 $(PCRELIB): 
 	cd $(TINDIR) && make

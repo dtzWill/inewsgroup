@@ -34,17 +34,12 @@
 	//col_subj
 	UITableColumn * col = [[UITableColumn alloc] initWithTitle: @"thread"
 	    identifier: @"thread" width: 320.0f]; //200.0f or so
-
-	//later show more information via multiple columns..
-
-//	UITableColumn * col_from = [[UITableColumn alloc] initWithTitle: @"from"
-//		identifier: @"from" width: 50.0f ];
-//	UITableColumn * col_date = [[UITableColumn alloc	
 	
 	[_table addTableColumn: col]; 
 	[_table setDataSource: self];
 	[_table setDelegate: self];
 	[_table reloadData];
+
 
 	[self addSubview: nav];
 	[self addSubview: _table];
@@ -56,8 +51,10 @@
 - (void)tableRowSelected:(NSNotification *)notification {
 //  NSLog(@"tableRowSelected!");
 	int i = [ _table selectedRow ], j, k=0;
+	//ouch @ hardcoded max value o_O
 	if ( i != 2147483647 ) // 0b1111111111111111111111111111111
 	{
+
 //		NSLog( @" looking for: %d", i );
 		for_each_art_in_thread( j, _threadnum )
 		{
@@ -95,13 +92,6 @@
 	for_each_art_in_thread( i, _threadnum )
 	{
 		row = [[ThreadViewItem alloc] initWithArticle: i ];
-/*
-		if ( arts[ i ].status )
-		{
-			NSLog( @"unread article found!" );
-			 exit(0);
-		}
-*/
 		[ _rows addObject: row ];
 	}
 	[ _titleItem setTitle: [NSString stringWithCString: arts[ base[ _threadnum ] ].subject ] ];
@@ -147,9 +137,6 @@
 		[ row release ];
 
 	}
-//	[ _rows removeAllObjects];//ignoring cases where re-entering same group, we don't care about old articles
-//	[ _titleItem setTitle: [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ]];	
-	//something cool here??	
 }
 
 //Methods to make table work...:
@@ -198,6 +185,10 @@
 	[ _delegate setView: self];
 }
 @end
+
+
+
+
 
 
 @implementation ThreadViewItem

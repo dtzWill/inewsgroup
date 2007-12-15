@@ -16,7 +16,7 @@
     [_prefTable setDelegate: self];
 	[_prefTable setBottomBufferHeight:44.0f];
 
-
+	//init both arrays...
 	_rows = [[NSMutableArray alloc] init];
 	_rowsAbout = [[NSMutableArray alloc] init];
 
@@ -39,7 +39,6 @@
 	[[_row textField] setText: @""];
 	[_rows addObject: _row];
 
-
 	//email
 	_row = [[UIPreferencesTextTableCell alloc] init ];
 	[_row setTitle: @"Email:"];
@@ -48,45 +47,45 @@
 
 	//put information about iNewsGroup and author here, copyright, etc
 	//about
+	//TODO: center this?
 	UIPreferencesTableCell * _rowAbout = [[UIPreferencesTableCell alloc] init ];
 	[ _rowAbout setTitle: @"iNewsGroup 0.0.7" ];
-//	[ [ _rowAbout valueTextLabel ] setCentersHorizontally: YES ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 	_rowAbout = [[UIPreferencesTableCell alloc] init ];
-//	[ [ _rowAbout valueTextLabel ] setCentersHorizontally: YES ];
 	[ _rowAbout setTitle: @"Will Dietz" ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 	_rowAbout = [[UIPreferencesTableCell alloc] init ];
-//	[ [ _rowAbout valueTextLabel ] setCentersHorizontally: YES ];
 	[ _rowAbout setTitle: @"inewsgroupdev@gmail.com" ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 
-
+	//tell the table "we got your data! come and get it!"
 	[_prefTable reloadData];
 
 
+	//initialize the headers for the various groups in the preferences table...
 	_prefHeader = [[UIPreferencesTableCell alloc] init];
 	[_prefHeader setTitle: @"NewsGroup Settings"];
-
 
 	_prefAboutHeader = [[UIPreferencesTableCell alloc] init];
 	[_prefAboutHeader setTitle: @"About:" ];
 
+	//initialize the navbar
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"Preferences" ];
 	[nav showButtonsWithLeftTitle: @"Quit" rightTitle: @"Done" leftBack: YES ]; 
 	[nav pushNavigationItem: _titleItem];
 	[nav setDelegate: self];
-	
 	[nav setBarStyle: 0];
 
+	//add the views to ourself
 	[self addSubview: nav];
 	[self addSubview: _prefTable];
 	
+	//done!
 	return self;
 }
 
@@ -95,12 +94,16 @@
 	_delegate = delegate;
 
 }
+////////////////////////////////////////////////////////////////////////////////////////////////
+//Preferences Table Stuff:
+////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // Start of Preference required methods
 - (int) numberOfGroupsInPreferencesTable: (UIPreferencesTable*)table 
 {
 //	NSLog( @"numberOfGroups Called\n" );
-	return 4;
+	return 4; //TODO: update this as needed
 }
 
 - (int) preferencesTable: (UIPreferencesTable*)table numberOfRowsInGroup: (int)group 
@@ -108,22 +111,27 @@
 //	NSLog( @"numberOfRowsInGroup, current row count is: %d\n", [_rows count] ); 
 	switch( group )
 	{
+	//I don't really understand why the header needs its own group, particular looking at how
+	//the 'preferencesTable: cellforGroup: method works....
+	//but haven't had a chance to look into it properly
 		case 0: return 0;
 		case 1: return [_rows count];
 		case 2: return 0;
 		case 3: return [_rowsAbout count];
 		default:
+			//ERROR :-(
 			NSLog( @"WTF: invalid group count in prefstable" );
 			return 0;
 	}
 }
-
 
 - (UIPreferencesTableCell*) preferencesTable: (UIPreferencesTable*)table cellForGroup: (int)group 
 {
 
 	switch (group)
 	{
+	//I don't understand why a header needs to be the header for 2 groups (and I don't even know that
+	//it has to be this way), and haven't had a chance to look into it
 		case 0: return _prefHeader;
 		case 1: return _prefHeader;
 		case 2: return _prefAboutHeader;
@@ -136,7 +144,6 @@
 
 - (BOOL) preferencesTable: (UIPreferencesTable*)table isLabelGroup: (int)group 
 {
-	return false;
     switch (group)
 	{
 		case 0: return true;
@@ -164,7 +171,9 @@
 			return nil;
 	}
 }
+////////////////////////////////////////////////////////////////////////////////////////////////
 
+//call this to tell us to fetch/loud our values
 - (void) loadSettings
 {
 	readSettingsFromFile();//if anything has messed things up... pull from file again
@@ -176,6 +185,7 @@
 	[ _prefTable reloadData ];
 }
 
+//call this to tell us to commmit/save our values
 - (void) saveSettings
 {
 	setServer( [ [ [ _rows objectAtIndex: SERVER_ROW ] textField ] text ] );
@@ -187,7 +197,7 @@
 }
 
 
-
+//clean-up time....
 - (void) dealloc
 {
 	[super dealloc];
@@ -218,6 +228,7 @@
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Navigation bar handler
 
@@ -227,10 +238,6 @@
 	if ( which == 0 ) //right, go back
 	{
 		//commit changes
-		
-
-		//refresh main window
-
 		[self saveSettings ];
 
 		//go back
@@ -243,8 +250,8 @@
 	}
 	
 	else
-	{
-
+	{//left
+		//quit
 		tin_done( EXIT_SUCCESS );
 	}
 

@@ -5,6 +5,7 @@
 
 //Interaction between iNewsGroup and the tin code... also declare global variables here
 
+//TODO: push global variables into their own header, and perhaps same with the language variables
 
 //globals:
 
@@ -20,9 +21,6 @@ extern NSString *kUIButtonBarButtonTitle;
 extern NSString *kUIButtonBarButtonTitleVerticalHeight;
 extern NSString *kUIButtonBarButtonTitleWidth;
 extern NSString *kUIButtonBarButtonType;
-//struct __GSFont * smaller_font;
-
-//CGColorSpaceRef colorSpace;
 
 static const double REFRESH_TIME = 0.3;
 static const double SAVE_TIME = 20.0;
@@ -32,10 +30,12 @@ static const double HTTP_REQUEST_TIMEOUT = 10.0;
 //if your email is longer than this, too bad
 char email[ MAX_EMAIL ];
 
-//This already exists, apparently.  From /where/ though?
-//static const float col_bkgd[4] = {0.0, 0.0, 0.0, 0.0};
+//TODO: find /all/ string literals, and put them here.
+//	file names (png's used), and in particular the ui messages
+//		perhaps put all ui messages in a file 'lang.h' or some such for easy
+//		modification
 
-//static const float col_gray[4] = {0.34, 0.34, 0.34, 1.0};
+
 
 //methods:
 
