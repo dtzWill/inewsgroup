@@ -16,7 +16,6 @@
 #import <UIKit/UIAlertSheet.h>
 #import <GraphicsServices/GraphicsServices.h>
 #import "iNewsApp.h"
-//#import "NewsListView.h"
 #import "newsfunctions.h"
 
 @implementation iNewsApp

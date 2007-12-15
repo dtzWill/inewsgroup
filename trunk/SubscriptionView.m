@@ -21,11 +21,14 @@
     [_prefTable setDelegate: self];
 	[_prefTable setBottomBufferHeight:44.0f];
 
-
+	//initialize the row array
 	_rows = [[NSMutableArray alloc] init];
 
+	//queue used to basically be a 'pool' of row objects we use, just changing their title, for
+	//displaying our table--this cuts down /big/ time on memory usage
 	_memoryQueue = [[NSMutableArray alloc] init];
 
+	//fill up the memoryQueue with rows....
 	int i =0;
 	UIPreferencesControlTableCell * row;
 	UISwitchControl * button;
@@ -36,33 +39,34 @@
 		UISwitchControl * button = [[UISwitchControl alloc] initWithFrame: CGRectMake(
  320.f - 
 114.0f, 36.0f, 114.0f, 48.0f ) ] ;
-//		[ [row titleTextLabel ] setFrame: CGRectMake( 0.0f, 0.0f, 320.0f - 114.0f, 32.0f ) ];
 		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];
 		[ [row titleTextLabel ] setWrapsText: YES ];
-//		[ [row titleTextLabel ] setVerticallyCenterText: NO ];
+//DEBUG
 //		[ row setTitle: @"this.is.a.ridiculously.long.group.name.dear.god.why.doesnt.it.ever.end" ];
+//ENDDEBUG
 		[ row setControl: button ];
 
 		[ _memoryQueue addObject: [ row retain ] ];
 	}
 
-
+	//create the header
 	_prefHeader = [[UIPreferencesTableCell alloc] init];
 	[_prefHeader setTitle: @"Subscriptions"];
 
-
+	//setup the navbar
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"Subscriptions" ];
 	[nav showButtonsWithLeftTitle: nil rightTitle: @"Done" leftBack: YES ]; 
 	[nav pushNavigationItem: _titleItem];
 	[nav setDelegate: self];
-	
 	[nav setBarStyle: 0];
 
+	//add the views to ourself
 	[self addSubview: nav];
 	[self addSubview: _prefTable];
 	
+	//done!
 	return self;
 }
 
@@ -72,6 +76,7 @@
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of Preference required methods
 - (int) numberOfGroupsInPreferencesTable: (UIPreferencesTable*)table 
 {
@@ -150,23 +155,13 @@
 	}
 }
 
+//call this to have us load our settings
 - (void) loadSettings
 {
-/*	while( [_rows count] > 0 )
-	{
-		id row = [_rows objectAtIndex: 0 ];
-		[_rows removeObjectAtIndex: 0 ];
-		[row release ];	
-	}
-	[ _rows removeAllObjects ];//clear it out...
-*/
 	if ( [ _rows count] == 0 ) //if not initialized yet...
 	{
 	
 		int i;
-	
-	//	[ _rows release ];
-	//	_rows = [NSMutableArray arrayWithCapacity: numActive() ];
 	
 		SubPrefItem * item;
 	
@@ -180,23 +175,13 @@
 	
 		[ _rows sortUsingSelector: @selector( compareSubscription: ) ];	
 	
-	/*
-		for_each_group( i )
-		{
-			row = [[UIPreferencesControlTableCell alloc] init];
-			button = [[UISwitchControl alloc] initWithFrame: CGRectMake( 320.f - 
-	114.0, 11.0f, 114.0f, 48.0f ) ];
-			[button setValue: active[ i ].subscribed ];
-			[ row setTitle: [NSString stringWithCString: active[ i ].name ] ];
-			[ row setControl: button ];
-			[ _rows addObject: row ];
-		}
-	*/
 	}
 	NSLog( @"loaded settings... reloading data" );
 	[ _prefTable reloadData ];
 }
 
+//call this to have us commit our settings
+//in this case, this means subscribing/unsubscribing according to changes
 - (void) saveSettings
 {
 	int i;
@@ -215,7 +200,7 @@
 }
 
 
-
+//cleanup!
 - (void) dealloc
 {
 	[super dealloc];
@@ -234,7 +219,7 @@
 
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////
 //Navigation bar handler
 
 
@@ -301,6 +286,8 @@
 	rowArray = array;
 	return self;
 }
+
+//accessor methods...
 
 - (bool) switchValue
 {

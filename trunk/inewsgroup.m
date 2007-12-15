@@ -4,7 +4,7 @@
 
 #import "iNewsApp.h"
 
-
+//run the main app!
 int main(int argc, char **argv)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

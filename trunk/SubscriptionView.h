@@ -6,7 +6,8 @@
 #import <UIKit/UIPreferencesTable.h>
 #import <UIKit/UIPreferencesControlTableCell.h>
 
-
+//this defines the 'queue' (pool) of rows we use for displaying
+//all the subscriptions....
 #define MAX_ROWS_ON_SCREEN 20
 
 @interface SubscriptionView : UIView
@@ -23,19 +24,23 @@
 
 - (void) setDelegate: (id) delegate;
 
-
+//call this to have us load our settings
 - (void) loadSettings;
 
+//call this to have us commit our settings
+//in this case, this means subscribing/unsubscribing according to changes
 - (void) saveSettings;
 
 
 @end
 
 
-
+//represents a row in the table, a 'group'
 @interface SubPrefItem: NSObject
 {
-	NSMutableArray * rowArray;
+	NSMutableArray * rowArray; //pointer to array that stores all the rows
+								//they all should have the same one
+							//TODO: change this so they DO use all the same one
 	NSString * title;
 	bool value;//store value even when row is invalid
 	int index;//so we know which one this corresponds to after sorting	

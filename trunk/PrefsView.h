@@ -6,6 +6,10 @@
 #import <UIKit/UIPreferencesTable.h>
 #import <UIKit/UIPreferencesTextTableCell.h>
 
+//View to allow the user to set/update/modify their preferences
+
+
+//defines for our rows...
 #define SERVER_ROW 0
 #define USER_ROW 1
 #define PASS_ROW 2
@@ -16,7 +20,11 @@
 	UIPreferencesTable * _prefTable;
 	UIPreferencesTableCell * _prefHeader;
 	UIPreferencesTableCell * _prefAboutHeader;
+
+	//array holding the preferences entries
 	NSMutableArray * _rows;
+
+	//array holding the arrays displaying the 'about' information
 	NSMutableArray * _rowsAbout;
 	UINavigationItem * _titleItem;
 	id _delegate; //go back to main view! :)
@@ -26,9 +34,10 @@
 
 - (void) setDelegate: (id) delegate;
 
-
+//call this to tell us to fetch/loud our values
 - (void) loadSettings;
 
+//call this to tell us to commmit/save our values
 - (void) saveSettings;
 
 

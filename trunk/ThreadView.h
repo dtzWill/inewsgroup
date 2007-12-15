@@ -1,14 +1,15 @@
 //Will Dietz
 //ThreadView.h
 
-//From the users's perspective this is /part/ of the groupview. So no 'refresh' button or anything or the sort.  Now we happen to re-use the same view, but that's beside the point. 
-
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <UIKit/UIView.h>
 #import <UIKit/UIImageAndTextTableCell.h>
 #import "PostView.h";
 
+//From the users's perspective this is /part/ of the groupview. So no 'refresh' button or anything or the sort.  Now we happen to re-use the same view, but that's beside the point. 
+
+//TODO: implement 'sharedInstance' style?
 
 @interface ThreadView: UIView
 {
@@ -37,7 +38,7 @@
 
 @end
 
-//a basically useless class to link together the article number with the cell
+//a basically otherwise useless class to link together the article number with the cell
 //possibly this will be useful later for adding other things to it
 @interface ThreadViewItem: UIImageAndTextTableCell
 {
