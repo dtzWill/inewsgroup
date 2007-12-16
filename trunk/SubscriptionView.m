@@ -5,6 +5,7 @@
 #import <UIKit/UIPreferencesControlTableCell.h>
 #import <GraphicsServices/GraphicsServices.h>
 #import <UIKit/UISwitchControl.h>
+#import "newsfunctions.h"
 //TODO: GET RID OF THIS:
 #import "tin.h"
 
@@ -16,13 +17,25 @@
 
 	//TODO: make this relative to rect
 	_prefTable = [[UIPreferencesTable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	320.0f, 480.0f - 16.0f - 48.0f)  ];
+	320.0f, 480.0f - 16.0f - 48.0f*2 )  ];
 	[_prefTable setDataSource: self];
     [_prefTable setDelegate: self];
 	[_prefTable setBottomBufferHeight:44.0f];
 
 	//initialize the row array
 	_rows = [[NSMutableArray alloc] init];
+
+	//initialize the curRow array
+	_curRows = [[NSMutableArray alloc] init];
+
+	_refresh = [[UIAlertSheet alloc]initWithTitle:@"Updating..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
+	[_refresh setDimsBackground:YES];
+
+	NSArray *buttons = [NSArray arrayWithObjects:@"OK", @"Clear", @"Cancel", nil];
+	_search = [[UIAlertSheet alloc]initWithTitle:@"Search" buttons:buttons defaultButtonIndex:1 delegate:self context:self];
+	[_search addTextFieldWithValue: @"" label: @"search phrase" ];
+	[_search setRunsModal: NO ];
+	[_search setDimsBackground: YES];
 
 	//queue used to basically be a 'pool' of row objects we use, just changing their title, for
 	//displaying our table--this cuts down /big/ time on memory usage
@@ -57,14 +70,22 @@
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"Subscriptions" ];
-	[nav showButtonsWithLeftTitle: nil rightTitle: @"Done" leftBack: YES ]; 
+	[nav showButtonsWithLeftTitle: @"Search" rightTitle: @"Done" leftBack: NO ]; 
 	[nav pushNavigationItem: _titleItem];
 	[nav setDelegate: self];
 	[nav setBarStyle: 0];
 
+	UINavigationBar *nav2 = [[UINavigationBar alloc] initWithFrame: CGRectMake(
+		0.0f, 480.0f-48.0f -16.0f, 320.0f, 48.0f) ];
+	_titleFilter = [ [UINavigationItem alloc] initWithTitle: @"" ];
+	[nav2 pushNavigationItem: _titleFilter];
+	[nav2 setBarStyle: 0];
+
+
 	//add the views to ourself
 	[self addSubview: nav];
 	[self addSubview: _prefTable];
+	[self addSubview: nav2];
 	
 	//done!
 	return self;
@@ -75,6 +96,133 @@
 	_delegate = delegate;
 
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//AlertSheet stuff
+- (void)alertSheet: (UIAlertSheet *)sheet buttonClicked: (int)button
+{
+//	NSLog( @"Button pressed: %d", button );
+	if( sheet == _refresh )
+	{	
+		NSLog( @"How did the buttonless refresh sheet get clicked?!" );
+
+	}
+	else if ( sheet == _search )
+	{
+		if ( button == 1 ) //OK
+		{
+			[ _refresh presentSheetInView: self];
+	[NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(updateSearch) userInfo:nil repeats:NO ];
+		}
+		else if ( button == 2 ) //clear
+		{
+			while( [ _curRows count ] > 0 )
+			{
+				id element = [ _curRows lastObject ];
+				[ _curRows removeLastObject ];
+				[ element release ];
+			}
+			int i;	
+			for(i=0; i < [ _rows count ]; i++ )
+			{
+				[ _curRows addObject: [ [ NSNumber numberWithInt: i ] retain ] ];
+			}
+			[ [ _search textField ] setText: @"" ];
+			[ _titleFilter setTitle: @"" ];
+			[ _prefTable reloadData ];
+		}
+		//no matter what... close the dialog
+		[ _search dismiss ];
+	}
+	else
+	{
+//		NSLog( @"WTF?" );
+	}
+}
+
+- (void) refreshMe
+{
+	//display the message.... help keep user patient :)
+	[ _refresh presentSheetInView: self ];
+
+	[NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(delayedInit) userInfo:nil repeats:NO ];
+
+}
+
+- (void) delayedInit
+{
+/*
+	while( [ _curRows count ] > 0 )
+	{
+		id element = [ _curRows lastObject ];
+		[ _curRows removeLastObject ];
+		[ element release ];
+	}
+	int i;	
+	for(i=0; i < [ _rows count ]; i++ )
+	{
+		[ _curRows addObject: [ [ NSNumber numberWithInt: i ] retain ] ];
+	}
+	[ [ _search textField ] setText: @"" ];
+*/
+
+	[self loadSettings ];
+
+	//don't need that anymore... 	
+	[ _refresh dismiss ];
+}
+
+- (void) updateSearch
+{//called after search dialog closed...
+
+//filter the rows by the search data given
+
+	NSString * text = [ [ _search textField ] text ];
+	int i;
+
+	//clear the old array...
+	while( [ _curRows count ] > 0 )
+	{
+		id element = [ _curRows lastObject ];
+		[ _curRows removeLastObject ];
+		[ element release ];
+	}
+
+
+
+	if( [ text compare: @"" ] == 0 )
+	{
+		for(i=0; i < [ _rows count ]; i++ )
+		{
+			[ _curRows addObject: [ [ NSNumber numberWithInt: i ] retain ] ];
+		}
+
+		[ _titleFilter setTitle: @"" ];
+	}
+	else
+	{
+		for(i=0; i < [ _rows count ]; i++ )
+		{
+		//	NSLog( @"%d: %@", i, [ [ _rows objectAtIndex: i ] getTitle ] );
+			//for now, we just check if the group's name contains the indicated search parameter
+			if ( [ [ [ _rows objectAtIndex: i ] getTitle ] rangeOfString: text options:NSCaseInsensitiveSearch].location != NSNotFound )
+			{
+				NSLog( @"%@ matches", [ [ _rows objectAtIndex: i ] getTitle ] );
+				[ _curRows addObject: [ [ NSNumber numberWithInt: i ] retain ] ]; 
+			} 
+	
+		}
+		[ _titleFilter setTitle: [NSString stringWithFormat: @"Filter: %@", text ] ];
+	}
+
+	[_prefTable reloadData ];
+
+	//all done
+	[ _refresh dismiss ];
+
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Start of Preference required methods
@@ -90,7 +238,7 @@
 	switch( group )
 	{
 		case 0: return 0;
-		case 1: return [_rows count];
+		case 1: return [_curRows count];
 		default:
 			NSLog( @"WTF: invalid group count in prefstable" );
 			return 0;
@@ -146,7 +294,7 @@
 		case 0: return _prefHeader;
 		case 1: 
 
-			return [[_rows objectAtIndex: row] getRow ];
+			return [ [ _rows objectAtIndex: [ [ _curRows objectAtIndex: row ] intValue ] ] getRow ];
 
 			break;
 		default:
@@ -172,6 +320,11 @@
 			[ _rows addObject: item ];
 		}
 	
+		for(i=0;i< [_rows count]; i++)
+		{
+			[ _curRows addObject: [ [NSNumber numberWithInt: i ] retain ] ];
+		}
+
 	
 		[ _rows sortUsingSelector: @selector( compareSubscription: ) ];	
 	
@@ -217,6 +370,9 @@
 
 	[_titleItem release];
 
+	[_search release];
+	[_refresh release];
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -237,6 +393,11 @@
 		//go back
 		[_delegate returnToMain];
 		
+	}
+	else
+	{ //left, 'search'
+		[ _search popupAlertAnimated: YES ];
+
 	}
 }
 @end
@@ -302,7 +463,7 @@
 
 - (NSString *) getTitle
 {
-	return title;
+	return [ title retain ];
 }
 
 - (NSComparisonResult)compareSubscription:(SubPrefItem *)s

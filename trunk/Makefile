@@ -28,10 +28,12 @@ all:   iNewsGroup
 
 iNewsGroup:  $(OBJS) 
 	$(ARMLD) $(LDFLAGS) -o $@ $(RESOLVLIB) $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^  
-#	cp UIUCMapApp UIUCMap.app
 
-%.o:    %.m
-	$(ARMCC) -c $(RESOLVLIB) $(FLAGS) $(TININC) $< -o $@
+inewsgroup.o: inewsgroup.m
+	$(ARMCC) -c $(FLAGS) $(TININC) $< -o $@
+
+%.o:    %.m %.h
+	$(ARMCC) -c $(FLAGS) $(TININC) $< -o $@
 
 $(PCRELIB): 
 	cd $(TINDIR) && make
@@ -47,17 +49,6 @@ clean: local_clean
 local_clean:
 	rm -f *.o iNewsGroup iNewsGroup-x86
 install: all
-#	scp iNewsGroup root@192.168.255.2:
-	scp iNewsGroup root@10.5.16.180: 
+	scp iNewsGroup root@192.168.255.2:
+#	scp iNewsGroup root@10.5.16.180: 
 # I have 2 wireless networks.. don't ask.
-#
-#x86: iNewsGroup-x86
-#
-#iNewsGroup-x86: inewsgroup.o.x86 newsfunctions.o.x86
-#	$(LD) $(LDFLAGS) -o $@ $^
-#
-#%.o.x86: %.m
-#	$(CC) -c $(FLAGS) $< -o $@
-#
-#
-#

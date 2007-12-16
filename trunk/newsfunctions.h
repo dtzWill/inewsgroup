@@ -97,3 +97,4 @@ void markGroupRead( int groupnum );
 bool isThreadRead( int threadnum ); 
 
 void doSubscribe( struct t_group * group, int status );
+

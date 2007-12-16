@@ -74,7 +74,7 @@
 	[buttonBar registerButtonGroup:1 withButtons:buttons withCount:2];
 	[buttonBar showButtonGroup:1 withDuration:0.];
 	[buttonBar setDelegate: self];
-//    [buttonBar setBarStyle:1];
+//    [buttonBar setBarStyle:2];
     [buttonBar setButtonBarTrackingMode: 2];
 
 	[ [ buttonBar viewWithTag: 2 ]//2='mark read' button
@@ -91,22 +91,15 @@
 
 	_count = 0;//1;
 
-	_connect = [[UIAlertSheet alloc]initWithTitle:@"Connecting..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
-//	[_connect setNumberOfRows: 1];	
+	_connect = [[UIAlertSheet alloc]initWithTitle:@"Connecting..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_connect setDimsBackground: YES];
 
-
-
-
-
 	_rows = [ [ NSMutableArray alloc] init ];
-
-
 
 	[self connect ];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 480.0f - 16.0f - 48.0f - 48.0f)];
+	    320.0f, 480.0f - 16.0f - 48.0f*2 )];
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"subscribedgroups"
 	    identifier: @"subscribedgroups" width: 320.0f];
 
@@ -130,6 +123,7 @@
 	
 	[_mainView addSubview:  _navTop ];
 	[_mainView addSubview: _table ];
+	[_mainView addSubview: buttonBar ];
 
 //	[window setContentView: root];
 	NSLog( @"Done with applicationDidFinishLaunching" ); 
@@ -165,11 +159,12 @@
 	int button = [ sender tag ];
 	switch (button) {
 		case 1://subscription manager
-			NSLog( @"loading sub settings" );
-			[ self saveConfig ];//commit it to the newsrc, b/c subs might change it, then reload, losing all data (namely read/unread status)
-			[ _subs loadSettings ];
 			NSLog( @"showing subs" );
 			[ self setView : _subs ];
+
+			NSLog( @"loading sub settings" );
+			[ self saveConfig ];//commit it to the newsrc, b/c subs might change it, then reload, losing all data (namely read/unread status)
+			[ _subs refreshMe ];
 		
 			break;
 
@@ -331,6 +326,7 @@
 
 - (void)view:(UIView *)view handleTapWithCount:(int)count event:(GSEvent *)event {
 //This should only be called from the disclosures of the rows!
+
   /* //DEBUG:
 	CGRect rect = GSEventGetLocationInWindow(event);
 	CGPoint point = rect.origin;

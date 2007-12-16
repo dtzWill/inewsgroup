@@ -26,7 +26,7 @@
 	[nav setBarStyle: 0];
 
 	//set up the ui message telling the user we're loading... but also preventing the user from using the ui :)
-	_message = [[UIAlertSheet alloc]initWithTitle:@"Loading Message..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
+	_message = [[UIAlertSheet alloc]initWithTitle:@"Loading Message..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_message setDimsBackground:YES];
 	
 	//create our array...
@@ -82,32 +82,33 @@
 //	NSLog( @" trying to open article %d of group %d", _postnum, _groupnum );
 
 	//tell the server which article we want
-	openArticle( _groupnum, _postnum );
-	
-	//actually go get all the data and parse it.... 
-	NSString * body = readArticleContent();
+	if ( openArticle( _groupnum, _postnum ) )
+	{
+		
+		//actually go get all the data and parse it.... 
+		NSString * body = readArticleContent();
 
-	//no longer need the article....
-	closeArticle();
+		//no longer need the article....
+		closeArticle();
  
-	UISimpleTableCell * row;
+		UISimpleTableCell * row;
 
-	//from
-	row = [[UISimpleTableCell alloc] init ];
-	[ row setTitle: articleFrom() ];
-	[ _rows addObject: row]; 
+		//from
+		row = [[UISimpleTableCell alloc] init ];
+		[ row setTitle: articleFrom() ];
+		[ _rows addObject: row]; 
 
-	//subject	
-	row = [[UISimpleTableCell alloc] init];
-	[ row setTitle: articleSubject() ];
-	[ _rows addObject: row];
+		//subject	
+		row = [[UISimpleTableCell alloc] init];
+		[ row setTitle: articleSubject() ];
+		[ _rows addObject: row];
 
-	[ _table reloadData];
+		[ _table reloadData];
 
-	[ _textView setTextSize: 12 ];
-	[ _textView setText: body ];
-	[ _textView recalculateStyle ]; //TODO: needed? what does this DO? 
-
+		[ _textView setTextSize: 12 ];
+		[ _textView setText: body ];
+		[ _textView recalculateStyle ]; //TODO: needed? what does this DO? 
+	}
 
 	//begin fix the 'starts not viewing top' bug
 	CGPoint p;

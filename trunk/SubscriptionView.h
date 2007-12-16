@@ -14,15 +14,26 @@
 {
 	UIPreferencesTable * _prefTable;
 	UIPreferencesTableCell * _prefHeader;
-	NSMutableArray * _rows;
+	NSMutableArray * _rows, * _curRows;
+
+	UIAlertSheet * _refresh;
+	UIAlertSheet * _search;
+
 	NSMutableArray * _memoryQueue; //simple fix until implement drill-down
 	UINavigationItem * _titleItem;
+	UINavigationItem * _titleFilter;
+
 	id _delegate; //go back to main view! :)
 } 
 
 - (id) initWithFrame: (CGRect) rect;
 
 - (void) setDelegate: (id) delegate;
+
+//method called by other views to initiate the sheet being shown, and the proper init'ing being done...
+- (void) refreshMe;
+
+- (void) delayedInit; //the actual init process
 
 //call this to have us load our settings
 - (void) loadSettings;
