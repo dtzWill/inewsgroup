@@ -87,9 +87,6 @@
 		
 		//actually go get all the data and parse it.... 
 		NSString * body = readArticleContent();
-
-		//no longer need the article....
-		closeArticle();
  
 		UISimpleTableCell * row;
 
@@ -105,9 +102,14 @@
 
 		[ _table reloadData];
 
+		//display subject as our title
+		[ _titleItem setTitle: articleSubject() ];
+
 		[ _textView setTextSize: 12 ];
 		[ _textView setText: body ];
 		[ _textView recalculateStyle ]; //TODO: needed? what does this DO? 
+		//no longer need the article....
+		closeArticle();
 	}
 
 	//begin fix the 'starts not viewing top' bug
@@ -122,8 +124,6 @@
 	//no longer need the message.. allow the user to use the UI again
 	[_message dismiss ];
 
-	//display subject as our title
-	[ _titleItem setTitle: articleSubject() ];
 
 	//since we're displaying it, assume the user has read it
 	markArticleRead( _groupnum, _postnum );

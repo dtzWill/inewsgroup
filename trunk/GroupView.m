@@ -167,7 +167,7 @@
 					@"ReadIndicator.png" : @"UnreadIndicator.png" ];  
 
 
-		[ cell setTitle: [NSString stringWithFormat: @"%s\n", arts[ base[ threadnum ] ].subject ] ];
+		[ cell setTitle: [NSString stringWithFormat: @"%s", arts[ base[ threadnum ] ].subject ] ];
 
 		[ cell setImage: img ];
 
