@@ -253,7 +253,9 @@ NSString *	readArticleContent()
 NSString * articleFrom()
 {
 	if ( _curArt.hdr.from )
+	{
 		return [NSString stringWithCString: _curArt.hdr.from ];
+	}
 	return @"Not specified";
 
 }
@@ -261,7 +263,9 @@ NSString * articleFrom()
 NSString * articleSubject()
 {
 	if ( _curArt.hdr.subj )
+	{
 		return [NSString stringWithCString: _curArt.hdr.subj ];
+	}
 	return @"No Subject";
 
 }
