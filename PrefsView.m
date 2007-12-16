@@ -76,7 +76,7 @@
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"Preferences" ];
-	[nav showButtonsWithLeftTitle: @"Quit" rightTitle: @"Done" leftBack: YES ]; 
+	[nav showButtonsWithLeftTitle: @"Quit" rightTitle: @"Done" leftBack: NO ]; 
 	[nav pushNavigationItem: _titleItem];
 	[nav setDelegate: self];
 	[nav setBarStyle: 0];

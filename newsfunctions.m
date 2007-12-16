@@ -252,13 +252,17 @@ NSString *	readArticleContent()
 
 NSString * articleFrom()
 {
-	return [NSString stringWithCString: _curArt.hdr.from ];
+	if ( _curArt.hdr.from )
+		return [NSString stringWithCString: _curArt.hdr.from ];
+	return @"Not specified";
 
 }
 
 NSString * articleSubject()
 {
-	return [NSString stringWithCString: _curArt.hdr.subj ];
+	if ( _curArt.hdr.subj )
+		return [NSString stringWithCString: _curArt.hdr.subj ];
+	return @"No Subject";
 
 }
 
@@ -497,6 +501,8 @@ int updateData()
 	{	
 		newsrc_active = false;
 		list_active = true;
+//		newsrc_active = true;
+//		list_active = false;
 	
 //		[ [MessageController sharedInstance] setAlertText: @"Reading active file..." ];	
 		read_news_active_file();

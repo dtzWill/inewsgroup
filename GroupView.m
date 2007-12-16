@@ -25,7 +25,7 @@
 	[nav setBarStyle: 0];
 
 	//Build alertshet used to display message to user while we're getting the headers
-	_connect = [[UIAlertSheet alloc]initWithTitle:@"Refreshing..." buttons:nil defaultButtonIndex:1 delegate:self context:nil];
+	_connect = [[UIAlertSheet alloc]initWithTitle:@"Refreshing..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_connect setDimsBackground:YES];
 
 	//Create /the/ threadView instance
