@@ -317,10 +317,10 @@ void readNewsRC()
 {
 	//TODO: do something with this number?
 	read_news_via_nntp = true;
-//	list_active = true;
-	newsrc_active = true;
-/*	newsrc_active = true;
-	list_active = false; */
+	list_active = true;
+	newsrc_active = false;
+//	newsrc_active = true;
+//	list_active = false; 
 	int num_subscribed = read_newsrc( newsrc, true );
 //	list_active = true;
 //	newsrc_active = false;
@@ -423,14 +423,10 @@ int init_server()
 		}
 	}
 	
-	read_news_via_nntp = true;
-	check_for_new_newsgroups = true;
-	read_saved_news = false;
-//why was this ever a good idea??
-	force_auth_on_conn_open = false;
+	read_news_via_nntp = true; //not local news server
+	check_for_new_newsgroups = true;//update newsgroup listing
+	read_saved_news = false;//don't just read local cache of messages
 
-	newsrc_active = false;
-	list_active = true;
 	tinrc.auto_reconnect = true;
 	tinrc.cache_overview_files = true;
 	tinrc.thread_articles = 3;//subject and reference
@@ -449,6 +445,9 @@ int init_server()
 
 	readSettingsFromFile();
 	
+	force_auth_on_conn_open = ( authpassword[0] != '\0' );
+	NSLog( @"Force auth: %d", force_auth_on_conn_open );
+
 	int connect = nntp_open();
 //	NSLog( @"nntp_open: %d", connect );
 	if ( connect == -65 ) //if failed due to system call, particularly "no route to host"
