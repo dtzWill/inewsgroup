@@ -6,10 +6,30 @@
 #import <GraphicsServices/GraphicsServices.h>
 #import <UIKit/UISwitchControl.h>
 #import "newsfunctions.h"
+#import "ViewController.h"
+#import "iNewsApp.h"
 //TODO: GET RID OF THIS:
 #import "tin.h"
 
+
+static SubscriptionView * sharedInstance = nil;
+
 @implementation SubscriptionView
+
++ (SubscriptionView *) sharedInstance
+{
+	if ( sharedInstance )
+		return sharedInstance;
+
+	//else
+
+	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
+	rect.origin. x = rect.origin.y = 0;
+	sharedInstance = [[SubscriptionView alloc] initWithFrame: rect ]; 
+
+	return sharedInstance;
+}
+
 
 - (id) initWithFrame: (CGRect) rect
 {
@@ -91,13 +111,6 @@
 	return self;
 }
 
-- (void) setDelegate: (id) delegate
-{
-	_delegate = delegate;
-
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //AlertSheet stuff
 - (void)alertSheet: (UIAlertSheet *)sheet buttonClicked: (int)button
@@ -152,20 +165,6 @@
 
 - (void) delayedInit
 {
-/*
-	while( [ _curRows count ] > 0 )
-	{
-		id element = [ _curRows lastObject ];
-		[ _curRows removeLastObject ];
-		[ element release ];
-	}
-	int i;	
-	for(i=0; i < [ _rows count ]; i++ )
-	{
-		[ _curRows addObject: [ [ NSNumber numberWithInt: i ] retain ] ];
-	}
-	[ [ _search textField ] setText: @"" ];
-*/
 
 	[self loadSettings ];
 
@@ -388,10 +387,10 @@
 		[self saveSettings ];
 
 		//TODO: refresh main window
-		[_delegate refreshTable ];	
+		[ [ iNewsApp sharedInstance ] refreshTable ];
 
 		//go back
-		[_delegate returnToMain];
+		[ [ ViewController sharedInstance ] setView: [ [ iNewsApp sharedInstance ] mainView ] slideFromLeft: YES ];
 		
 	}
 	else

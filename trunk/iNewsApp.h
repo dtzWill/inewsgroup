@@ -22,19 +22,17 @@
 
 	UIWindow * _window;
 	UIView * _mainView;
-	PrefsView * _prefs; 
-	GroupView * _group;
-	SubscriptionView * _subs;
     UITable * _table;
 	UIAlertSheet * _connect;
 //    NewsListView * root;//root view
 }
+- (id)_initWithArgc:(int)fp8 argv:(const char **)fp12;	// IMP=0x323b6ab0
 
-- (void) returnToMain;
-
-- (void) setView: (UIView *) view;
++ (iNewsApp *) sharedInstance;
 
 - (void) connect;
+
+- (UIView *) mainView;
 
 @end
 

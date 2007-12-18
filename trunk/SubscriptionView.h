@@ -22,13 +22,12 @@
 	NSMutableArray * _memoryQueue; //simple fix until implement drill-down
 	UINavigationItem * _titleItem;
 	UINavigationItem * _titleFilter;
-
-	id _delegate; //go back to main view! :)
 } 
 
-- (id) initWithFrame: (CGRect) rect;
+//singleton
++ (SubscriptionView *) sharedInstance;
 
-- (void) setDelegate: (id) delegate;
+- (id) initWithFrame: (CGRect) rect;
 
 //method called by other views to initiate the sheet being shown, and the proper init'ing being done...
 - (void) refreshMe;

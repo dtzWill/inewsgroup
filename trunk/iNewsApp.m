@@ -17,8 +17,29 @@
 #import <GraphicsServices/GraphicsServices.h>
 #import "iNewsApp.h"
 #import "newsfunctions.h"
+#import "ViewController.h"
+
+static iNewsApp * sharedInstance = nil;
+
 
 @implementation iNewsApp
+- (id)_initWithArgc:(int)fp8 argv:(const char **)fp12
+{
+	
+	return (sharedInstance = [super _initWithArgc: fp8 argv: fp12 ] );	
+
+}
+
++ (iNewsApp *) sharedInstance
+{
+	if ( sharedInstance )
+	{
+		return sharedInstance;
+	}
+	NSLog( @"ERROR: sharedInstance called /before/ obj init'd.." );
+
+	return nil;//we /want/ things to die, this shouldn't ever happen
+}
 
 - (void) applicationDidFinishLaunching: (id) unused
 {
@@ -27,13 +48,15 @@
 	rect.origin. x = rect.origin.y = 0;
 	_window = [[UIWindow alloc] initWithContentRect: rect];
 
+
 	_mainView = [[UIView alloc] initWithFrame: rect];
-	[_window setContentView: _mainView];
+	[ [ViewController sharedInstance ] addSubview: _mainView ];	
+	[ [ViewController sharedInstance ] setCurView: _mainView ];
+	[_window setContentView: [ ViewController sharedInstance ] ];
 
 	[_window orderFront: self];
 	[_window makeKey: self];
 	[_window _setHidden: NO];
-
 
 	//top navigation bar.
 	_navTop = [[UINavigationBar alloc] initWithFrame: CGRectMake(
@@ -89,7 +112,7 @@
 	
 	NSLog(@"done with init");
 
-	_count = 0;//1;
+	_count = 0;//clear out the count
 
 	_connect = [[UIAlertSheet alloc]initWithTitle:@"Connecting..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_connect setDimsBackground: YES];
@@ -109,49 +132,20 @@
 	[_table setDelegate: self];
 	[_table reloadData];
 
-
-	//initialize other views...
-	_prefs = [[PrefsView alloc] initWithFrame: rect];
-	[_prefs setDelegate: self];
-	
-	_group = [[GroupView alloc] initWithFrame: rect];
-	[_group setDelegate: self];
-
-	_subs = [[SubscriptionView alloc] initWithFrame: rect];
-	[_subs setDelegate: self];
-
-	
 	[_mainView addSubview:  _navTop ];
 	[_mainView addSubview: _table ];
 	[_mainView addSubview: buttonBar ];
 
-//	[window setContentView: root];
 	NSLog( @"Done with applicationDidFinishLaunching" ); 
 }
 
 
 - (void)tableRowSelected:(NSNotification *)notification {
 //  NSLog(@"tableRowSelected!");
-	//don't do anything, actions are taken via the buttonbar
+	//just set selectedRow for use elsewhere
 	_selectedRow = [_table selectedRow];
-/*
-	int groupnum = [_table selectedRow];
-	if ( groupnum == [ _rows count] - 1 )//the more/less bar...
-	{
-		NSLog( @"loading sub settings" );
-		[ _subs loadSettings ];
-		NSLog( @"showing subs" );
-		[ self setView : _subs ];
-	}
-	else
-	{
-		[ _group setGroupNum: groupnum ];
-	
-		[_window setContentView: _group ];
-	
-		[_group refreshMe ];
-	}
-*/
+
+
 }
 
 //handle various buttons:
@@ -160,11 +154,12 @@
 	switch (button) {
 		case 1://subscription manager
 			NSLog( @"showing subs" );
-			[ self setView : _subs ];
+
+			[ [ ViewController sharedInstance] setView: [ SubscriptionView sharedInstance ] slideFromLeft: NO ];
 
 			NSLog( @"loading sub settings" );
 			[ self saveConfig ];//commit it to the newsrc, b/c subs might change it, then reload, losing all data (namely read/unread status)
-			[ _subs refreshMe ];
+			[ [ SubscriptionView sharedInstance ] refreshMe ];
 		
 			break;
 
@@ -175,17 +170,6 @@
 				[ self refreshTable ];
 			}
 			break;
-     /*   case 3://view articles in selected group
-			if( _selectedRow >= 0 ) //if valid group number
-			{
-				[ _group setGroupNum: _selectedRow ];
-		
-				[_window setContentView: _group ];
-		
-				[_group refreshMe ];
-			}
-			break;
-*/
 	}
    
 }
@@ -216,12 +200,19 @@
 {
 //	[ _connect setBlocksInteraction: NO ];
 //	[ _connect setRunsModal: NO ];
-	[_connect presentSheetInView: _mainView ];	 
+	[_connect presentSheetInView: [ViewController sharedInstance ] ];	 
 
 	[NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
 //	NSLog( @" set timer....%d", self );
 
 }
+
+- (UIView *) mainView
+{
+	return _mainView;
+}
+
+
 
 - (void)dealloc {
 	//TODO: MAKE THIS DO WHAT IT'S SUPPOSED TO  
@@ -233,25 +224,10 @@
 	[_table release];
 	_delegate = nil;
 */
+
 	[super dealloc];
 
 }
-
-- (void) returnToMain
-{
-	
-	[ self refreshTable ];//TODO: only do this when needed
-	[ _window setContentView: _mainView ]; 
-}
-
-- (void) setView: (UIView *) view
-{
-
-
-	[ _window setContentView: view];
-
-}
-
 
 - (void) delayedInit
 {
@@ -263,21 +239,18 @@
 	if(	!init_server() )
 	{//if fail.. just go to prefs page
 		NSLog( @"connection failed... showing prefs view" );
-		[ _window setContentView: _prefs];	
+		[ [ViewController sharedInstance] setView: [PrefsView sharedInstance ] slideFromLeft: NO ];
+	
 	}
 	else
 	{
-//		readNewsRC();
 		[NSTimer scheduledTimerWithTimeInterval: SAVE_TIME target:self selector:@selector(saveConfig) userInfo:nil repeats:YES];	
 		updateData();
 		[self refreshTable ];
-		//TODO: set timer to fire every X seconds, saving the newsrc, as follows:
-		//write_config_file(local_config_file);
-		//long sessions would benefit greatly from this, and it's rather cheap :)
+
 	}
-//	[[MessageController sharedInstance] sheetClosed ];
 	[ _connect dismiss ];
-	[_prefs loadSettings ];
+	[ [PrefsView sharedInstance ] loadSettings ];
 }
 
 - (void) saveConfig
@@ -297,10 +270,6 @@
 	{
 		row = [[UIImageAndTextTableCell alloc] init];
 		
-	/*	[row setTitle: [NSString stringWithFormat: @"%s%s",
-			active[ my_group[i] ].newsrc.num_unread > 0 ? "*":" " , //put "*" if unread arts
-			active[my_group[i]].name ] ];*/
-
 		bool unread = active[ my_group[i] ].newsrc.num_unread > 0 ;
 		UIImage * img = [UIImage applicationImageNamed:
 				unread ? @"UnreadIndicator.png" : @"ReadIndicator.png" ];  
@@ -327,21 +296,15 @@
 - (void)view:(UIView *)view handleTapWithCount:(int)count event:(GSEvent *)event {
 //This should only be called from the disclosures of the rows!
 
-  /* //DEBUG:
-	CGRect rect = GSEventGetLocationInWindow(event);
-	CGPoint point = rect.origin;
-	NSLog(@"view:%@ handleTapWithCount:%i event:(point.x=%f, point.y=%f)",view, count, point.x, point.y);
-	NSLog( @"clicked on: %@", [ [_rows objectAtIndex: _selectedRow ] title ] );
-*/
-
 	//disclosure clicked on..... go there!
 	if( _selectedRow >= 0 ) //if valid group number
 	{
-		[ _group setGroupNum: _selectedRow ];
+		[ [GroupView sharedInstance ] setGroupNum: _selectedRow ];
 	
-		[_window setContentView: _group ];
+
+		[ [ViewController sharedInstance] setView: [GroupView sharedInstance] slideFromLeft: YES ];
 	
-		[_group refreshMe ];
+		[ [GroupView sharedInstance ] refreshMe ];
 	}
 
 }
@@ -357,8 +320,7 @@
 	}
 	else
 	{
-		[ _window setContentView: _prefs];
-		[_prefs setDelegate: self];
+		[ [ViewController sharedInstance] setView: [PrefsView sharedInstance] slideFromLeft: NO ];
 
 	}
 

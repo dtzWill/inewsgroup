@@ -5,8 +5,26 @@
 
 //TODO: move any functionality that needs this into newsfunctions where it belongs!
 #import "tin.h"
+#import "ViewController.h"
+#import "GroupView.h"
+
+static ThreadView * sharedInstance = nil;
 
 @implementation ThreadView
+
++ (ThreadView *) sharedInstance
+{
+	if ( sharedInstance )
+		return sharedInstance;
+
+	//else
+
+	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
+	rect.origin. x = rect.origin.y = 0;
+	sharedInstance = [[ThreadView alloc] initWithFrame: rect ]; 
+
+	return sharedInstance;
+}
 
 - (id) initWithFrame: (CGRect) rect
 {
@@ -24,9 +42,6 @@
 	[nav setDelegate: self];	
 	[nav setBarStyle: 0];
 
-	_postView = [[PostView alloc] initWithFrame: rect];
-	[ _postView setDelegate: self ];
-	
 	_rows = [ [ NSMutableArray alloc] init ];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
@@ -65,9 +80,9 @@
 		if ( i == k )
 		{
 			NSLog ( @"opening article : %d\n\n", j );	
-			[_postView setArticleNum: j  andGroupnum: _groupnum ];
-			[_delegate setView: _postView ];
-			[_postView refresh ];
+			[ [ PostView sharedInstance ]  setArticleNum: j  andGroupnum: _groupnum ];
+			[ [ViewController sharedInstance ] setView: [ PostView sharedInstance ] slideFromLeft: YES ];
+			[ [ PostView sharedInstance ] refresh ];
 		}
 		else
 		{
@@ -166,24 +181,12 @@
 	}
 	else
 	{
-		[ _delegate returnToPage ];	
+		[ [ ViewController sharedInstance] setView: [GroupView sharedInstance] slideFromLeft: NO ];
 	}
 
 }
 
 
-- (void) setDelegate: (id) delegate
-{
-
-	_delegate = delegate;
-
-}
-
-- (void) returnToPage
-{
-	[ self refreshTitles ];
-	[ _delegate setView: self];
-}
 @end
 
 
