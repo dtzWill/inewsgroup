@@ -5,8 +5,26 @@
 
 #import <UIKit/UISimpleTableCell.h>
 #import "newsfunctions.h"
+#import "ViewController.h"
+
+static PostView * sharedInstance = nil;
 
 @implementation PostView
+
++ (PostView *) sharedInstance
+{
+	if ( sharedInstance )
+		return sharedInstance;
+
+	//else
+
+	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
+	rect.origin. x = rect.origin.y = 0;
+	sharedInstance = [[PostView alloc] initWithFrame: rect ]; 
+
+	return sharedInstance;
+}
+
 
 - (id) initWithFrame: (CGRect) rect
 {
@@ -168,27 +186,15 @@
 	}
 	else
 	{
-		[ _delegate returnToPage ];	
+
+		//Go back to previous view.. whichever called us, and in the opposite direction
+
+		[ [ [ ViewController sharedInstance ] getPrevView ] refreshTitles ];
+		[ [ ViewController sharedInstance ] 
+				setView: [ [ViewController sharedInstance ] getPrevView ]
+				slideFromLeft: ![ [ ViewController sharedInstance] getPrevDir ] ];
 	}
 
 }
-
-
-- (void) setDelegate: (id) delegate
-{
-
-	_delegate = delegate;
-
-}
-
-//unused
-/*
-- (void) returnToPage
-{
-	[_delegate setView: self ];
-
-
-}
-*/
 
 @end

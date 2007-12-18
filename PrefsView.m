@@ -1,9 +1,28 @@
 //Will Dietz
 //PrefsView.m
 
-#include "PrefsView.h"
+#import "PrefsView.h"
+#import "ViewController.h"
+#import "iNewsApp.h"
+
+static PrefsView * sharedInstance = nil;
 
 @implementation PrefsView
+
++ (PrefsView *) sharedInstance
+{
+	if ( sharedInstance )
+		return sharedInstance;
+
+	//else
+
+	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
+	rect.origin. x = rect.origin.y = 0;
+	sharedInstance = [[PrefsView alloc] initWithFrame: rect ]; 
+
+	return sharedInstance;
+}
+
 
 - (id) initWithFrame: (CGRect) rect
 {
@@ -49,7 +68,7 @@
 	//about
 	//TODO: center this?
 	UIPreferencesTableCell * _rowAbout = [[UIPreferencesTableCell alloc] init ];
-	[ _rowAbout setTitle: @"iNewsGroup 0.0.7" ];
+	[ _rowAbout setTitle: @"iNewsGroup 0.0.8" ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 	_rowAbout = [[UIPreferencesTableCell alloc] init ];
@@ -241,11 +260,12 @@
 		[self saveSettings ];
 
 		//go back
-		[_delegate returnToMain];
+		[ [ ViewController sharedInstance ] setView: [ [iNewsApp sharedInstance] mainView ] slideFromLeft: YES ];
+
 		
 		if( !hasConnected() )
-		{//maybe this made things better..?
-			[ _delegate connect ];
+		{//maybe this made things better..? (now we have good auth, a valid server, etc)
+			[ [ iNewsApp sharedInstance] connect ];
 		}
 	}
 	

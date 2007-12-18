@@ -21,13 +21,13 @@
 	int _groupnum;//index in my_group array
     NSMutableArray * _rows;// holds the row objects for our table 
     UINavigationItem * _titleItem;//title, saved for memory purposes
-	ThreadView * _threadView;//The only instance of threadView--TODO: switch to sharedInstance style?
-	PostView * _postView;//The only isntance of postView--TODO: switch to sharedInstance style?
     UITable * _table;//table used to display the threads
-	id _delegate;//our parent we call to change views.. TODO: clean up, use a centralized viewmanager, sharedInstance, etc.  This delegate nonsense causes warnings and is messy as all hell.
 	UIAlertSheet * _connect;//alert sheet used to display "Refreshing" text while loading the headers for this newsgroup.
 
 }
+
+//singleton
++ (GroupView *) sharedInstance;
 
 //standard init, passing frame to display in
 - (id) initWithFrame: (CGRect) rect;
@@ -45,17 +45,6 @@
 //updates/assigns the titles for each row (the subject of the thread)
 //any the read/unread status indicator
 - (void) refreshTitles;
-
-//used to set the delegate used to change views, etc
-- (void) setDelegate: (id) delegate;
-
-//an unfortunate design choice that has the child views (threadview and postview)
-//call this (without any interface or anything) and we in turn call the right delegate.
-//x.x
-- (void) setView: (UIView *) view;
-
-//another such unfortunate method
-- (void) returnToPage;
 
 @end
 

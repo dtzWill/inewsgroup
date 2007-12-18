@@ -24,8 +24,10 @@
 	//the usuals..
     UITable * _table;
 	UIAlertSheet * _message;
-	id _delegate;
 }
+
+//singleton
++ (PostView *) sharedInstance;
 
 - (id) initWithFrame: (CGRect) rect;
 
@@ -37,12 +39,6 @@
 
 //do the actual 'getting' of the article, we're called as a callback from a timer set in refresh...
 - (void) getPost;
-
-- (void) setDelegate: (id) delegate; //are YOU my mommmy?
-
-//not used
-//- (void) returnToPage;
-
 
 @end
 

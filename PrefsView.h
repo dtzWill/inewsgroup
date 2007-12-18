@@ -30,6 +30,9 @@
 	id _delegate; //go back to main view! :)
 } 
 
+//singleton
++ (PrefsView *) sharedInstance;
+
 - (id) initWithFrame: (CGRect) rect;
 
 - (void) setDelegate: (id) delegate;

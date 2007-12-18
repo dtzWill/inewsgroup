@@ -19,10 +19,11 @@
     NSMutableArray * _rows;// holds the row objects for our table 
     UINavigationItem * _titleItem;//title
     UITable * _table;
-	id _delegate;
-	PostView * _postView;
 
 }
+
+//singleton
++ (ThreadView *) sharedInstance;
 
 - (id) initWithFrame: (CGRect) rect;
 
@@ -31,10 +32,6 @@
 - (void) refresh;//for consistency's sake, this should be called BEFORE switching to this view.  Since this is a fast operation, that shouldn't be a problem.
 
 - (void) refreshTitles;
-
-- (void) setDelegate: (id) delegate; //are YOU my mommmy?
-
-- (void) returnToPage;
 
 @end
 

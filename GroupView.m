@@ -4,13 +4,28 @@
 #import "GroupView.h"
 #import "newsfunctions.h"
 #import <GraphicsServices/GraphicsServices.h>
-
+#import "iNewsApp.h"
+#import "ViewController.h"
 //TODO: move any functionality that needs this into newsfunctions where it belongs!
 #import "tin.h"
 
-
+static GroupView * sharedInstance = nil;
 
 @implementation GroupView
+
++ (GroupView *) sharedInstance
+{
+	if ( sharedInstance )
+		return sharedInstance;
+
+	//else
+
+	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
+	rect.origin. x = rect.origin.y = 0;
+	sharedInstance = [[GroupView alloc] initWithFrame: rect ]; 
+
+	return sharedInstance;
+}
 
 - (id) initWithFrame: (CGRect) rect
 {
@@ -27,14 +42,6 @@
 	//Build alertshet used to display message to user while we're getting the headers
 	_connect = [[UIAlertSheet alloc]initWithTitle:@"Refreshing..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_connect setDimsBackground:YES];
-
-	//Create /the/ threadView instance
-	_threadView = [[ThreadView alloc] initWithFrame: rect];
-	[ _threadView setDelegate: self ];
-
-	//Create /the/ postView instance
-	_postView = [[PostView alloc] initWithFrame: rect];
-	[ _postView setDelegate: self ];
 
 	//create title bar
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"GroupView" ];
@@ -203,16 +210,15 @@
 	int i = [ [ _rows objectAtIndex: [_rows count] - 1 - [ _table selectedRow ] ] threadNum ];
 	if ( artsInThread( i ) > 1 ) //if actually is /in/ a thead
 	{
-		[ _threadView setGroupNum: _groupnum andThreadNum: i ];
-		[ _threadView refresh ];
-		[ _delegate setView: _threadView ];
+		[ [ThreadView sharedInstance] setGroupNum: _groupnum andThreadNum: i ];
+		[ [ ViewController sharedInstance] setView: [ThreadView sharedInstance] slideFromLeft: YES ];
+		[ [ThreadView sharedInstance] refresh ];
 	}
 	else
 	{
-		[ _postView setArticleNum: base[ i ] andGroupnum: _groupnum ];
-		[ _delegate setView: _postView ];
-		[ _postView refresh ];
-		//
+		[ [PostView sharedInstance ] setArticleNum: base[ i ] andGroupnum: _groupnum ];
+		[ [ ViewController sharedInstance] setView: [PostView sharedInstance] slideFromLeft: YES ];
+		[ [PostView sharedInstance ] refresh ];
 	}
 }
 
@@ -227,37 +233,10 @@
 	}
 	else
 	{
-		[ _delegate returnToMain ];	
+		[ [ ViewController sharedInstance ] setView: [ [iNewsApp sharedInstance] mainView ] slideFromLeft: NO ];
 	}
 
 }
-
-//set parent to call when need to take actions like changing views, etc
-- (void) setDelegate: (id) delegate
-{
-
-	_delegate = delegate;
-
-}
-
-//method our children call to return to us....update ourselves in case any changes
-//have been made (in particular read/unread status) and pass the necessary
-//view request along to delegate
-- (void) returnToPage
-{
-	[self refreshTitles ];
-	[ _delegate setView: self];
-
-}
-
-//method our children call to change a view.. we just pass it along :)
-- (void) setView: (UIView *) view
-{
-
-	[ _delegate setView: view ];
-}
-@end
-
 
 
 //class representing an element in the table--basically just a subclass of a normal
