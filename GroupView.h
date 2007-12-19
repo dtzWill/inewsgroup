@@ -59,5 +59,9 @@
 
 - (id) initWithThreadNum: (int) threadnum;
 
+- (float) rowHeight;
+
+- (int) numLines;
+
 - (int) threadNum;
 @end
