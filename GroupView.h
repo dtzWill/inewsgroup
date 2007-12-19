@@ -24,6 +24,7 @@
     UITable * _table;//table used to display the threads
 	UIAlertSheet * _connect;//alert sheet used to display "Refreshing" text while loading the headers for this newsgroup.
 
+	int	_selectedRow;
 }
 
 //singleton

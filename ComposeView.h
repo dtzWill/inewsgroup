@@ -5,11 +5,22 @@
 #import <UIKit/UIKit.h>
 #import <UIKit/UIView.h>
 #import <UIKit/UITextView.h>
+#import <Message/PlainTextDocument.h>
 
 //Compose a message, and send it
 
-#define SUBJECT_ROW 0
-#define CONTENT_ROW ( SUBJECT_ROW + 1 )
+//globals:
+
+//keys for passing us information to start the message with
+static NSString * kSubject = @"subj";//editable
+static NSString * kNewsGroup = @"groups";//set
+static NSString * kQuoteContent = @"quote";//hmmm
+static NSString * kReferences = @"ref";//set
+
+
+//#define SUBJECT_ROW 0
+//#define  
+//#define CONTENT_ROW ( SUBJECT_ROW + 1 )
 
 @interface ComposeView: UIView
 {
@@ -20,8 +31,6 @@
 		-Newsgroup(s) to post to (for now, just one)
 		-Subject
 		-Message content
-
-
 	*/
 	int _postnum, _groupnum;
 
@@ -30,21 +39,22 @@
     UINavigationItem * _titleItem;//title
     UITable * _table;
 	UIAlertSheet * _message;
-	id _delegate;
+
+	//message-specific
+	NSString * _subject;
+	NSString * _newsgroup;
+	NSMutableArray * _references;
+	
+
 }
+
++ (ComposeView *)sharedInstance;
 
 - (id) initWithFrame: (CGRect) rect;
 
-- (void) setArticleNum: (int) artnum andGroupnum: (int) groupnum;
+- (void) startNewMessage: (NSDictionary *) items;
 
-- (void) refresh;
-
-- (void) getPost;
-
-- (void) setDelegate: (id) delegate; //are YOU my mommmy?
-
-//- (void) returnToPage;
-
+- (void) emptyOldMessage;
 
 @end
 

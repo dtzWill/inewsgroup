@@ -174,8 +174,9 @@ static iNewsApp * sharedInstance = nil;
    
 }
 
-- (BOOL)respondsToSelector:(SEL)aSelector {
-//    NSLog(@"respondsToSelector: %@", NSStringFromSelector(aSelector));
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
+//	NSLog(@"respondsToSelector: %@", NSStringFromSelector(aSelector));
     return [super respondsToSelector: aSelector];
 }
 
