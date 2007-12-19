@@ -52,7 +52,7 @@ static SubscriptionView * sharedInstance = nil;
 	[_refresh setDimsBackground:YES];
 
 	NSArray *buttons = [NSArray arrayWithObjects:@"OK", @"Clear", @"Cancel", nil];
-	_search = [[UIAlertSheet alloc]initWithTitle:@"Search" buttons:buttons defaultButtonIndex:1 delegate:self context:self];
+	_search = [[UIAlertSheet alloc]initWithTitle:@"" buttons:buttons defaultButtonIndex:1 delegate:self context:self];
 	[_search addTextFieldWithValue: @"" label: @"search phrase" ];
 	[_search setRunsModal: NO ];
 	[_search setDimsBackground: YES];
