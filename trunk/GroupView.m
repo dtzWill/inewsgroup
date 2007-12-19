@@ -6,6 +6,7 @@
 #import <GraphicsServices/GraphicsServices.h>
 #import "iNewsApp.h"
 #import "ViewController.h"
+#import "ComposeView.h"
 //TODO: move any functionality that needs this into newsfunctions where it belongs!
 #import "tin.h"
 
@@ -54,7 +55,7 @@ static GroupView * sharedInstance = nil;
 
 	//create table used to display the rows
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 480.0f - 16.0f - 48.0f)];
+	    320.0f, 480.0f - 16.0f - 48.0f*2)];
 	//our table has a single column...
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"articles"
 	    identifier: @"articles" width: 320.0f];
@@ -66,12 +67,87 @@ static GroupView * sharedInstance = nil;
 	[_table setSeparatorStyle: 1];
 	[_table reloadData];
 
+	_selectedRow = -1; //invalid
+
+
+	//bottom bar:
+
+	//create buttons...
+    NSDictionary *btnCompose = [NSDictionary dictionaryWithObjectsAndKeys:
+            //self, kUIButtonBarButtonTarget,
+            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
+            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonTag,
+            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
+            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
+            @"New Message...", kUIButtonBarButtonInfo,
+            nil
+    ];
+
+    NSDictionary *btnMarkRead = [NSDictionary dictionaryWithObjectsAndKeys:
+            //self, kUIButtonBarButtonTarget,
+            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
+            [NSNumber numberWithUnsignedInt:2], kUIButtonBarButtonTag,
+            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
+            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
+            @"Mark Read", kUIButtonBarButtonInfo,
+            nil
+    ];
+
+	NSArray *items = [NSArray arrayWithObjects:btnCompose,btnMarkRead, nil];
+	UIButtonBar *buttonBar = [[UIButtonBar alloc] initInView: self withFrame:CGRectMake(0.0f, 480.0f-16.0f-48.0f, 320.0f, 48.0f) withItemList:items];
+	
+	int buttons[2] = { 1, 2,};
+	[buttonBar registerButtonGroup:1 withButtons:buttons withCount:2];
+	[buttonBar showButtonGroup:1 withDuration:0.];
+	[buttonBar setDelegate: self];
+//    [buttonBar setBarStyle:2];
+    [buttonBar setButtonBarTrackingMode: 2];
+
+	[ [ buttonBar viewWithTag: 2 ]//2='mark read' button
+            setFrame:CGRectMake( 320.0f	-80.0f, 0.0f, 64.0f, 48.0f) //right-align
+        ]; 
+	
+
+
+
+
 	//add views to ourself
 	[self addSubview: nav];
 	[self addSubview: _table];
 	
 	//done!
 	return self;
+}
+
+//handle various buttons:
+- (void)buttonBarItemTapped:(id) sender {
+	int button = [ sender tag ];
+	switch (button) {
+		case 1://compose a new message in this group
+			NSLog( @"Compose a message!" );
+
+			NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+				@"Test subject", kSubject,
+				[NSString stringWithCString: active[ my_group[ _groupnum ] ].name ], kNewsGroup,		
+				@"This is a test message. Does the quote functionality really work? That'd be absolutely amazing", kQuoteContent,
+					nil];
+			NSLog( @"dict created!" );
+			[ [ ComposeView sharedInstance ] startNewMessage: dict ];
+
+			[ [ ViewController sharedInstance ] setView: [ ComposeView sharedInstance] slideFromLeft: YES ];
+
+		
+			break;
+
+        case 2://mark selected group read
+			if( _selectedRow >= 0 )
+			{
+//				for_each_art_in_thread( [ _rows objectAtRow _selectedRow ] )markGroupRead( _selectedRow );	
+//				[ self refreshTable ];
+			}
+			break;
+	}
+   
 }
 
 //method used to refresh the contents of the groupView--displays message and then does the refreshing.
@@ -143,8 +219,13 @@ static GroupView * sharedInstance = nil;
 		if ( artsInThread( i ) > 1 )
 		{
 			[row setDisclosureStyle: 1];
-			[row setShowDisclosure: YES];
 		}
+		else
+		{
+			[row setDisclosureStyle: 2];
+		}
+		[row setShowDisclosure: YES];
+
 		[ _rows addObject: row ];
 	}
 
@@ -172,7 +253,9 @@ static GroupView * sharedInstance = nil;
 
 		UIImage * img = [UIImage applicationImageNamed:
 				isThreadRead( threadnum ) ?
-					@"ReadIndicator.png" : @"UnreadIndicator.png" ];  
+					@"ReadIndicator.png" : @"UnreadIndicator.png" ];
+//					( ( artCount > 1 )? @"ThReadIndicator.png" : @"ReadIndicator.png" )
+//					: ( ( artCount > 1 ) ? @"ThUnreadIndicator.png" : @"UnreadIndicator.png" ) ];  
 
 
 		[ cell setTitle: [NSString stringWithFormat: @"%s", arts[ base[ threadnum ] ].subject ] ];
@@ -238,6 +321,7 @@ static GroupView * sharedInstance = nil;
 	}
 	else
 	{
+		[ [ iNewsApp sharedInstance ] refreshTable ];
 		[ [ ViewController sharedInstance ] setView: [ [iNewsApp sharedInstance] mainView ] slideFromLeft: NO ];
 	}
 

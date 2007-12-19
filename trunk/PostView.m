@@ -4,6 +4,7 @@
 #import "PostView.h"
 
 #import <UIKit/UISimpleTableCell.h>
+#import <GraphicsServices/GraphicsServices.h>
 #import "newsfunctions.h"
 #import "ViewController.h"
 
@@ -30,7 +31,6 @@ static PostView * sharedInstance = nil;
 {
 	[super initWithFrame: rect];
 
-	//TODO: maybe actually use the rect...?
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 
@@ -52,7 +52,7 @@ static PostView * sharedInstance = nil;
 
 	//create our table...
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 48.0f + 80.0f )];//480.0f - 16.0f - 48.0f - 350.0f)];
+	    320.0f, 64.0f )];//480.0f - 16.0f - 48.0f - 350.0f)];
 	//col_subj
 	UITableColumn * col = [[UITableColumn alloc] initWithTitle: @"post"
 	    identifier: @"post" width: 320.0f];
@@ -64,8 +64,9 @@ static PostView * sharedInstance = nil;
 
 	
 	//text view to show the message data...
-	_textView = [[UITextView alloc] initWithFrame: CGRectMake(0.0f, 48.0f + 80.0f,
-		320.0f, 480.0f - 16.0f - 48.0f - 80.0f )]; 
+	_textView = [[UITextView alloc] initWithFrame: CGRectMake(0.0f, 48.0f + 64.0f,
+		320.0f, 480.0f - 16.0f - 48.0f - 64.0f )]; 
+	
 
 	//add the various views to ourself..
 	[self addSubview: nav];
@@ -111,11 +112,13 @@ static PostView * sharedInstance = nil;
 		//from
 		row = [[UISimpleTableCell alloc] init ];
 		[ row setTitle: articleFrom() ];
+		[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
 		[ _rows addObject: row]; 
 
 		//subject	
 		row = [[UISimpleTableCell alloc] init];
 		[ row setTitle: articleSubject() ];
+		[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
 		[ _rows addObject: row];
 
 		[ _table reloadData];
@@ -173,6 +176,10 @@ static PostView * sharedInstance = nil;
 	reusing: (BOOL) reusing
 {
 	return [ _rows objectAtIndex: row]; 
+}
+
+- (float)table:(UITable *)aTable heightForRow:(int)row {
+	return 32.0f;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@ ARMCC=arm-apple-darwin-gcc
 ARMLD=$(ARMCC)
 CC=gcc
 LD=$(CC)
+CFLAGS=-O2
 RESOLVLIB = ./libresolv.a 
 LDFLAGS= -v -Wl,-syslibroot,/usr/local/share/iphone-filesystem  -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit -framework CFNetwork -framework Message
 TINDIR = tin-1.8.3/src
@@ -14,6 +15,7 @@ INTLFLAGS = $(INTLLIB) -liconv
 OBJS = \
 	$(TINLIB) \
 	ViewController.o \
+	ComposeView.o \
 	SubscriptionView.o \
 	PostView.o \
 	ThreadView.o \

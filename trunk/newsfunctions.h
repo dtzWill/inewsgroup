@@ -61,6 +61,7 @@ NSString * getServer();
 NSString * getUserName();
 NSString * getPassword();
 NSString * getEmail();
+NSString * getFromString();
 
 void setServer( NSString * server );
 
