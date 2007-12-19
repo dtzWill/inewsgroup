@@ -32,7 +32,7 @@ static ViewController *sharedInstance = nil;
 
 - (void) setView: (UIView *) view slideFromLeft: (bool) left
 {
-	NSLog( @"about to transition" );
+//	NSLog( @"about to transition" );
 	int dir = left? 1: 2;	
 
 	_prevDir = left;

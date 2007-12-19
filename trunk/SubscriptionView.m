@@ -130,23 +130,12 @@ static SubscriptionView * sharedInstance = nil;
 		}
 		else if ( button == 2 ) //clear
 		{
-			while( [ _curRows count ] > 0 )
-			{
-				id element = [ _curRows lastObject ];
-				[ _curRows removeLastObject ];
-				[ element release ];
-			}
-			int i;	
-			for(i=0; i < [ _rows count ]; i++ )
-			{
-				[ _curRows addObject: [ [ NSNumber numberWithInt: i ] retain ] ];
-			}
 			[ [ _search textField ] setText: @"" ];
-			[ _titleFilter setTitle: @"" ];
-			[ _prefTable reloadData ];
 		}
-		//no matter what... close the dialog
-		[ _search dismiss ];
+		if ( button != 2 )//don't close if just 'clear'
+		{
+			[ _search dismiss ];
+		}
 	}
 	else
 	{

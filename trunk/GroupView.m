@@ -63,6 +63,7 @@ static GroupView * sharedInstance = nil;
 	[_table addTableColumn: col]; 
 	[_table setDataSource: self];
 	[_table setDelegate: self];
+	[_table setSeparatorStyle: 1];
 	[_table reloadData];
 
 	//add views to ourself
@@ -222,6 +223,10 @@ static GroupView * sharedInstance = nil;
 	}
 }
 
+- (float)table:(UITable *)aTable heightForRow:(int)row {
+	return [ [ _rows objectAtIndex: row ] rowHeight ];
+}
+
 ///////////////////////////////////////////////////////////////////////////////////
 //nav bar button handler
 - (void)navigationBar:(UINavigationBar*)bar buttonClicked:(int) which;
@@ -237,7 +242,7 @@ static GroupView * sharedInstance = nil;
 	}
 
 }
-
+@end
 
 //class representing an element in the table--basically just a subclass of a normal
 //table row, but stores the threadnumber in with it for easy access
@@ -245,15 +250,27 @@ static GroupView * sharedInstance = nil;
 
 - (id) initWithThreadNum: (int) threadnum
 {
-	[super initWithFrame: CGRectMake(0.0f,0.0f, 320.0f, 64.0f)];
+	[super initWithFrame: CGRectMake(0.0f,0.0f, 320.0f, 128.0f)];
 
 	//set font to use....
 	[ [self titleTextLabel]setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];	
+	[ [self titleTextLabel] setWrapsText: YES ];
 	//remember our threadnum....
 	_threadnum = threadnum;
 	return self;
 }
 
+- (void) layoutSubviews
+{
+	[ super layoutSubviews ];
+	CGRect rect = CGRectMake( 32.0f, 0.0f, 260.0f, 16.0f * [self numLines ] );
+	//center it vertically
+	rect.origin.y = ( (64.0f - 16.0f * [self numLines ])/ 2.0f  );	
+ 
+	[ [ self titleTextLabel] setFrame: rect ];	
+//	[ [ self titleTextLabel ] setWrapsText: YES ];
+//	NSLog( @"Size: x: %f, y: %f", [ _titleTextLabel textSize ].width, [_titleTextLabel textSize].height ); 
+}
 
 //accessor method..
 - (int) threadNum
@@ -262,4 +279,18 @@ static GroupView * sharedInstance = nil;
 	return _threadnum;
 }
 
+
+- (int) numLines
+{
+	return 1 + ( [_titleTextLabel textSize].width ) / 250;
+}
+
+- (float) rowHeight
+{
+	return 64.0f;
+
+//	int height = 64.0f+ 32.0f*([self numLines]); 
+//	NSLog( @"rowHeight called! %d", height );
+//	return height;
+}
 @end

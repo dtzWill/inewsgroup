@@ -181,6 +181,7 @@ static ThreadView * sharedInstance = nil;
 	}
 	else
 	{
+		[ [ GroupView sharedInstance ] refreshTitles ];
 		[ [ ViewController sharedInstance] setView: [GroupView sharedInstance] slideFromLeft: NO ];
 	}
 
