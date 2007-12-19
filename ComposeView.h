@@ -16,8 +16,8 @@
 
 	/*All messages need the following:
 	
-		-From
-		-Newsgroups to post to
+		-From --NOT editable
+		-Newsgroup(s) to post to (for now, just one)
 		-Subject
 		-Message content
 
