@@ -465,6 +465,8 @@ int init_server()
 
 	readSettingsFromFile();
 	
+	NSLog( @"force_no_post: %d", force_no_post );
+
 	force_auth_on_conn_open = ( authpassword[0] != '\0' );
 	NSLog( @"Force auth: %d", force_auth_on_conn_open );
 

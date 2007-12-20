@@ -1114,7 +1114,7 @@ check_extensions(
 
 		buf[0] = '\0';
 		i = new_nntp_command("LIST EXTENSIONS", OK_EXTENSIONS, buf, sizeof(buf));
-		wait_message( 0 , "sent extensions command" );
+		wait_message( 0 , "sent extensions command\n" );
 		switch (i) {
 			case 215:	/* Netscape-Collabra/3.52 (badly broken); NetWare-News-Server/5.1 */
 #		ifdef DEBUG
