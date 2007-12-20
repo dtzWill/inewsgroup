@@ -68,7 +68,7 @@ static PrefsView * sharedInstance = nil;
 	//about
 	//TODO: center this?
 	UIPreferencesTableCell * _rowAbout = [[UIPreferencesTableCell alloc] init ];
-	[ _rowAbout setTitle: @"iNewsGroup 0.0.8.1" ];
+	[ _rowAbout setTitle: @"iNewsGroup 1.0.0" ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 	_rowAbout = [[UIPreferencesTableCell alloc] init ];

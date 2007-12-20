@@ -45,6 +45,10 @@
 
 - (id) initWithArticle: (id) artnum;
 
+- (float) rowHeight;
+
+- (int) numLines;
+
 - (int) article;
 
 @end

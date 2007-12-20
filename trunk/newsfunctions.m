@@ -278,6 +278,18 @@ NSString * articleSubject()
 
 }
 
+NSString * getReferences( int articlenum )
+{
+
+	char * refs = NULL;
+
+	refs = get_references( arts[ articlenum ].refptr );
+	NSString * ret = [NSString stringWithCString: ( refs ? refs : "" ) ];
+//	NSLog( ret );
+	
+	return [ ret retain ];
+}
+
 
 
 void closeArticle()
@@ -549,6 +561,60 @@ void printActive()
 
 
 };
+
+//sends a message synchronously
+bool sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message )
+{
+
+	NSLog( @"Sending Message: ");
+	NSLog( @"Newsgroups: %@", newsgroup );
+	NSLog( @"Subject: %@", subject );
+	NSLog( @"References: %@", references );
+	NSLog( @"message: %@", message );
+
+
+	references = nil;
+
+	FILE * f_newmail;
+	
+	//write this to a file and then tell the tin code to add it to the postponed queue
+
+	if ( ( f_newmail = fopen( "/tmp/newarticle", "w" ) ) == 0 )
+	{
+		//error! :(
+		return;
+	}
+	//else
+
+	fprintf( f_newmail, "From: %s\n", [ getEmail() cString ] );
+
+	fprintf( f_newmail, "Subject: %s\n", [ subject cString ] ); 
+
+	fprintf( f_newmail, "Newsgroups: %s\n", [newsgroup cString ] );
+
+	if ( [ references compare: @"" ] != 0 )
+	{
+		fprintf( f_newmail, "References: %s\n", [references cString ] );
+	}
+
+	fprintf( f_newmail, "\n" ); //newline to start the message
+
+	fprintf( f_newmail, "%s\n", [ message cString ] );
+
+
+	fclose( f_newmail ); //yay that was fun
+
+
+	postpone_article( "/tmp/newarticle" );
+
+	return pickup_postponed_articles( false, true ); //ask=no, all=yes
+
+
+}
+
+
+
+
 
 //TODO: add function to fix all memory that's part of
 //		--newsfunctions

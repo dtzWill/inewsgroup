@@ -38,12 +38,12 @@
 #ifndef VERSION_H
 #	define VERSION_H	1
 
-#	define PRODUCT		"tin"
+#	define PRODUCT		"iNewsGroup"
 #	ifndef TIN_AUTOCONF_H
-#		define VERSION		"1.8.3"
+#		define VERSION		"1.0.0 or greater"
 #	endif /* !TIN_AUTOCONF_H */
-#	define RELEASEDATE	"20070201"
-#	define RELEASENAME	"Scotasay"
+#	define RELEASEDATE	"2007"
+#	define RELEASENAME	"dtzTech"
 /* config-file versions - must by dotted triples */
 #	define TINRC_VERSION	"1.3.7"
 #	define ATTRIBUTES_VERSION	"1.0.4"

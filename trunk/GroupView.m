@@ -2,6 +2,7 @@
 //GroupView.m
 
 #import "GroupView.h"
+
 #import "newsfunctions.h"
 #import <GraphicsServices/GraphicsServices.h>
 #import "iNewsApp.h"
@@ -125,12 +126,9 @@ static GroupView * sharedInstance = nil;
 	int i;
 	switch (button) {
 		case 1://compose a new message in this group
-			NSLog( @"Compose a message!" );
-
+			NSLog( @"Compose!" );
 			NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-				@"Test subject", kSubject,
-				[NSString stringWithCString: active[ my_group[ _groupnum ] ].name ], kNewsGroup,		
-				@"This is a test message. Does the quote functionality really work? That'd be absolutely amazing", kQuoteContent,
+				[ [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ] retain ], kNewsGroup,		
 					nil];
 			NSLog( @"dict created!" );
 			[ [ ComposeView sharedInstance ] startNewMessage: dict ];
@@ -396,8 +394,5 @@ static GroupView * sharedInstance = nil;
 {
 	return 64.0f;
 
-//	int height = 64.0f+ 32.0f*([self numLines]); 
-//	NSLog( @"rowHeight called! %d", height );
-//	return height;
 }
 @end

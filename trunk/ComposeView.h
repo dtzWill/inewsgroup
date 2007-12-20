@@ -55,7 +55,7 @@ static const float KEYBOARD_DELAY=0.5f;
 	//message-specific
 	NSString * _subject;
 	NSString * _newsgroup;
-	NSMutableArray * _references;
+	NSString * _references;
 	
 
 }

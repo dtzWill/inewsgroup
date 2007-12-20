@@ -7,6 +7,7 @@
 #import <GraphicsServices/GraphicsServices.h>
 #import "newsfunctions.h"
 #import "ViewController.h"
+#import "ComposeView.h"
 
 static PostView * sharedInstance = nil;
 
@@ -38,7 +39,7 @@ static PostView * sharedInstance = nil;
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"PostView" ];//better name?? lol
 	
 	//setup the nav bar
-	[nav showButtonsWithLeftTitle: @"Back" rightTitle: nil leftBack: YES ];
+	[nav showLeftButton: @"Back" withStyle: BUTTON_BACK rightButton: @"Reply" withStyle: BUTTON_BLUE ];
 	[nav pushNavigationItem: _titleItem];
 	[nav setDelegate: self];	
 	[nav setBarStyle: 0];
@@ -47,6 +48,9 @@ static PostView * sharedInstance = nil;
 	_message = [[UIAlertSheet alloc]initWithTitle:@"Loading Message..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_message setDimsBackground:YES];
 	
+	_prevView = nil;
+	_prevDir = NO;
+
 	//create our array...
 	_rows = [ [ NSMutableArray alloc] init ];
 
@@ -117,7 +121,7 @@ static PostView * sharedInstance = nil;
 
 		//subject	
 		row = [[UISimpleTableCell alloc] init];
-		[ row setTitle: articleSubject() ];
+		[ row setTitle: ( _subject = articleSubject() ) ];
 		[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
 		[ _rows addObject: row];
 
@@ -126,20 +130,25 @@ static PostView * sharedInstance = nil;
 		//display subject as our title
 		[ _titleItem setTitle: articleSubject() ];
 
-		[ _textView setTextSize: 12 ];
+		[ _textView setTextSize: 14 ];
 		[ _textView setText: body ];
 		[ _textView recalculateStyle ]; //TODO: needed? what does this DO? 
+
+		_references = [ getReferences( _postnum ) retain ];
+	//	NSLog( @"refs: %@", _references );
+
 		//no longer need the article....
 		closeArticle();
 	}
 
-	//begin fix the 'starts not viewing top' bug
-	CGPoint p;
-	p.x = 0.0f;
-	p.y = 0.0f;	
-
-	[ _textView scrollPointVisibleAtTopLeft: p ]; 
-	//end fix
+//	//begin fix the 'starts not viewing top' bug
+//	CGPoint p;
+//	p.x = 0.0f;
+//	p.y = 0.0f;	
+//
+//	[ _textView scrollPointVisibleAtTopLeft: p ]; 
+//	//end fix
+	[ _textView setSelectionToStart ];
 
 
 	//no longer need the message.. allow the user to use the UI again
@@ -189,17 +198,44 @@ static PostView * sharedInstance = nil;
 //	NSLog( @"button pressed, which: %d", which );
 	if ( which == 0 ) //right
 	{
-	//nothing for now.... there /is/ no right button :)
+			NSLog ( @"Reply to message!" );
+			NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+				[ [NSString stringWithFormat: @"Re: %@", _subject ] retain ], kSubject,
+				[ [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ] retain ], kNewsGroup,		
+				[ _textView text ], kQuoteContent,
+				_references, kReferences,	
+					nil];
+			//NSLog( @"dict created!" );
+
+			[ [ ComposeView sharedInstance ] startNewMessage: dict ];
+
+			if ( !_prevView )
+			{//if we don't already 'know' where we came from.. save it
+				_prevView = [ [ ViewController sharedInstance ] getPrevView ];
+				_prevDir = [ [ ViewController sharedInstance ] getPrevDir ];
+			}
+			[ [ ViewController sharedInstance ] setView: [ ComposeView sharedInstance] slideFromLeft: YES ];
+
+
 	}
 	else
 	{
 
 		//Go back to previous view.. whichever called us, and in the opposite direction
+		if( !_prevView)
+		{
+			[ [ [ ViewController sharedInstance ] getPrevView ] refreshTitles ];
+			[ [ ViewController sharedInstance ] 
+					setView: [ [ViewController sharedInstance ] getPrevView ]
+					slideFromLeft: ![ [ ViewController sharedInstance] getPrevDir ] ];
+		}
+		else
+		{
+			[ _prevView refreshTitles ];
+			[ [ ViewController sharedInstance] setView: _prevView slideFromLeft: !_prevDir ];
+			_prevView = nil;//reset
 
-		[ [ [ ViewController sharedInstance ] getPrevView ] refreshTitles ];
-		[ [ ViewController sharedInstance ] 
-				setView: [ [ViewController sharedInstance ] getPrevView ]
-				slideFromLeft: ![ [ ViewController sharedInstance] getPrevDir ] ];
+		}
 	}
 
 }

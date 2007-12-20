@@ -18,9 +18,14 @@
 {
 	int _postnum, _groupnum; //which article in what group is this??
 
+	UIView * _prevView;
+	bool _prevDir;
+
 	UITextView * _textView;//object used to view the text...
     NSMutableArray * _rows;//used to display the header information
     UINavigationItem * _titleItem;//title
+	NSString * _subject;
+	NSString * _references;
 	//the usuals..
     UITable * _table;
 	UIAlertSheet * _message;

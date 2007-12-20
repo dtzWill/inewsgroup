@@ -96,6 +96,8 @@ NSString * articleFrom();
 
 NSString * articleSubject();
 
+NSString * getReferences( int articlenum );
+
 void closeArticle();
 
 void markArticleRead( int groupnum, int articlenum );
@@ -106,3 +108,5 @@ bool isThreadRead( int threadnum );
 
 void doSubscribe( struct t_group * group, int status );
 
+
+bool sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message );
