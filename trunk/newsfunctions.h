@@ -22,7 +22,14 @@ extern NSString *kUIButtonBarButtonTitleVerticalHeight;
 extern NSString *kUIButtonBarButtonTitleWidth;
 extern NSString *kUIButtonBarButtonType;
 
+static const int BUTTON_NORMAL = 0;
+static const int BUTTON_RED = 1;
+static const int BUTTON_BACK = 2;
+static const int BUTTON_BLUE = 3;
+
+
 static const double REFRESH_TIME = 0.3;
+static const double QUIT_WAIT_TIME = 5.0; //yep, I'm valuing appearance of success more than actual success.
 static const double SAVE_TIME = 20.0;
 static const double HTTP_REQUEST_TIMEOUT = 10.0;
 

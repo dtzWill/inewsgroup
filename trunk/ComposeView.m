@@ -32,22 +32,25 @@ static ComposeView * sharedInstance = nil;
 
 	[super initWithFrame: rect];
 
-	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
+	_nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 
 	//set title to some default until we load the first article, and that'll overwrite it
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"Compose" ];//better name?? lol
 	
 	//setup the nav bar
-	[nav showButtonsWithLeftTitle: @"Cancel" rightTitle: @"Send" leftBack: YES ];
-	[nav pushNavigationItem: _titleItem];
-	[nav setDelegate: self];	
-	[nav setBarStyle: 0];
+	[ _nav showLeftButton: @"Cancel" withStyle: BUTTON_BACK rightButton:@"Send" withStyle: BUTTON_BLUE ];	// IMP=0x323d7894
+	[ _nav pushNavigationItem: _titleItem];
+	[ _nav setDelegate: self];	
+	[ _nav setBarStyle: 0];
 
 	//set up the ui message telling the user we're loading... but also preventing the user from using the ui :)
 	_message = [[UIAlertSheet alloc]initWithTitle:@"Sending Message..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_message setDimsBackground:YES];
 	
+	_keyboardTransitioning = false;
+	_editingMessage = false;
+
 	//create our array...
 	_rows = [ [ NSMutableArray alloc] init ];
 
@@ -84,7 +87,7 @@ static ComposeView * sharedInstance = nil;
 
 
 	//add the various views to ourself..
-	[ self addSubview: nav];
+	[ self addSubview: _nav];
 	[ self addSubview: _table];
 	[ self addSubview: _textView];
     [ self addSubview:_keyboard];
@@ -157,7 +160,6 @@ static ComposeView * sharedInstance = nil;
 	[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
 	[ _rows addObject: row];
 	
-	_keyboardTransitioning = false;
 
 	[ _table reloadData];
 	NSLog( @"preparing textField" );
@@ -219,7 +221,19 @@ static ComposeView * sharedInstance = nil;
 //	NSLog( @"button pressed, which: %d", which );
 	if ( which == 0 ) //right
 	{
-	//nothing for now.... there /is/ no right button :)
+		if ( _editingMessage) //'done', we should close the keyboard and go back to normal view
+		{
+
+			[ self toggleKeyboardFor: _textView ];	
+		}
+		else
+		{ //send! try to send this message.....
+
+			//send();
+
+		}
+
+
 	}
 	else
 	{
@@ -250,15 +264,29 @@ static ComposeView * sharedInstance = nil;
 
 - (void)adjustForShownKeyboard
 {
+	//adjust the message container to cover the headers, as well as move for the keyboard
 	[_textView setBottomBufferHeight:(5.0f)];
 	[_textView setFrame: _rectSmall ]; 
+
+	//change navigationbar buttons
+	
+	[ _nav showLeftButton: nil withStyle: BUTTON_NORMAL rightButton:@"Done" withStyle: BUTTON_RED ];	// IMP=0x323d7894
+	_editingMessage = true;	
+
 	[ self keyboardTransitionOver ];
 }
 
 - (void)adjustForHiddenKeyboard
 {
+	//move back to where it was originally
 	[_textView setFrame: _rectBig ];
 	[ self keyboardTransitionOver ];
+
+	//revert the buttons
+	[ _nav showLeftButton: @"Cancel" withStyle: BUTTON_BACK rightButton:@"Send" withStyle: BUTTON_BLUE ];	// IMP=0x323d7894
+	_editingMessage = false;
+
+
 }
 
 - (void)showKeyboard

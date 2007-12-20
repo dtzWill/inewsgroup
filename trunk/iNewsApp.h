@@ -34,6 +34,8 @@
 
 - (UIView *) mainView;
 
+- (void) exitMe;
+
 @end
 
 

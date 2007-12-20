@@ -272,7 +272,7 @@ static PrefsView * sharedInstance = nil;
 	else
 	{//left
 		//quit
-		tin_done( EXIT_SUCCESS );
+		[ [ iNewsApp sharedInstance ] exitMe ];
 	}
 
 }

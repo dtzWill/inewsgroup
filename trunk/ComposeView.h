@@ -42,8 +42,10 @@ static const float KEYBOARD_DELAY=0.5f;
 	CGRect _rectSmall;
 	CGRect _rectBig;
 	bool _keyboardShown;
+	bool _editingMessage;
 	bool _keyboardTransitioning;
 	EditTextView * _textView;
+	UINavigationBar * _nav;
 	EditorKeyboard * _keyboard;
     NSMutableArray * _rows;// holds the row objects for our table 
     UINavigationItem * _titleItem;//title

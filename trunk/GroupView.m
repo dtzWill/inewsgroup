@@ -47,7 +47,7 @@ static GroupView * sharedInstance = nil;
 	//create title bar
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"GroupView" ];
 	//assign title bar to nav bar
-	[nav showButtonsWithLeftTitle: @"Back" rightTitle: @"Refresh" leftBack: YES ]; 
+	[nav showLeftButton: @"Back" withStyle: BUTTON_BACK rightButton: @"Refresh" withStyle: BUTTON_BLUE ];
 	[nav pushNavigationItem: _titleItem];
 
 	//create array to store the rows
