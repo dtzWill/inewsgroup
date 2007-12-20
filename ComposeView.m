@@ -162,7 +162,7 @@ static ComposeView * sharedInstance = nil;
 	
 
 	[ _table reloadData];
-	NSLog( @"preparing textField" );
+//	NSLog( @"preparing textField" );
 //	NSLog( @"Quote: %@", quote );
 //	[ _textView setTextSize: 12 ];
 	[ _textView setText: quote ];
@@ -170,7 +170,7 @@ static ComposeView * sharedInstance = nil;
 //	[ _textField setDelegate: self ];
 //	[ _textField setEditable: YES ];
 //	[ _textField performBecomeEditableTasks ];
-	NSLog( @"done with textField" );
+//	NSLog( @"done with textField" );
 
 //	[ptd release ];
 	
@@ -224,7 +224,7 @@ static ComposeView * sharedInstance = nil;
 		if ( _editingMessage) //'done', we should close the keyboard and go back to normal view
 		{
 
-			[ self toggleKeyboardFor: _textView ];	
+			[ self toggleKeyboardFor: self ];	
 		}
 		else
 		{ //send! try to send this message.....
@@ -323,6 +323,10 @@ static ComposeView * sharedInstance = nil;
     {
 		if ( sender == _textView )
 		{
+			return;	//don't let the user's tapping in the message dialog close it
+		}
+    	else if ( sender == self )
+		{
 		   [NSTimer scheduledTimerWithTimeInterval: KEYBOARD_DELAY target:self selector:@selector(adjustForHiddenKeyboard) userInfo:nil repeats:NO];	
 		} else
 		{
@@ -332,7 +336,7 @@ static ComposeView * sharedInstance = nil;
     }
     else
     {
-    	if ( sender == _textView )
+		if ( sender == _textView )
 		{
 			[NSTimer scheduledTimerWithTimeInterval: KEYBOARD_DELAY target:self selector:@selector(adjustForShownKeyboard) userInfo:nil repeats:NO];	
 		} else

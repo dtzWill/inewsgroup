@@ -284,8 +284,6 @@ static iNewsApp * sharedInstance = nil;
 		[ row setDisclosureStyle: 1 ]; //BLUE
 		[row setShowDisclosure: YES];
 		[row setDisclosureClickable: YES];
- 
-//		[ row setTapDelegate: self ];
 		[ [ row _disclosureView ] setTapDelegate: self ];
 		[ _rows addObject : row ];
 	}
@@ -310,18 +308,10 @@ static iNewsApp * sharedInstance = nil;
 
 }
 
-- (void) hardExit
-{
-	exit(0);//GTFO
-
-}
-
 - (void) exitMe
 {
 	
-	[NSTimer scheduledTimerWithTimeInterval: QUIT_WAIT_TIME target:self selector:@selector(hardExit) userInfo:nil repeats:NO];	
-	tin_done(EXIT_SUCCESS); //doesn't close the app gracefully.... o_O
-
+	[self terminateWithSuccess ];
 
 }
 

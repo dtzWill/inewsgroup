@@ -122,6 +122,7 @@ static GroupView * sharedInstance = nil;
 //handle various buttons:
 - (void)buttonBarItemTapped:(id) sender {
 	int button = [ sender tag ];
+	int i;
 	switch (button) {
 		case 1://compose a new message in this group
 			NSLog( @"Compose a message!" );
@@ -142,13 +143,42 @@ static GroupView * sharedInstance = nil;
         case 2://mark selected group read
 			if( _selectedRow >= 0 )
 			{
-//				for_each_art_in_thread( [ _rows objectAtRow _selectedRow ] )markGroupRead( _selectedRow );	
-//				[ self refreshTable ];
+				for_each_art_in_thread( i ,
+					[ [ _rows objectAtIndex: [_rows count] - 1 - _selectedRow ] threadNum ] )
+				{
+					markArticleRead( _groupnum, i );	
+				}
+
+				[ self refreshTitles ];
 			}
 			break;
 	}
    
 }
+
+- (void)view:(UIView *)view handleTapWithCount:(int)count event:(GSEvent *)event {
+//This should only be called from the disclosures of the rows!
+
+	//disclosure clicked on..... go there!
+	if ( _selectedRow >= 0 )
+	{
+	
+		int i = [ [ _rows objectAtIndex: [_rows count] - 1 - _selectedRow ] threadNum ];
+		if ( artsInThread( i ) > 1 ) //if actually is /in/ a thead
+		{
+			[ [ThreadView sharedInstance] setGroupNum: _groupnum andThreadNum: i ];
+			[ [ ViewController sharedInstance] setView: [ThreadView sharedInstance] slideFromLeft: YES ];
+			[ [ThreadView sharedInstance] refresh ];
+		}
+		else
+		{
+			[ [PostView sharedInstance ] setArticleNum: base[ i ] andGroupnum: _groupnum ];
+			[ [ ViewController sharedInstance] setView: [PostView sharedInstance] slideFromLeft: YES ];
+			[ [PostView sharedInstance ] refresh ];
+		}
+	}
+}
+
 
 //method used to refresh the contents of the groupView--displays message and then does the refreshing.
 - (void) refreshMe
@@ -225,6 +255,8 @@ static GroupView * sharedInstance = nil;
 			[row setDisclosureStyle: 2];
 		}
 		[row setShowDisclosure: YES];
+		[row setDisclosureClickable: YES];
+		[ [ row _disclosureView ] setTapDelegate: self ];
 
 		[ _rows addObject: row ];
 	}
@@ -290,20 +322,11 @@ static GroupView * sharedInstance = nil;
 }
 
 - (void)tableRowSelected:(NSNotification *)notification {
-//  NSLog(@"tableRowSelected!");
-	int i = [ [ _rows objectAtIndex: [_rows count] - 1 - [ _table selectedRow ] ] threadNum ];
-	if ( artsInThread( i ) > 1 ) //if actually is /in/ a thead
-	{
-		[ [ThreadView sharedInstance] setGroupNum: _groupnum andThreadNum: i ];
-		[ [ ViewController sharedInstance] setView: [ThreadView sharedInstance] slideFromLeft: YES ];
-		[ [ThreadView sharedInstance] refresh ];
-	}
-	else
-	{
-		[ [PostView sharedInstance ] setArticleNum: base[ i ] andGroupnum: _groupnum ];
-		[ [ ViewController sharedInstance] setView: [PostView sharedInstance] slideFromLeft: YES ];
-		[ [PostView sharedInstance ] refresh ];
-	}
+//  NSLog(@"tableRowSelected: %d", [ _table selectedRow ]);
+
+	_selectedRow = [ _table selectedRow ];
+/*	
+*/
 }
 
 - (float)table:(UITable *)aTable heightForRow:(int)row {
