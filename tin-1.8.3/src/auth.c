@@ -327,10 +327,17 @@ authinfo_original(
 	strncpy(last_server, server, PATH_LEN - 1);
 	last_server[PATH_LEN - 1] = '\0';
 
+	authuser = strncpy(authuser, authusername, strlen(authusername) );
+
+	
+	authpass = authpassword;
 	/*
 	 * Let's try the previous auth pair first, if applicable.
 	 * Else, proceed to the other mechanisms.
 	 */
+	//if we already auth'd.. no need to do it again
+	if (initialized && do_authinfo_original( server, authuser, authpass ) )
+		return TRUE;
 //	if (initialized && !changed && !already_failed && do_authinfo_original(server, authusername, authpassword))
 //		return TRUE;
 /*
@@ -338,10 +345,6 @@ authinfo_original(
 		return TRUE;
 */
 //	authpassword[0] = '\0';
-	authuser = strncpy(authuser, authusername, strlen(authusername) );
-
-	
-	authpass = authpassword;
 
 
 //	wait_message( 0 , "user: %s, pass: %s\n", authuser, authpass );
