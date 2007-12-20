@@ -159,7 +159,7 @@ static void msg_add_x_headers(const char *headers);
 static void msg_free_headers(void);
 static void msg_init_headers(void);
 static void post_postponed_article(int ask, const char *subject, const char *newsgroups);
-static void postpone_article(const char *the_article);
+//static void postpone_article(const char *the_article);
 static void setup_check_article_screen(int *init);
 static void strip_double_ngs(char *ngs_list);
 static void update_active_after_posting(char *newsgroups);
@@ -2206,7 +2206,8 @@ pickup_postponed_articles(
 }
 
 
-static void
+//Will--no longer static, marked extern for my use
+void
 postpone_article(
 	const char *the_article)
 {

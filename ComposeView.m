@@ -79,6 +79,7 @@ static ComposeView * sharedInstance = nil;
 	
 	//text view to show the message data...
 	_textView = [[EditTextView alloc] initWithFrame: _rectBig ];
+	[ _textView setTextSize: 20 ];
 	[ _textView setDelegate: self ];
 
 	//Keyboard:
@@ -108,21 +109,33 @@ static ComposeView * sharedInstance = nil;
 {
 //	NSLog( @"clearing old message data..." );
 	[self emptyOldMessage ];
+
+	NSString * tmp;
 	
 //	NSLog( @"getting subject" );
-	_subject = [ items objectForKey: kSubject ];
-	if ( !_subject) _subject = @"";
+	_subject = [ NSString stringWithString: ( ( tmp = [ items objectForKey: kSubject ] ) ? tmp : @"" ) ];
 
 //	NSLog( @"getting newsgroup" );
-	_newsgroup = [ items objectForKey: kNewsGroup ];
-	if ( !_newsgroup ) _newsgroup = @"";
+	_newsgroup = [ [ NSString stringWithString: ( ( tmp = [ items objectForKey: kNewsGroup ]) ? tmp : @"" ) ] retain ];
 
-	_references = nil;
+	_references = [ [ NSString stringWithString: ( ( tmp = [ items objectForKey: kReferences ] ) ? tmp : @"" ) ] retain ];
+
 
 //	NSLog( @"Getting quote" );
+
+	//TODO: MAKE THIS NOT SUCK
 	NSString * quote = [ items objectForKey: kQuoteContent ];
 
+	if ( quote )
+		quote = [NSString stringWithFormat: @"\nQuote:\n%@", quote ]; 
+
+	
+
 	//process quote and add the '>'s and tack to the end of 'content'
+
+	//or for now....
+
+
 
 
 //	PlainTextDocument * ptd = [ [ PlainTextDocument alloc] init ];
@@ -165,7 +178,11 @@ static ComposeView * sharedInstance = nil;
 //	NSLog( @"preparing textField" );
 //	NSLog( @"Quote: %@", quote );
 //	[ _textView setTextSize: 12 ];
-	[ _textView setText: quote ];
+	if ( quote )
+	{
+		[ _textView setText: quote ];
+		[ _textView setSelectionToStart ];	
+	}
 //	[ _textField recalculateStyle ]; //TODO: needed? what does this DO? 
 //	[ _textField setDelegate: self ];
 //	[ _textField setEditable: YES ];
@@ -190,6 +207,8 @@ static ComposeView * sharedInstance = nil;
 		[ _rows removeLastObject ];
 	}
 
+	[ _textView setText: @"" ];
+	
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,7 +248,19 @@ static ComposeView * sharedInstance = nil;
 		else
 		{ //send! try to send this message.....
 
-			//send();
+			NSLog ( @"about to send a message" );
+			NSLog ( @"test: %d", _newsgroup );
+			NSLog ( @"newsgroup: %@", _newsgroup );
+			sendMessage( _newsgroup, _references, [ [ _rows objectAtIndex: 1 ] value ] , [ _textView text ] );
+
+			//TODO: tell the user if an error occured!!! or confirmation, or SOMETHING
+
+
+		//go back!
+		[ [ ViewController sharedInstance ] 
+				setView: [ [ ViewController sharedInstance ] getPrevView ]
+				slideFromLeft: NO ];
+			
 
 		}
 

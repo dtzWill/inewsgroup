@@ -484,6 +484,7 @@ extern int post_response(const char *groupname, int respnum, t_bool copy_text, t
 extern int repost_article(const char *groupname, int respnum, t_bool supersede, t_openartinfo *artinfo);
 extern t_bool cancel_article(struct t_group *group, struct t_article *art, int respnum);
 extern t_bool mail_bug_report(void);
+extern void postpone_article( const char *the_article );
 extern t_bool pickup_postponed_articles(t_bool ask, t_bool all);
 extern t_bool post_article(const char *groupname);
 extern t_bool reread_active_after_posting(void);

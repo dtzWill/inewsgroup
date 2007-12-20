@@ -5,6 +5,7 @@
 
 //TODO: move any functionality that needs this into newsfunctions where it belongs!
 #import "tin.h"
+#import <GraphicsServices/GraphicsServices.h>
 #import "ViewController.h"
 #import "GroupView.h"
 
@@ -53,6 +54,7 @@ static ThreadView * sharedInstance = nil;
 	[_table addTableColumn: col]; 
 	[_table setDataSource: self];
 	[_table setDelegate: self];
+	[_table setSeparatorStyle: 1];
 	[_table reloadData];
 
 
@@ -107,6 +109,8 @@ static ThreadView * sharedInstance = nil;
 	for_each_art_in_thread( i, _threadnum )
 	{
 		row = [[ThreadViewItem alloc] initWithArticle: i ];
+		[ row setDisclosureStyle: 2 ];
+		[ row setShowDisclosure: YES ];
 		[ _rows addObject: row ];
 	}
 	[ _titleItem setTitle: [NSString stringWithCString: arts[ base[ _threadnum ] ].subject ] ];
@@ -171,6 +175,10 @@ static ThreadView * sharedInstance = nil;
 	return [ _rows objectAtIndex: row]; 
 }
 
+- (float)table:(UITable *)aTable heightForRow:(int)row {
+	return [ [ _rows objectAtIndex: row ] rowHeight ];
+}
+
 //nav bar button handler
 - (void)navigationBar:(UINavigationBar*)bar buttonClicked:(int) which;
 {
@@ -199,15 +207,45 @@ static ThreadView * sharedInstance = nil;
 
 - (id) initWithArticle: (id) artnum
 {
-	[super init];
+	[super initWithFrame: CGRectMake( 0.0f, 0.0f, 320.0f, 128.0f )];
+
+	//set font to use....
+	[ [self titleTextLabel]setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];	
+	[ [self titleTextLabel] setWrapsText: YES ];
 
 	_articleID = artnum;
 
 	return self;
 }
 
+- (void) layoutSubviews
+{
+	[ super layoutSubviews ];
+	CGRect rect = CGRectMake( 32.0f, 0.0f, 260.0f, 16.0f * [self numLines ] );
+	//center it vertically
+	rect.origin.y = ( (64.0f - 16.0f * [self numLines ])/ 2.0f  );	
+ 
+	[ [ self titleTextLabel] setFrame: rect ];	
+
+}
+
+
 - (int) article
 {
 	return _articleID;
 }
+
+- (int) numLines
+{
+	return 1 + ( [_titleTextLabel textSize].width ) / 250;
+}
+
+- (float) rowHeight
+{
+	return 64.0f;
+
+}
+
+
+
 @end
