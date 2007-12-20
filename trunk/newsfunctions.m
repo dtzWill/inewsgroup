@@ -67,7 +67,7 @@ NSString * getFromString()
 	//TODO: eventually add the user's full name as well, as set in the
 	//preferences pane
 
-	return getEmail();
+	return [NSString stringWithFormat: @"From: %@", getEmail()];
 
 }
 

@@ -15,6 +15,9 @@ INTLFLAGS = $(INTLLIB) -liconv
 OBJS = \
 	$(TINLIB) \
 	ViewController.o \
+	EditableRowCell.o \
+	EditTextView.o \
+	EditorKeyboard.o \
 	ComposeView.o \
 	SubscriptionView.o \
 	PostView.o \
