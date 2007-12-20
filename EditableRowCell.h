@@ -9,6 +9,6 @@
 	id _delegate;
 }
 
-- (void) setDeleate: (id) delegate;
+- (void) setDelegate: (id) delegate;
 
 @end

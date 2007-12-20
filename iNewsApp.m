@@ -62,7 +62,7 @@ static iNewsApp * sharedInstance = nil;
 	_navTop = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"iNewsGroup" ];
-	[_navTop showButtonsWithLeftTitle: @"Prefs" rightTitle: @"Quit" leftBack: YES ]; 
+	[_navTop showLeftButton: @"Prefs" withStyle: BUTTON_BACK rightButton: @"Quit" withStyle: BUTTON_RED ];
 	[_navTop pushNavigationItem: _titleItem];
 	[_navTop setDelegate: self];	
 	[_navTop setBarStyle: 3];
@@ -310,13 +310,27 @@ static iNewsApp * sharedInstance = nil;
 
 }
 
+- (void) hardExit
+{
+	exit(0);//GTFO
+
+}
+
+- (void) exitMe
+{
+	
+	[NSTimer scheduledTimerWithTimeInterval: QUIT_WAIT_TIME target:self selector:@selector(hardExit) userInfo:nil repeats:NO];	
+	tin_done(EXIT_SUCCESS); //doesn't close the app gracefully.... o_O
+
+
+}
+
 - (void)navigationBar:(UINavigationBar*)bar buttonClicked:(int) which;
 {
 //	NSLog( @"button pressed, which: %d", which );
 	if ( which == 0 ) //right
 	{
-
-		tin_done(EXIT_SUCCESS); //doesn't close the app gracefully.... o_O
+		[self exitMe ];
 		//TODO: close the app gracefully.
 	}
 	else
