@@ -311,6 +311,7 @@ static iNewsApp * sharedInstance = nil;
 - (void) exitMe
 {
 	
+	[self saveConfig ];
 	[self terminateWithSuccess ];
 
 }
