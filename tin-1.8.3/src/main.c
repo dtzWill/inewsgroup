@@ -405,295 +405,294 @@ static void usage(char *theProgname);
  * process command line options
  */
 #define OPTIONS "aAcdD:f:g:G:hHI:lm:M:nNop:qQrRs:SuvVwxXzZ"
-
-static void
-read_cmd_line_options(
-	int argc,
-	char *argv[])
-{
-	int ch;
-	t_bool newsrc_set = FALSE;
-
-	envargs(&argc, &argv, "TINRC");
-
-	while ((ch = getopt(argc, argv, OPTIONS)) != -1) {
-		switch (ch) {
-			case 'a':
-#ifdef HAVE_COLOR
-				use_color = bool_not(use_color);
-#else
-				error_message(_(txt_option_not_enabled), "-DHAVE_COLOR");
-				giveup();
-				/* keep lint quiet: */
-				/* NOTREACHED */
-#endif /* HAVE_COLOR */
-				break;
-
-			case 'A':
-#ifdef NNTP_ABLE
-				force_auth_on_conn_open = TRUE;
-#else
-				error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
-				giveup();
-				/* keep lint quiet: */
-				/* NOTREACHED */
-#endif /* NNTP_ABLE */
-				break;
-
-			case 'c':
-				batch_mode = TRUE;
-				catchup = TRUE;
-				break;
-
-			case 'd':
-				show_description = FALSE;
-				break;
-
-			case 'D':		/* debug mode 1=NNTP, 2=ALL, 3=newsrc, 4=malloc */
-#ifdef DEBUG
-				debug = atoi(optarg);
-				debug_delete_files();
-#else
-				error_message(_(txt_option_not_enabled), "-DDEBUG");
-				giveup();
-				/* keep lint quiet: */
-				/* NOTREACHED */
-#endif /* DEBUG */
-				break;
-
-			case 'f':	/* newsrc file */
-				my_strncpy(newsrc, optarg, sizeof(newsrc) - 1);
-				newsrc_set = TRUE;
-				break;
-
-			case 'G':
-				tinrc.getart_limit = atoi(optarg);
-				break;
-
-			case 'g':	/* select alternative NNTP-server, implies -r */
-#ifdef NNTP_ABLE
-				my_strncpy(cmdline_nntpserver, optarg, sizeof(cmdline_nntpserver) - 1);
-				read_news_via_nntp = TRUE;
-#else
-				error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
-				giveup();
-				/* keep lint quiet: */
-				/* NOTREACHED */
-#endif /* NNTP_ABLE */
-				break;
-
-			case 'H':
-				show_intro_page();
-				exit(EXIT_SUCCESS);
-				/* keep lint quiet: */
-				/* FALLTHROUGH */
-
-			case 'I':
-				my_strncpy(index_newsdir, optarg, sizeof(index_newsdir) - 1);
-				break;
-
-			case 'l':
-				list_active = TRUE;
-				break;
-
-			case 'm':
-				my_strncpy(tinrc.maildir, optarg, sizeof(tinrc.maildir) - 1);
-				break;
-
-			case 'M':	/* mail new news to specified user */
-				my_strncpy(mail_news_user, optarg, sizeof(mail_news_user) - 1);
-				mail_news = TRUE;
-				batch_mode = TRUE;
-				break;
-
-			case 'n':
-				newsrc_active = TRUE;
-				break;
-
-			case 'N':	/* mail new news to your posts */
-				my_strncpy(mail_news_user, userid, sizeof(mail_news_user) - 1);
-				mail_news = TRUE;
-				batch_mode = TRUE;
-				break;
-
-			case 'o':	/* post postponed articles & exit */
-#ifndef NO_POSTING
-				/*
-				 * TODO: autoposting currently does some screen output, so we
-				 *       can't set batch_mode
-				 */
-				post_postponed_and_exit = TRUE;
-				check_for_new_newsgroups = FALSE;
-#else
-				error_message(_(txt_option_not_enabled), "-UNO_POSTING");
-				giveup();
-				/* keep lint quiet: */
-				/* NOTREACHED */
-#endif /* !NO_POSTING */
-				break;
-
-			case 'p': /* implies -r */
-#ifdef NNTP_ABLE
-				read_news_via_nntp = TRUE;
-				if (atoi(optarg) != 0)
-					nntp_tcp_port = (unsigned short) atoi(optarg);
-#else
-				error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
-				giveup();
-				/* keep lint quiet: */
-				/* NOTREACHED */
-#endif /* NNTP_ABLE */
-				break;
-
-			case 'q':
-				check_for_new_newsgroups = FALSE;
-				break;
-
-			case 'Q':
-				newsrc_active = TRUE;
-				check_for_new_newsgroups = FALSE;
-				show_description = FALSE;
-				break;
-
-			case 'r':	/* read news remotely from default NNTP server */
-#ifdef NNTP_ABLE
-				read_news_via_nntp = TRUE;
-#else
-				error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
-				giveup();
-				/* keep lint quiet: */
-				/* NOTREACHED */
-#endif /* NNTP_ABLE */
-				break;
-
-			case 'R':	/* read news saved by -S option */
-				read_saved_news = TRUE;
-				list_active = TRUE;
-				newsrc_active = FALSE;
-				check_for_new_newsgroups = FALSE;
-				my_strncpy(news_active_file, save_active_file, sizeof(news_active_file) - 1);
-				break;
-
-			case 's':
-				my_strncpy(tinrc.savedir, optarg, sizeof(tinrc.savedir) - 1);
-				break;
-
-			case 'S':	/* save new news to dir structure */
-				save_news = TRUE;
-				batch_mode = TRUE;
-				break;
-
-			case 'u':	/* update index files */
-				batch_mode = TRUE;
-				update_index = TRUE;
-				break;
-
-			case 'v':	/* verbose mode */
-				verbose = TRUE;
-				break;
-
-			case 'V':
-				tin_version_info(stderr);
-				exit(EXIT_SUCCESS);
-				/* keep lint quiet: */
-				/* FALLTHROUGH */
-
-			case 'w':	/* post article & exit */
-#ifndef NO_POSTING
-				post_article_and_exit = TRUE;
-				check_for_new_newsgroups = FALSE;
-#else
-				error_message(_(txt_option_not_enabled), "-UNO_POSTING");
-				giveup();
-				/* keep lint quiet: */
-				/* NOTREACHED */
-#endif /* !NO_POSTING */
-				break;
-
-#if 0
-			case 'W':	/* reserved according to SUSV3 XDB Utility Syntax Guidelines, Guideline 3 */
-				break;
-#endif /* 0 */
-
-			case 'x':	/* enter no_posting mode */
-				force_no_post = TRUE;
-				break;
-
-			case 'X':	/* don't save ~/.newsrc on exit */
-				no_write = TRUE;
-				break;
-
-			case 'z':
-				start_any_unread = TRUE;
-				break;
-
-			case 'Z':
-				check_any_unread = TRUE;
-				batch_mode = TRUE;
-				break;
-
-			case 'h':
-			case '?':
-			default:
-				usage(tin_progname);
-				exit(EXIT_SUCCESS);
-		}
-	}
-	cmdargs = argv;
-	num_cmdargs = optind;
-	max_cmdargs = argc;
-	if (!newsrc_set) {
-		if (read_news_via_nntp)
-			get_newsrcname(newsrc, getserverbyfile(NNTP_SERVER_FILE));
-		else {
-#if defined(HAVE_SYS_UTSNAME_H) && defined(HAVE_UNAME)
-			struct utsname uts;
-			(void) uname(&uts);
-			get_newsrcname(newsrc, uts.nodename);
-#else
-			char nodenamebuf[256]; /* SUSv2 limit; better use HOST_NAME_MAX */
-#ifdef HAVE_GETHOSTNAME
-			(void) gethostname(nodenamebuf, sizeof(nodenamebuf));
-#endif /* HAVE_GETHOSTNAME */
-			get_newsrcname(newsrc, nodenamebuf);
-#endif /* HAVE_SYS_UTSNAME_H && HAVE_UNAME */
-		}
-	}
-
-	/*
-	 * Sort out conflicts of options....
-	 */
-	if (!batch_mode) {
-		if (verbose) {
-			wait_message(2, _(txt_useful_with_batch_mode), "-v");
-			verbose = FALSE;
-		}
-		if (catchup) {
-			wait_message(2, _(txt_useful_with_batch_mode), "-c");
-			catchup = FALSE;
-		}
-	} else {
-		if (read_saved_news) {
-			wait_message(2, _(txt_useful_without_batch_mode), "-R");
-			read_saved_news = FALSE;
-		}
-	}
-#ifdef NNTP_ABLE
-	/*
-	 * If we're reading from an NNTP server and we've been asked not to look
-	 * for new newsgroups, trust our cached copy of the newsgroups file.
-	 */
-	if (read_news_via_nntp)
-		read_local_newsgroups_file = bool_not(check_for_new_newsgroups);
-#endif /* NNTP_ABLE */
-	/*
-	 * If we use neither list_active nor newsrc_active,
-	 * we use both of them.
-	 */
-	if (!list_active && !newsrc_active)
-		list_active = newsrc_active = TRUE;
-}
-
+////	
+////	static void
+////	read_cmd_line_options(
+////		int argc,
+////		char *argv[])
+////	{
+////		int ch;
+////		t_bool newsrc_set = FALSE;
+////	
+////		envargs(&argc, &argv, "TINRC");
+////	
+////		while ((ch = getopt(argc, argv, OPTIONS)) != -1) {
+////			switch (ch) {
+////				case 'a':
+////	#ifdef HAVE_COLOR
+////					use_color = bool_not(use_color);
+////	#else
+////					error_message(_(txt_option_not_enabled), "-DHAVE_COLOR");
+////					giveup();
+////					/* keep lint quiet: */
+////					/* NOTREACHED */
+////	#endif /* HAVE_COLOR */
+////					break;
+////	
+////				case 'A':
+////	#ifdef NNTP_ABLE
+////					force_auth_on_conn_open = TRUE;
+////	#else
+////					error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
+////					giveup();
+////					/* keep lint quiet: */
+////					/* NOTREACHED */
+////	#endif /* NNTP_ABLE */
+////					break;
+////	
+////				case 'c':
+////					batch_mode = TRUE;
+////					catchup = TRUE;
+////					break;
+////	
+////				case 'd':
+////					show_description = FALSE;
+////					break;
+////	
+////				case 'D':		/* debug mode 1=NNTP, 2=ALL, 3=newsrc, 4=malloc */
+////	#ifdef DEBUG
+////					debug = atoi(optarg);
+////					debug_delete_files();
+////	#else
+////					error_message(_(txt_option_not_enabled), "-DDEBUG");
+////					giveup();
+////					/* keep lint quiet: */
+////					/* NOTREACHED */
+////	#endif /* DEBUG */
+////					break;
+////	
+////				case 'f':	/* newsrc file */
+////					my_strncpy(newsrc, optarg, sizeof(newsrc) - 1);
+////					newsrc_set = TRUE;
+////					break;
+////	
+////				case 'G':
+////					tinrc.getart_limit = atoi(optarg);
+////					break;
+////	
+////				case 'g':	/* select alternative NNTP-server, implies -r */
+////	#ifdef NNTP_ABLE
+////					my_strncpy(cmdline_nntpserver, optarg, sizeof(cmdline_nntpserver) - 1);
+////					read_news_via_nntp = TRUE;
+////	#else
+////					error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
+////					giveup();
+////					/* keep lint quiet: */
+////					/* NOTREACHED */
+////	#endif /* NNTP_ABLE */
+////					break;
+////	
+////				case 'H':
+////					show_intro_page();
+////					exit(EXIT_SUCCESS);
+////					/* keep lint quiet: */
+////					/* FALLTHROUGH */
+////	
+////				case 'I':
+////					my_strncpy(index_newsdir, optarg, sizeof(index_newsdir) - 1);
+////					break;
+////	
+////				case 'l':
+////					list_active = TRUE;
+////					break;
+////	
+////				case 'm':
+////					my_strncpy(tinrc.maildir, optarg, sizeof(tinrc.maildir) - 1);
+////					break;
+////	
+////				case 'M':	/* mail new news to specified user */
+////					my_strncpy(mail_news_user, optarg, sizeof(mail_news_user) - 1);
+////					mail_news = TRUE;
+////					batch_mode = TRUE;
+////					break;
+////	
+////				case 'n':
+////					newsrc_active = TRUE;
+////					break;
+////	
+////				case 'N':	/* mail new news to your posts */
+////					my_strncpy(mail_news_user, userid, sizeof(mail_news_user) - 1);
+////					mail_news = TRUE;
+////					batch_mode = TRUE;
+////					break;
+////	
+////				case 'o':	/* post postponed articles & exit */
+////	#ifndef NO_POSTING
+////					/*
+////					 * TODO: autoposting currently does some screen output, so we
+////					 *       can't set batch_mode
+////					 */
+////					post_postponed_and_exit = TRUE;
+////					check_for_new_newsgroups = FALSE;
+////	#else
+////					error_message(_(txt_option_not_enabled), "-UNO_POSTING");
+////					giveup();
+////					/* keep lint quiet: */
+////					/* NOTREACHED */
+////	#endif /* !NO_POSTING */
+////					break;
+////	
+////				case 'p': /* implies -r */
+////	#ifdef NNTP_ABLE
+////					read_news_via_nntp = TRUE;
+////					if (atoi(optarg) != 0)
+////						nntp_tcp_port = (unsigned short) atoi(optarg);
+////	#else
+////					error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
+////					giveup();
+////					/* keep lint quiet: */
+////					/* NOTREACHED */
+////	#endif /* NNTP_ABLE */
+////					break;
+////	
+////				case 'q':
+////					check_for_new_newsgroups = FALSE;
+////					break;
+////	
+////				case 'Q':
+////					newsrc_active = TRUE;
+////					check_for_new_newsgroups = FALSE;
+////					show_description = FALSE;
+////					break;
+////	
+////				case 'r':	/* read news remotely from default NNTP server */
+////	#ifdef NNTP_ABLE
+////					read_news_via_nntp = TRUE;
+////	#else
+////					error_message(_(txt_option_not_enabled), "-DNNTP_ABLE");
+////					giveup();
+////					/* keep lint quiet: */
+////					/* NOTREACHED */
+////	#endif /* NNTP_ABLE */
+////					break;
+////	
+////				case 'R':	/* read news saved by -S option */
+////					read_saved_news = TRUE;
+////					list_active = TRUE;
+////					newsrc_active = FALSE;
+////					check_for_new_newsgroups = FALSE;
+////					my_strncpy(news_active_file, save_active_file, sizeof(news_active_file) - 1);
+////					break;
+////	
+////				case 's':
+////					my_strncpy(tinrc.savedir, optarg, sizeof(tinrc.savedir) - 1);
+////					break;
+////	
+////				case 'S':	/* save new news to dir structure */
+////					save_news = TRUE;
+////					batch_mode = TRUE;
+////					break;
+////	
+////				case 'u':	/* update index files */
+////					batch_mode = TRUE;
+////					update_index = TRUE;
+////					break;
+////	
+////				case 'v':	/* verbose mode */
+////					verbose = TRUE;
+////					break;
+////	
+////				case 'V':
+////					tin_version_info(stderr);
+////					exit(EXIT_SUCCESS);
+////					/* keep lint quiet: */
+////					/* FALLTHROUGH */
+////	
+////				case 'w':	/* post article & exit */
+////	#ifndef NO_POSTING
+////					post_article_and_exit = TRUE;
+////					check_for_new_newsgroups = FALSE;
+////	#else
+////					error_message(_(txt_option_not_enabled), "-UNO_POSTING");
+////					giveup();
+////					/* keep lint quiet: */
+////					/* NOTREACHED */
+////	#endif /* !NO_POSTING */
+////					break;
+////	
+////	#if 0
+////				case 'W':	/* reserved according to SUSV3 XDB Utility Syntax Guidelines, Guideline 3 */
+////					break;
+////	#endif /* 0 */
+////	
+////				case 'x':	/* enter no_posting mode */
+////					force_no_post = TRUE;
+////					break;
+////	
+////				case 'X':	/* don't save ~/.newsrc on exit */
+////					no_write = TRUE;
+////					break;
+////	
+////				case 'z':
+////					start_any_unread = TRUE;
+////					break;
+////	
+////				case 'Z':
+////					check_any_unread = TRUE;
+////					batch_mode = TRUE;
+////					break;
+////	
+////				case 'h':
+////				case '?':
+////				default:
+////					usage(tin_progname);
+////					exit(EXIT_SUCCESS);
+////			}
+////		}
+////		cmdargs = argv;
+////		num_cmdargs = optind;
+////		max_cmdargs = argc;
+////		if (!newsrc_set) {
+////			if (read_news_via_nntp)
+////				get_newsrcname(newsrc, getserverbyfile(NNTP_SERVER_FILE));
+////			else {
+////	#if defined(HAVE_SYS_UTSNAME_H) && defined(HAVE_UNAME)
+////				struct utsname uts;
+////				(void) uname(&uts);
+////				get_newsrcname(newsrc, uts.nodename);
+////	#else
+////				char nodenamebuf[256]; /* SUSv2 limit; better use HOST_NAME_MAX */
+////	#ifdef HAVE_GETHOSTNAME
+////				(void) gethostname(nodenamebuf, sizeof(nodenamebuf));
+////	#endif /* HAVE_GETHOSTNAME */
+////				get_newsrcname(newsrc, nodenamebuf);
+////	#endif /* HAVE_SYS_UTSNAME_H && HAVE_UNAME */
+////			}
+////		}
+////	
+////		/*
+////		 * Sort out conflicts of options....
+////		 */
+////		if (!batch_mode) {
+////			if (verbose) {
+////				wait_message(2, _(txt_useful_with_batch_mode), "-v");
+////				verbose = FALSE;
+////			}
+////			if (catchup) {
+////				wait_message(2, _(txt_useful_with_batch_mode), "-c");
+////				catchup = FALSE;
+////			}
+////		} else {
+////			if (read_saved_news) {
+////				wait_message(2, _(txt_useful_without_batch_mode), "-R");
+////				read_saved_news = FALSE;
+////			}
+////		}
+////	#ifdef NNTP_ABLE
+////		/*
+////		 * If we're reading from an NNTP server and we've been asked not to look
+////		 * for new newsgroups, trust our cached copy of the newsgroups file.
+////		 */
+////		if (read_news_via_nntp)
+////			read_local_newsgroups_file = bool_not(check_for_new_newsgroups);
+////	#endif /* NNTP_ABLE */
+////		/*
+////		 * If we use neither list_active nor newsrc_active,
+////		 * we use both of them.
+////		 */
+////		if (!list_active && !newsrc_active)
+////			list_active = newsrc_active = TRUE;
+////	}
 
 /*
  * usage

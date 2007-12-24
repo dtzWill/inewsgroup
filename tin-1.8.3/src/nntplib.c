@@ -882,7 +882,7 @@ get_server(
 	int size)
 {
 	//Will: don't retry, takes forever
-	int retry = 0;//NNTP_TRY_RECONNECT;
+	int retry = 1;//NNTP_TRY_RECONNECT;
 
 	reconnected_in_last_get_server = FALSE;
 	errno = 0;
@@ -1377,6 +1377,7 @@ nntp_open(
 		}
 		if ((ret = mode_reader(&sec)))
 			return ret; /* "MODE READER" failed, exit */
+		
 	}
 
 	if (!is_reconnect) {

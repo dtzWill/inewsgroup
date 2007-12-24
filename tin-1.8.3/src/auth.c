@@ -336,8 +336,8 @@ authinfo_original(
 	 * Else, proceed to the other mechanisms.
 	 */
 	//if we already auth'd.. no need to do it again
-	if (initialized && do_authinfo_original( server, authuser, authpass ) )
-		return TRUE;
+//	if (initialized && !alreadydo_authinfo_original( server, authuser, authpass ) )
+//		return TRUE;
 //	if (initialized && !changed && !already_failed && do_authinfo_original(server, authusername, authpassword))
 //		return TRUE;
 /*
