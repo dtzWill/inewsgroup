@@ -706,9 +706,9 @@ init_selfinfo(
 	 * if it's still unset fall into no posting mode.
 	 */
 	if (domain_name[0] == '\0') {
-		error_message(_(txt_error_no_domain_name));
-		//sleep(2);
-		force_no_post = TRUE;
+		//will---set default domain_name here
+		char * default_domain_name = "nowhere.com";
+		strncpy( domain_name, default_domain_name, strlen( default_domain_name ) ); //more dirty hack, i'm sorry tin authors :(
 	}
 
 	/*
