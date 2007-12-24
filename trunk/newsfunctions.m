@@ -250,7 +250,9 @@ NSString *	readArticleContent()
 	NSMutableString * body = [[NSMutableString alloc] init];
 	char * line;
 	int i; 
-	for (i = 0; i < _curArt.cooked_lines; i++) {
+	//i=1, to skip the 'Newsgroups: " line that should have been
+	//removed with the headers, but apparently not.
+	for (i = 1; i < _curArt.cooked_lines; i++) {
 		fseek(_curArt.cooked, _curArt.cookl[i].offset, SEEK_SET);
 		line = tin_fgets(_curArt.cooked, FALSE);
 		[ body appendString: [ NSMutableString stringWithFormat: @"%s\n", line ] ];
