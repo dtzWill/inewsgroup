@@ -9,12 +9,12 @@
 {
 	[super init];
 
-	NSLog( @"init" );
+	return self;
 }
 	
 - (void)_textFieldEndEditing:(id)fp8 	// IMP=0x3244e26c
 {
-	NSLog( @"textFieldEndEditing" );
+//	NSLog( @"textFieldEndEditing" );
 	[super _textFieldEndEditing: fp8 ];
 
 	if( [_delegate respondsToSelector:@selector(toggleKeyboardFor:)] )
@@ -32,7 +32,7 @@
 }
 - (void)_textFieldStartEditing:(id)fp8	// IMP=0x3244e1fc
 {
-	NSLog( @"textFieldStartEditing" );
+//	NSLog( @"textFieldStartEditing" );
 	[super _textFieldStartEditing: fp8];
 	
 	if( [_delegate respondsToSelector:@selector(toggleKeyboardFor:)] )

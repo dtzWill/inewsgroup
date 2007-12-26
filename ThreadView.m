@@ -8,6 +8,7 @@
 #import <GraphicsServices/GraphicsServices.h>
 #import "ViewController.h"
 #import "GroupView.h"
+#import "consts.h"
 
 static ThreadView * sharedInstance = nil;
 
@@ -34,8 +35,8 @@ static ThreadView * sharedInstance = nil;
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 
-	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"ThreadView" ];//better name?? lol
-	[nav showButtonsWithLeftTitle: @"Back" rightTitle: nil leftBack: YES ];
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_THREADVIEW ];//better name?? lol
+	[nav showButtonsWithLeftTitle: L_BACK rightTitle: nil leftBack: YES ];
 	//'Next' button in the nav bar to browse threads??
 	//(maybe put prev/next in a bottom bar....?)
 	 
@@ -69,8 +70,8 @@ static ThreadView * sharedInstance = nil;
 //  NSLog(@"tableRowSelected!");
 	int i = [ _table selectedRow ], j, k=0;
 	//ouch @ hardcoded max value o_O
-	if ( i != 2147483647 ) // 0b1111111111111111111111111111111
-	{
+	if ( i != UNSIGNED_MINUS_ONE )
+  	{
 
 //		NSLog( @" looking for: %d", i );
 		for_each_art_in_thread( j, _threadnum )
@@ -136,7 +137,7 @@ static ThreadView * sharedInstance = nil;
 
 		UIImage * img = [UIImage applicationImageNamed:
 			arts[ art ].status != ART_READ ?
-				@"UnreadIndicator.png" : @"ReadIndicator.png" ];
+				IMG_UNREAD : IMG_READ ];
 		[ cell setImage: img ];
 
 	}
@@ -205,7 +206,7 @@ static ThreadView * sharedInstance = nil;
 
 @implementation ThreadViewItem
 
-- (id) initWithArticle: (id) artnum
+- (id) initWithArticle: (int) artnum
 {
 	[super initWithFrame: CGRectMake( 0.0f, 0.0f, 320.0f, 128.0f )];
 

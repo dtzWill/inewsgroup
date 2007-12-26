@@ -36,6 +36,10 @@
 
 - (void) exitMe;
 
+- (void) refreshTable;
+
+- (void) saveConfig;
+
 @end
 
 

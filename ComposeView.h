@@ -5,29 +5,18 @@
 #import <UIKit/UIKit.h>
 #import <UIKit/UIView.h>
 #import <UIKit/UITextField.h>
-#import <Message/PlainTextDocument.h>
 #import "EditTextView.h"
 #import "EditorKeyboard.h"
-
+#import "EditableRowCell.h" 
 //Compose a message, and send it
 
-//globals:
-
-//keys for passing us information to start the message with
-static NSString * kSubject = @"subj";//editable
-static NSString * kNewsGroup = @"groups";//set
-static NSString * kQuoteContent = @"quote";//hmmm
-static NSString * kReferences = @"ref";//set
-
-//HORRIBLE HACK :-/
-static const float KEYBOARD_DELAY=0.5f;
 
 
 //#define SUBJECT_ROW 0
 //#define  
 //#define CONTENT_ROW ( SUBJECT_ROW + 1 )
 
-@interface ComposeView: UIView
+@interface ComposeView: UIView <KeyboardToggler>
 {
 
 	/*All messages need the following:
@@ -67,6 +56,10 @@ static const float KEYBOARD_DELAY=0.5f;
 - (void) startNewMessage: (NSDictionary *) items;
 
 - (void) emptyOldMessage;
+
+- (void) toggleKeyboardFor: (id) sender;
+
+- (void) keyboardTransitionOver;
 
 @end
 

@@ -25,7 +25,7 @@
     {
 	if( [_delegate respondsToSelector:@selector(toggleKeyboardFor:)] )
 	{
-	    [_delegate toggleKeyboardFor: self];
+	    [_delegate performSelector: @selector(toggleKeyboardFor:) withObject: self];
 	}
     }
     [super mouseUp:fp8];
@@ -35,7 +35,7 @@
 {
     if( [_delegate respondsToSelector:@selector(shouldInsertText:)] )
     {
-	if( ! [_delegate shouldInsertText:text] )
+	if( ! [_delegate performSelector: @selector(shouldInsertText:) withObject: text] )
 	{
 	    return FALSE;
 	}

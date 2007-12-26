@@ -67,7 +67,7 @@ NSString * getFromString()
 	//TODO: eventually add the user's full name as well, as set in the
 	//preferences pane
 
-	return [NSString stringWithFormat: @"From: %@", getEmail()];
+	return [NSString stringWithFormat: L_FROM_FORMAT, getEmail()];
 
 }
 
@@ -125,7 +125,7 @@ void readSettingsFromFile()
 
 	//update ~/.newsauth
 	
-	if ( ( f_newsauth = fopen( "/var/root/.newsauth", "r" ) )== 0 )
+	if ( ( f_newsauth = fopen( F_NEWSAUTH, "r" ) )== 0 )
 	{
 		//error :(
 		return;
@@ -145,7 +145,7 @@ void readSettingsFromFile()
 
 	//read from ~/.newsemail
 
-	if ( ( f_email = fopen( "/var/root/.newsemail", "r" ) ) == 0 )
+	if ( ( f_email = fopen( F_NEWSEMAIL, "r" ) ) == 0 )
 	{
 		//error :(
 		return;
@@ -168,7 +168,7 @@ void saveSettingsToFiles()
 	NSLog( @"\ntrying to save...." );	 
 	//update /etc/nntpserver
 	
-	if ( ( f_nntpserver = fopen( "/etc/nntpserver", "w" ) ) == 0 )
+	if ( ( f_nntpserver = fopen( F_NNTPSERVER, "w" ) ) == 0 )
 	{
 		//error! :(
 		return;
@@ -180,7 +180,7 @@ void saveSettingsToFiles()
 
 	//update ~/.newsemail
 
-	if ( ( f_newsemail = fopen( "/var/root/.newsemail", "w" ) ) == 0 )
+	if ( ( f_newsemail = fopen( F_NEWSEMAIL, "w" ) ) == 0 )
 	{
 		//error :(
 		return;
@@ -193,7 +193,7 @@ void saveSettingsToFiles()
 
 	//update ~/.newsauth
 	
-	if ( ( f_newsauth = fopen( "/var/root/.newsauth", "w" ) )== 0 )
+	if ( ( f_newsauth = fopen( F_NEWSAUTH, "w" ) )== 0 )
 	{
 		//error :(
 		return;
@@ -266,7 +266,7 @@ NSString * articleFrom()
 	{
 		return [NSString stringWithCString: _curArt.hdr.from ];
 	}
-	return @"Not specified";
+	return L_DEFAULT_FROM;
 
 }
 
@@ -276,7 +276,7 @@ NSString * articleSubject()
 	{
 		return [NSString stringWithCString: _curArt.hdr.subj ];
 	}
-	return @"No Subject";
+	return L_DEFAULT_SUBJECT;
 
 }
 
@@ -287,7 +287,7 @@ NSString * getReferences( int articlenum )
 
 	refs = get_references( arts[ articlenum ].refptr );
 	NSString * ret = [NSString stringWithCString: ( refs ? refs : "" ) ];
-//	NSLog( ret );
+	NSLog( ret );
 	
 	return [ ret retain ];
 }
@@ -359,22 +359,22 @@ void init()
 {
 	m_hasConnected = false;
 	init_alloc();
-	NSLog( @"alloc init completed" );
+//	NSLog( @"alloc init completed" );
 	hash_init();
-	NSLog( @"hash init completed" );
+//	NSLog( @"hash init completed" );
 	init_selfinfo();
-	NSLog( @"selfinfo init completed" );
+//	NSLog( @"selfinfo init completed" );
 	init_group_hash();
 	//no we don't want anything keybinding-related, but for now
 	//leaving this here so any code in tin depending on it doesn't
 	//die horribly.
-	NSLog( @"group hash init completed" );
+//	NSLog( @"group hash init completed" );
 	setup_default_keys(); /* preinit keybindings */
 
 	email[0] = '\0'; //empty
 
 	set_signal_handlers();
-	NSLog( @"sig handler init completed" );
+//	NSLog( @"sig handler init completed" );
 //	read_newsauth_file( nntp_server, user, pass );
 
 	//colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -422,6 +422,10 @@ int init_server()
 //	[[NetworkController sharedInstance]keepEdgeUp];									
 //	[[NetworkController sharedInstance]bringUpEdge];
 //	sleep ( 5 );
+
+//DEBUG:
+	force_no_post = YES;
+//DEBUG
 	
 	if(!([[NetworkController sharedInstance]isNetworkUp]))
 	{
@@ -567,7 +571,7 @@ void printActive()
 };
 
 //sends a message synchronously
-bool sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message )
+int sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message )
 {
 
 	NSLog( @"Sending Message: ");
@@ -583,13 +587,14 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 	
 	//write this to a file and then tell the tin code to add it to the postponed queue
 
-	if ( ( f_newmail = fopen( "/tmp/newarticle", "w" ) ) == 0 )
+	if ( ( f_newmail = fopen( F_TMPNEW, "w" ) ) == 0 )
 	{
 		//error! :(
 		return;
 	}
 	//else
 
+	//these aren't pushed into 'consts.h' because they aren't language-specific
 	fprintf( f_newmail, "From: %s\n", [ getEmail() cString ] );
 
 	fprintf( f_newmail, "Subject: %s\n", [ subject cString ] ); 
@@ -609,10 +614,9 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 	fclose( f_newmail ); //yay that was fun
 
 
-	postpone_article( "/tmp/newarticle" );
+	postpone_article( F_TMPNEW );
 
 	return pickup_postponed_articles( false, true ); //ask=no, all=yes
-
 
 }
 

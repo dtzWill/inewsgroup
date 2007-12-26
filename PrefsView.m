@@ -4,6 +4,7 @@
 #import "PrefsView.h"
 #import "ViewController.h"
 #import "iNewsApp.h"
+#import "consts.h"
 
 static PrefsView * sharedInstance = nil;
 
@@ -42,25 +43,25 @@ static PrefsView * sharedInstance = nil;
 	UIPreferencesTextTableCell * _row;
 	//server
 	_row = [[UIPreferencesTextTableCell alloc] init ];
-	[_row setTitle: @"Server" ];
+	[_row setTitle: L_SERVER ];
 	[[_row textField] setText: @""];//blank for now, fill this in!!
 	[_rows addObject: _row];
 
 	//username
 	_row = [[UIPreferencesTextTableCell alloc] init ];
-	[_row setTitle: @"Username"];
+	[_row setTitle: L_USERNAME ];
 	[[_row textField] setText: @""];
 	[_rows addObject: _row];
 
 	//password
 	_row = [[UIPreferencesTextTableCell alloc] init ];
-	[_row setTitle: @"Password"];
+	[_row setTitle: L_PASSWORD ];
 	[[_row textField] setText: @""];
 	[_rows addObject: _row];
 
 	//email
 	_row = [[UIPreferencesTextTableCell alloc] init ];
-	[_row setTitle: @"Email:"];
+	[_row setTitle: L_EMAIL ];
 	[[_row textField] setText: @""];
 	[_rows addObject: _row];
 
@@ -68,15 +69,15 @@ static PrefsView * sharedInstance = nil;
 	//about
 	//TODO: center this?
 	UIPreferencesTableCell * _rowAbout = [[UIPreferencesTableCell alloc] init ];
-	[ _rowAbout setTitle: @"iNewsGroup 1.0.0" ];
+	[ _rowAbout setTitle: RELEASE_AND_VERSION ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 	_rowAbout = [[UIPreferencesTableCell alloc] init ];
-	[ _rowAbout setTitle: @"Will Dietz" ];
+	[ _rowAbout setTitle: AUTHOR ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 	_rowAbout = [[UIPreferencesTableCell alloc] init ];
-	[ _rowAbout setTitle: @"inewsgroupdev@gmail.com" ];
+	[ _rowAbout setTitle: CONTACT_EMAIL ];
 	[ _rowsAbout addObject: _rowAbout ];
 
 
@@ -86,16 +87,16 @@ static PrefsView * sharedInstance = nil;
 
 	//initialize the headers for the various groups in the preferences table...
 	_prefHeader = [[UIPreferencesTableCell alloc] init];
-	[_prefHeader setTitle: @"NewsGroup Settings"];
+	[_prefHeader setTitle: L_NEWSGROUP_SETTINGS ];
 
 	_prefAboutHeader = [[UIPreferencesTableCell alloc] init];
-	[_prefAboutHeader setTitle: @"About:" ];
+	[_prefAboutHeader setTitle: L_ABOUT ];
 
 	//initialize the navbar
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
-	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"Preferences" ];
-	[nav showButtonsWithLeftTitle: @"Quit" rightTitle: @"Done" leftBack: NO ]; 
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_PREFERENCES ];
+	[nav showButtonsWithLeftTitle: L_QUIT rightTitle: L_DONE leftBack: NO ]; 
 	[nav pushNavigationItem: _titleItem];
 	[nav setDelegate: self];
 	[nav setBarStyle: 0];
@@ -197,10 +198,10 @@ static PrefsView * sharedInstance = nil;
 {
 	readSettingsFromFile();//if anything has messed things up... pull from file again
 
-	[ [ [ _rows objectAtIndex: SERVER_ROW ] textField ] setText: getServer() ]; 
-	[ [ [ _rows objectAtIndex: USER_ROW ] textField ] setText: getUserName() ];
-	[ [ [ _rows objectAtIndex: PASS_ROW ] textField ] setText: getPass() ];
-	[ [ [ _rows objectAtIndex: EMAIL_ROW ] textField ] setText: getEmail() ]; 
+	[ [ [ _rows objectAtIndex: SERVER_ROW ] textField ] setText: (id)getServer() ]; 
+	[ [ [ _rows objectAtIndex: USER_ROW ] textField ] setText: (id)getUserName() ];
+	[ [ [ _rows objectAtIndex: PASS_ROW ] textField ] setText: (id)getPass() ];
+	[ [ [ _rows objectAtIndex: EMAIL_ROW ] textField ] setText: (id)getEmail() ]; 
 	[ _prefTable reloadData ];
 }
 

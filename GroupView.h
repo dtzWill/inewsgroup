@@ -6,6 +6,7 @@
 #import <UIKit/UIView.h>
 #import "ThreadView.h"
 #import "PostView.h"
+#import "TitleRefresher.h"
 
 //GroupView:
 //view all the threads within a given group
@@ -16,7 +17,7 @@
 //TODO: switch to 'sharedInstance' style?
 
 
-@interface GroupView: UIView
+@interface GroupView : UIView <TitleRefresher>
 {
 	int _groupnum;//index in my_group array
     NSMutableArray * _rows;// holds the row objects for our table 

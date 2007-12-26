@@ -24,6 +24,7 @@
 #import <UIKit/UIScroller.h>
 #import <UIKit/UITransformAnimation.h>
 #import <UIKit/UIView-Geometry.h>
+#import "consts.h"
 
 //
 // Override settings of the default keyboard implementation
@@ -68,7 +69,7 @@
     [translate setStartTransform: CGAffineTransformMake(1,0,0,1,0,0)];
     [translate setEndTransform: trans];
     [[[UIAnimator alloc] init] addAnimation:translate
-			       withDuration:.5 start:YES];
+			       withDuration: KEYBOARD_DELAY start:YES];
 }
 
 - (void) hide
@@ -86,7 +87,7 @@
     [translate setStartTransform: CGAffineTransformMake(1,0,0,1,0,0)];
     [translate setEndTransform: trans];
     [[[UIAnimator alloc] init] addAnimation:translate
-			       withDuration:.5 start:YES];
+			       withDuration: KEYBOARD_DELAY start:YES];
 }
 
 

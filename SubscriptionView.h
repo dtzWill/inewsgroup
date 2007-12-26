@@ -6,9 +6,6 @@
 #import <UIKit/UIPreferencesTable.h>
 #import <UIKit/UIPreferencesControlTableCell.h>
 
-//this defines the 'queue' (pool) of rows we use for displaying
-//all the subscriptions....
-#define MAX_ROWS_ON_SCREEN 20
 
 @interface SubscriptionView : UIView
 {

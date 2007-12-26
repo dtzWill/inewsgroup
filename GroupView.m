@@ -8,6 +8,7 @@
 #import "iNewsApp.h"
 #import "ViewController.h"
 #import "ComposeView.h"
+#import "consts.h"
 //TODO: move any functionality that needs this into newsfunctions where it belongs!
 #import "tin.h"
 
@@ -42,13 +43,13 @@ static GroupView * sharedInstance = nil;
 	[nav setBarStyle: 0];
 
 	//Build alertshet used to display message to user while we're getting the headers
-	_connect = [[UIAlertSheet alloc]initWithTitle:@"Refreshing..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
+	_connect = [[UIAlertSheet alloc]initWithTitle: L_REFRESHING_MSG buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_connect setDimsBackground:YES];
 
 	//create title bar
-	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"GroupView" ];
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_GROUPVIEW ];
 	//assign title bar to nav bar
-	[nav showLeftButton: @"Back" withStyle: BUTTON_BACK rightButton: @"Refresh" withStyle: BUTTON_BLUE ];
+	[nav showLeftButton: L_BACK withStyle: BUTTON_BACK rightButton: L_REFRESH withStyle: BUTTON_BLUE ];
 	[nav pushNavigationItem: _titleItem];
 
 	//create array to store the rows
@@ -80,7 +81,7 @@ static GroupView * sharedInstance = nil;
             [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonTag,
             [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
             [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
-            @"New Message...", kUIButtonBarButtonInfo,
+            L_NEW_MSG, kUIButtonBarButtonInfo,
             nil
     ];
 
@@ -90,7 +91,7 @@ static GroupView * sharedInstance = nil;
             [NSNumber numberWithUnsignedInt:2], kUIButtonBarButtonTag,
             [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
             [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
-            @"Mark Read", kUIButtonBarButtonInfo,
+            L_MARK_READ, kUIButtonBarButtonInfo,
             nil
     ];
 
@@ -104,6 +105,7 @@ static GroupView * sharedInstance = nil;
 //    [buttonBar setBarStyle:2];
     [buttonBar setButtonBarTrackingMode: 2];
 
+//	[ [ buttonBar viewWithTag: 1 ] setEnabled: force_no_post ];
 	[ [ buttonBar viewWithTag: 2 ]//2='mark read' button
             setFrame:CGRectMake( 320.0f	-80.0f, 0.0f, 64.0f, 48.0f) //right-align
         ]; 
@@ -283,7 +285,7 @@ static GroupView * sharedInstance = nil;
 
 		UIImage * img = [UIImage applicationImageNamed:
 				isThreadRead( threadnum ) ?
-					@"ReadIndicator.png" : @"UnreadIndicator.png" ];
+					IMG_READ : IMG_UNREAD ];
 //					( ( artCount > 1 )? @"ThReadIndicator.png" : @"ReadIndicator.png" )
 //					: ( ( artCount > 1 ) ? @"ThUnreadIndicator.png" : @"UnreadIndicator.png" ) ];  
 

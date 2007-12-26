@@ -159,6 +159,7 @@ static void msg_add_x_headers(const char *headers);
 static void msg_free_headers(void);
 static void msg_init_headers(void);
 static void post_postponed_article(int ask, const char *subject, const char *newsgroups);
+static int post_postponed_article_helpful(int ask, const char *subject, const char *newsgroups);
 //static void postpone_article(const char *the_article);
 static void setup_check_article_screen(int *init);
 static void strip_double_ngs(char *ngs_list);
@@ -1569,20 +1570,21 @@ post_article_loop:
 					wait_message(2, _(txt_art_posted), *a_message_id ? a_message_id : "");
 					goto post_article_done;
 				} else {
-					if ((func = prompt_rejected()) == POST_POSTPONE)
-						/* reuse clean copy which didn't get modified by submit_news_file() */
-						postpone_article(backup_article_name(article_name));
-					else if (func == POST_EDIT) {
-						/* replace modified article with clean backup */
-						rename_file(backup_article_name(article_name), article_name);
-						goto post_article_loop;
-					} else {
-						unlink(backup_article_name(article_name));
-						rename_file(article_name, dead_article);
-						if (tinrc.keep_dead_articles)
-							append_file(dead_articles, dead_article);
-						wait_message(2, _(txt_art_rejected), dead_article);
-					}
+					ret_code = POSTED_NONE;
+		///			if ((func = prompt_rejected()) == POST_POSTPONE)
+		///				/* reuse clean copy which didn't get modified by submit_news_file() */
+		///				postpone_article(backup_article_name(article_name));
+		///			else if (func == POST_EDIT) {
+		///				/* replace modified article with clean backup */
+		///				rename_file(backup_article_name(article_name), article_name);
+		///				goto post_article_loop;
+		///			} else {
+		///				unlink(backup_article_name(article_name));
+		///				rename_file(article_name, dead_article);
+		///				if (tinrc.keep_dead_articles)
+		///					append_file(dead_articles, dead_article);
+		///				wait_message(2, _(txt_art_rejected), dead_article);
+		///			}
 				return ret_code;
 				}
 
@@ -1593,62 +1595,63 @@ post_article_loop:
 			default:
 				break;
 		}
-		if (type != POST_REPOST) {
-			char keyedit[MAXKEYLEN], keypost[MAXKEYLEN];
-			char keypostpone[MAXKEYLEN], keyquit[MAXKEYLEN];
-			char keymenu[MAXKEYLEN];
-#ifdef HAVE_ISPELL
-			char keyispell[MAXKEYLEN];
-#endif /* HAVE_ISPELL */
-#ifdef HAVE_PGP_GPG
-			char keypgp[MAXKEYLEN];
-#endif /* HAVE_PGP_GPG */
-
-			func = prompt_slk_response((i ? POST_EDIT : art_unchanged ? POST_POSTPONE : GLOBAL_POST),
-					post_post_keys, _(txt_quit_edit_post),
-					printascii(keyquit, func_to_key(GLOBAL_QUIT, post_post_keys)),
-					printascii(keyedit, func_to_key(POST_EDIT, post_post_keys)),
-#ifdef HAVE_ISPELL
-					printascii(keyispell, func_to_key(POST_ISPELL, post_post_keys)),
-#endif /* HAVE_ISPELL */
-#ifdef HAVE_PGP_GPG
-					printascii(keypgp, func_to_key(POST_PGP, post_post_keys)),
-#endif /* HAVE_PGP_GPG */
-					printascii(keymenu, func_to_key(GLOBAL_OPTION_MENU, post_post_keys)),
-					printascii(keypost, func_to_key(GLOBAL_POST, post_post_keys)),
-					printascii(keypostpone, func_to_key(POST_POSTPONE, post_post_keys)));
-		} else {
-			char *smsg;
-			char buf[LEN];
-			char keyedit[MAXKEYLEN], keypost[MAXKEYLEN];
-			char keypostpone[MAXKEYLEN], keyquit[MAXKEYLEN];
-			char keymenu[MAXKEYLEN];
-#ifdef HAVE_ISPELL
-			char keyispell[MAXKEYLEN];
-#endif /* HAVE_ISPELL */
-#ifdef HAVE_PGP_GPG
-			char keypgp[MAXKEYLEN];
-#endif /* HAVE_PGP_GPG */
-
-			snprintf(buf, sizeof(buf), _(txt_quit_edit_xpost),
-					printascii(keyquit, func_to_key(GLOBAL_QUIT, post_post_keys)),
-					printascii(keyedit, func_to_key(POST_EDIT, post_post_keys)),
-#ifdef HAVE_ISPELL
-					printascii(keyispell, func_to_key(POST_ISPELL, post_post_keys)),
-#endif /* HAVE_ISPELL */
-#ifdef HAVE_PGP_GPG
-					printascii(keypgp, func_to_key(POST_PGP, post_post_keys)),
-#endif /* HAVE_PGP_GPG */
-					printascii(keymenu, func_to_key(GLOBAL_OPTION_MENU, post_post_keys)),
-					printascii(keypost, func_to_key(GLOBAL_POST, post_post_keys)),
-					printascii(keypostpone, func_to_key(POST_POSTPONE, post_post_keys)));
-
-			/* Superfluous force_command stuff not used in current code */
-			func = ( /* force_command ? ch_default : */ prompt_slk_response(func,
-						post_post_keys, "%s", sized_message(&smsg, buf,
-						"" /* TODO: was note_h.subj */ )));
-			free(smsg);
-		}
+//Don't ask the user for anything
+////			if (type != POST_REPOST) {
+////				char keyedit[MAXKEYLEN], keypost[MAXKEYLEN];
+////				char keypostpone[MAXKEYLEN], keyquit[MAXKEYLEN];
+////				char keymenu[MAXKEYLEN];
+////	#ifdef HAVE_ISPELL
+////				char keyispell[MAXKEYLEN];
+////	#endif /* HAVE_ISPELL */
+////	#ifdef HAVE_PGP_GPG
+////				char keypgp[MAXKEYLEN];
+////	#endif /* HAVE_PGP_GPG */
+////	
+////				func = prompt_slk_response((i ? POST_EDIT : art_unchanged ? POST_POSTPONE : GLOBAL_POST),
+////						post_post_keys, _(txt_quit_edit_post),
+////						printascii(keyquit, func_to_key(GLOBAL_QUIT, post_post_keys)),
+////						printascii(keyedit, func_to_key(POST_EDIT, post_post_keys)),
+////	#ifdef HAVE_ISPELL
+////						printascii(keyispell, func_to_key(POST_ISPELL, post_post_keys)),
+////	#endif /* HAVE_ISPELL */
+////	#ifdef HAVE_PGP_GPG
+////						printascii(keypgp, func_to_key(POST_PGP, post_post_keys)),
+////	#endif /* HAVE_PGP_GPG */
+////						printascii(keymenu, func_to_key(GLOBAL_OPTION_MENU, post_post_keys)),
+////						printascii(keypost, func_to_key(GLOBAL_POST, post_post_keys)),
+////						printascii(keypostpone, func_to_key(POST_POSTPONE, post_post_keys)));
+////			} else {
+////				char *smsg;
+////				char buf[LEN];
+////				char keyedit[MAXKEYLEN], keypost[MAXKEYLEN];
+////				char keypostpone[MAXKEYLEN], keyquit[MAXKEYLEN];
+////				char keymenu[MAXKEYLEN];
+////	#ifdef HAVE_ISPELL
+////				char keyispell[MAXKEYLEN];
+////	#endif /* HAVE_ISPELL */
+////	#ifdef HAVE_PGP_GPG
+////				char keypgp[MAXKEYLEN];
+////	#endif /* HAVE_PGP_GPG */
+////	
+////				snprintf(buf, sizeof(buf), _(txt_quit_edit_xpost),
+////						printascii(keyquit, func_to_key(GLOBAL_QUIT, post_post_keys)),
+////						printascii(keyedit, func_to_key(POST_EDIT, post_post_keys)),
+////	#ifdef HAVE_ISPELL
+////						printascii(keyispell, func_to_key(POST_ISPELL, post_post_keys)),
+////	#endif /* HAVE_ISPELL */
+////	#ifdef HAVE_PGP_GPG
+////						printascii(keypgp, func_to_key(POST_PGP, post_post_keys)),
+////	#endif /* HAVE_PGP_GPG */
+////						printascii(keymenu, func_to_key(GLOBAL_OPTION_MENU, post_post_keys)),
+////						printascii(keypost, func_to_key(GLOBAL_POST, post_post_keys)),
+////						printascii(keypostpone, func_to_key(POST_POSTPONE, post_post_keys)));
+////	
+////				/* Superfluous force_command stuff not used in current code */
+////				func = ( /* force_command ? ch_default : */ prompt_slk_response(func,
+////							post_post_keys, "%s", sized_message(&smsg, buf,
+////							"" /* TODO: was note_h.subj */ )));
+////				free(smsg);
+////			}
 	}
 
 post_article_done:
@@ -1967,12 +1970,22 @@ quick_post_article(
 	post_loop(POST_QUICK, group, POST_EDIT, _(txt_posting), art_type, start_line_offset);
 }
 
+//will-wrapper
+static void
+post_postponed_article(
+	int ask,
+	const char * subject,
+	const char * newsgroups )
+{
+	post_postponed_article_helpful( ask, subject, newsgroups );
+}
+
 
 /*
  *  Post an article that is already written (for postponed articles)
  */
-static void
-post_postponed_article(
+static int
+post_postponed_article_helpful(
 	int ask,
 	const char *subject,
 	const char *newsgroups)
@@ -2127,6 +2140,8 @@ fetch_postponed_article(
 }
 
 
+int ppa_err; 
+
 /* pick up any postponed articles and ask if the user wants to use them */
 t_bool
 pickup_postponed_articles(
@@ -2137,55 +2152,42 @@ pickup_postponed_articles(
 	char subject[HEADER_LEN];
 	char question[HEADER_LEN];
 	int count = count_postponed_articles();
-	int i;
+	int i, ret;
+
+	ppa_err = PPA_ERR_NONE;
+
 	t_function func;
 
 	if (!count) {
 		if (!ask)
 			info_message(_(txt_info_nopostponed));
+		ppa_err = PPA_ERR_NO_MAIL;	
 		return FALSE;
 	}
-
-	snprintf(question, sizeof(question), _(txt_prompt_see_postponed), count);
-
-	if (ask && prompt_yn(question, TRUE) != 1)
-		return FALSE;
-
+	count = (count > 1 ) ? 1 : count; //don't send more than 1 at a time
 	for (i = 0; i < count; i++) {
 		if (!fetch_postponed_article(article_name, subject, newsgroups))
-			return TRUE;
-
-		if (!all) {
-			char *smsg;
-			char buf[LEN];
-			char keyall[MAXKEYLEN], keyno[MAXKEYLEN], keyoverride[MAXKEYLEN];
-			char keyquit[MAXKEYLEN], keyyes[MAXKEYLEN];
-
-			snprintf(buf, sizeof(buf), _(txt_postpone_repost),
-					printascii(keyyes, func_to_key(PROMPT_YES, post_postpone_keys)),
-					printascii(keyoverride, func_to_key(POSTPONE_OVERRIDE, post_postpone_keys)),
-					printascii(keyall, func_to_key(POSTPONE_ALL, post_postpone_keys)),
-					printascii(keyno, func_to_key(PROMPT_NO, post_postpone_keys)),
-					printascii(keyquit, func_to_key(GLOBAL_QUIT, post_postpone_keys)));
-
-			func = prompt_slk_response(PROMPT_YES, post_postpone_keys,
-					"%s", sized_message(&smsg, buf, subject));
-			free(smsg);
-
-			if (func == POSTPONE_ALL)
-				all = TRUE;
+		{
+			ppa_err = PPA_ERR_FAILED_ART_FETCH;
+			return FALSE;
 		}
 
-		/* No else here since all changes in previous if */
 		if (all)
 			func = POSTPONE_OVERRIDE;
 
 		switch (func) {
 			case PROMPT_YES:
 			case POSTPONE_OVERRIDE:
-				post_postponed_article(func == PROMPT_YES, subject, newsgroups);
+				ret = post_postponed_article_helpful(func == PROMPT_YES, subject, newsgroups);
 				Raw(TRUE);
-				break;
+				if ( ret == POSTED_OK )
+				{
+					return TRUE;//success! :)
+				}
+				//else
+				
+				ppa_err = PPA_ERR_SERVER;
+				return FALSE;	
 
 			case PROMPT_NO:
 			case GLOBAL_QUIT:
@@ -2195,7 +2197,10 @@ pickup_postponed_articles(
 				}
 				unlink(article_name);
 				if (func != PROMPT_NO)
-					return TRUE;
+				{
+					ppa_err = PPA_ERR_GLOBAL_ERR;
+					return TRUE; //error
+				}
 				break;
 
 			default:

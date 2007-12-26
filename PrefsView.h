@@ -9,7 +9,7 @@
 //View to allow the user to set/update/modify their preferences
 
 
-//defines for our rows...
+//local defines for our rows...
 #define SERVER_ROW 0
 #define USER_ROW 1
 #define PASS_ROW 2
