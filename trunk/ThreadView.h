@@ -6,12 +6,12 @@
 #import <UIKit/UIView.h>
 #import <UIKit/UIImageAndTextTableCell.h>
 #import "PostView.h";
+#import "TitleRefresher.h"
 
 //From the users's perspective this is /part/ of the groupview. So no 'refresh' button or anything or the sort.  Now we happen to re-use the same view, but that's beside the point. 
 
-//TODO: implement 'sharedInstance' style?
 
-@interface ThreadView: UIView
+@interface ThreadView: UIView <TitleRefresher>
 {
 	int _groupnum;
 	int _threadnum;//index in my_group
@@ -43,7 +43,7 @@
 
 }
 
-- (id) initWithArticle: (id) artnum;
+- (id) initWithArticle: (int) artnum;
 
 - (float) rowHeight;
 

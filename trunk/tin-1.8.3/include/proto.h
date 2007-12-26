@@ -485,6 +485,14 @@ extern int repost_article(const char *groupname, int respnum, t_bool supersede, 
 extern t_bool cancel_article(struct t_group *group, struct t_article *art, int respnum);
 extern t_bool mail_bug_report(void);
 extern void postpone_article( const char *the_article );
+extern	int ppa_err;
+#define PPA_ERR_NONE 0
+#define PPA_ERR_NO_MAIL 1
+#define PPA_ERR_FAILED_ART_FETCH 2
+#define PPA_ERR_GLOBAL_ERR 3
+#define PPA_ERR_SERVER 4
+
+
 extern t_bool pickup_postponed_articles(t_bool ask, t_bool all);
 extern t_bool post_article(const char *groupname);
 extern t_bool reread_active_after_posting(void);

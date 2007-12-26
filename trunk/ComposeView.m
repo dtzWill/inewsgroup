@@ -8,6 +8,7 @@
 #import <UIKit/UISimpleTableCell.h>
 #import "newsfunctions.h"
 #import "EditableRowCell.h" 
+#import "consts.h"
 
 static ComposeView * sharedInstance = nil;
 
@@ -36,16 +37,16 @@ static ComposeView * sharedInstance = nil;
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 
 	//set title to some default until we load the first article, and that'll overwrite it
-	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"Compose" ];//better name?? lol
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_COMPOSE ];//better name?? lol
 	
 	//setup the nav bar
-	[ _nav showLeftButton: @"Cancel" withStyle: BUTTON_BACK rightButton:@"Send" withStyle: BUTTON_BLUE ];	// IMP=0x323d7894
+	[ _nav showLeftButton: L_CANCEL withStyle: BUTTON_BACK rightButton: L_SEND withStyle: BUTTON_BLUE ];	// IMP=0x323d7894
 	[ _nav pushNavigationItem: _titleItem];
 	[ _nav setDelegate: self];	
 	[ _nav setBarStyle: 0];
 
 	//set up the ui message telling the user we're loading... but also preventing the user from using the ui :)
-	_message = [[UIAlertSheet alloc]initWithTitle:@"Sending Message..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
+	_message = [[UIAlertSheet alloc]initWithTitle: L_SEND_MSG buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_message setDimsBackground:YES];
 	
 	_keyboardTransitioning = false;
@@ -99,9 +100,6 @@ static ComposeView * sharedInstance = nil;
 	//done!
 	return self;
 
-
-
-
 }
 
 
@@ -123,29 +121,23 @@ static ComposeView * sharedInstance = nil;
 
 //	NSLog( @"Getting quote" );
 
-	//TODO: MAKE THIS NOT SUCK
-	NSString * quote = [ items objectForKey: kQuoteContent ];
+	NSMutableString * quote = [ items objectForKey: kQuoteContent ];
 
 	if ( quote )
-		quote = [NSString stringWithFormat: @"\nQuote:\n%@", quote ]; 
-
-	
-
+	{
 	//process quote and add the '>'s and tack to the end of 'content'
+		NSArray * lines = [ quote componentsSeparatedByString: @"\n" ];
+		quote = [ NSMutableString stringWithString: L_QUOTE ];
+		NSEnumerator * enumerator = [ lines objectEnumerator ];
+		NSString * obj;
+		NSLog( @"Count: %d", [ lines count ] );
+		while ( obj = [ enumerator nextObject ] )
+		{
+			[ quote appendFormat: L_QUOTE_FORMAT, obj ]; 
+		}
 
-	//or for now....
 
-
-
-
-//	PlainTextDocument * ptd = [ [ PlainTextDocument alloc] init ];
-//	NSLog( @"adding quote" );
-//	if ( quote )
-//	{
-//		[ ptd appendString: quote withQuoteLevel: 1 ];	
-//	}
-//	NSLog( @"printing string:" );
-//	NSLog( [ ptd string ] );	
+	}
 
 	UISimpleTableCell * row;
 	EditableRowCell * rowEdit;
@@ -157,10 +149,10 @@ static ComposeView * sharedInstance = nil;
 	[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
 	[ _rows addObject: row]; 
 
-//	NSLog( @"preparing subject row" );
+///	NSLog( @"preparing subject row" );
 	//subject	
 	rowEdit = [[EditableRowCell alloc] init];
-	[ rowEdit setTitle: @"Subj:" ];
+	[ rowEdit setTitle: L_SUBJ ];
 	[ rowEdit setValue: _subject ];
 	[ rowEdit setDelegate: self ];
 	[ [ rowEdit textField] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
@@ -169,27 +161,20 @@ static ComposeView * sharedInstance = nil;
 //	NSLog( @"preparing newsgroup row" );
 	//newsgroup
 	row = [[UISimpleTableCell alloc] init];
-	[ row setTitle: [NSString stringWithFormat: @"Newsgroup: %@", _newsgroup ] ];
+	[ row setTitle: [NSString stringWithFormat: L_NEWSGROUP_FORMAT, _newsgroup ] ];
 	[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
 	[ _rows addObject: row];
 	
 
 	[ _table reloadData];
-//	NSLog( @"preparing textField" );
-//	NSLog( @"Quote: %@", quote );
-//	[ _textView setTextSize: 12 ];
+
 	if ( quote )
 	{
 		[ _textView setText: quote ];
 		[ _textView setSelectionToStart ];	
 	}
-//	[ _textField recalculateStyle ]; //TODO: needed? what does this DO? 
-//	[ _textField setDelegate: self ];
-//	[ _textField setEditable: YES ];
-//	[ _textField performBecomeEditableTasks ];
-//	NSLog( @"done with textField" );
 
-//	[ptd release ];
+//	NSLog( @"done with textField" );
 	
 }
 
@@ -248,18 +233,37 @@ static ComposeView * sharedInstance = nil;
 		else
 		{ //send! try to send this message.....
 
-			NSLog ( @"about to send a message" );
-			NSLog ( @"test: %d", _newsgroup );
-			NSLog ( @"newsgroup: %@", _newsgroup );
-			sendMessage( _newsgroup, _references, [ [ _rows objectAtIndex: 1 ] value ] , [ _textView text ] );
+//			NSLog ( @"about to send a message" );
+	//		NSLog ( @"test: %d", _newsgroup );
+	//		NSLog ( @"newsgroup: %@", _newsgroup );
+			if ( sendMessage( _newsgroup, _references, [ [ _rows objectAtIndex: 1 ] value ] , [ _textView text ] ) ) //!=0
+			{
+				switch( ppa_err ) //what happened?
+				{
+					case PPA_ERR_NO_MAIL: //no mail was found to send
+					case PPA_ERR_FAILED_ART_FETCH://couldn't fetch the article, possibly malformed, etc
+						//send error regarding bad article
+						break;
+					case PPA_ERR_SERVER:
+						//server denied
+						break;
+					case PPA_ERR_GLOBAL_ERR:
+					default:
+						//application error... not sure what to do here
+						break;
+				}
 
-			//TODO: tell the user if an error occured!!! or confirmation, or SOMETHING
 
 
-		//go back!
-		[ [ ViewController sharedInstance ] 
-				setView: [ [ ViewController sharedInstance ] getPrevView ]
-				slideFromLeft: NO ];
+			}
+			else
+			{//message was sent, reutrn to previous view
+
+				//go back!
+				[ [ ViewController sharedInstance ] 
+						setView: [ [ ViewController sharedInstance ] getPrevView ]
+						slideFromLeft: NO ];
+			}
 			
 
 		}
@@ -279,19 +283,12 @@ static ComposeView * sharedInstance = nil;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+//Error handling:
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 //textfield:
-/*
-- (BOOL)textFieldShouldStartEditing: (UITextField *) view
-{
-	return YES;
-
-}
-
-- (BOOL)textFieldShouldEndEditing: (UITextField *) view
-{
-	return YES;
-}
-*/
 
 - (void)adjustForShownKeyboard
 {
@@ -301,7 +298,7 @@ static ComposeView * sharedInstance = nil;
 
 	//change navigationbar buttons
 	
-	[ _nav showLeftButton: nil withStyle: BUTTON_NORMAL rightButton:@"Done" withStyle: BUTTON_RED ];	// IMP=0x323d7894
+	[ _nav showLeftButton: nil withStyle: BUTTON_NORMAL rightButton: L_DONE withStyle: BUTTON_RED ];	// IMP=0x323d7894
 	_editingMessage = true;	
 
 	[ self keyboardTransitionOver ];
@@ -314,7 +311,7 @@ static ComposeView * sharedInstance = nil;
 	[ self keyboardTransitionOver ];
 
 	//revert the buttons
-	[ _nav showLeftButton: @"Cancel" withStyle: BUTTON_BACK rightButton:@"Send" withStyle: BUTTON_BLUE ];	// IMP=0x323d7894
+	[ _nav showLeftButton: L_CANCEL withStyle: BUTTON_BACK rightButton: L_SEND withStyle: BUTTON_BLUE ];	// IMP=0x323d7894
 	_editingMessage = false;
 
 

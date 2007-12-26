@@ -48,12 +48,12 @@ static SubscriptionView * sharedInstance = nil;
 	//initialize the curRow array
 	_curRows = [[NSMutableArray alloc] init];
 
-	_refresh = [[UIAlertSheet alloc]initWithTitle:@"Updating..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
+	_refresh = [[UIAlertSheet alloc]initWithTitle: L_UPDATING buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_refresh setDimsBackground:YES];
 
-	NSArray *buttons = [NSArray arrayWithObjects:@"OK", @"Clear", @"Cancel", nil];
+	NSArray *buttons = [NSArray arrayWithObjects: L_OK, L_CLEAR, L_CANCEL, nil];
 	_search = [[UIAlertSheet alloc]initWithTitle:@"" buttons:buttons defaultButtonIndex:1 delegate:self context:self];
-	[_search addTextFieldWithValue: @"" label: @"search phrase" ];
+	[_search addTextFieldWithValue: @"" label: L_SEARCH_LABEL ];
 	[_search setRunsModal: NO ];
 	[_search setDimsBackground: YES];
 
@@ -84,13 +84,13 @@ static SubscriptionView * sharedInstance = nil;
 
 	//create the header
 	_prefHeader = [[UIPreferencesTableCell alloc] init];
-	[_prefHeader setTitle: @"Subscriptions"];
+	[_prefHeader setTitle: L_SUBSCRIPTIONS ];
 
 	//setup the navbar
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
-	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"Subscriptions" ];
-	[nav showButtonsWithLeftTitle: @"Search" rightTitle: @"Done" leftBack: NO ]; 
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_SUBSCRIPTIONS ];
+	[nav showButtonsWithLeftTitle: L_SEARCH rightTitle: L_DONE leftBack: NO ]; 
 	[nav pushNavigationItem: _titleItem];
 	[nav setDelegate: self];
 	[nav setBarStyle: 0];
@@ -196,12 +196,12 @@ static SubscriptionView * sharedInstance = nil;
 			//for now, we just check if the group's name contains the indicated search parameter
 			if ( [ [ [ _rows objectAtIndex: i ] getTitle ] rangeOfString: text options:NSCaseInsensitiveSearch].location != NSNotFound )
 			{
-				NSLog( @"%@ matches", [ [ _rows objectAtIndex: i ] getTitle ] );
+			//	NSLog( @"%@ matches", [ [ _rows objectAtIndex: i ] getTitle ] );
 				[ _curRows addObject: [ [ NSNumber numberWithInt: i ] retain ] ]; 
 			} 
 	
 		}
-		[ _titleFilter setTitle: [NSString stringWithFormat: @"Filter: %@", text ] ];
+		[ _titleFilter setTitle: [NSString stringWithFormat: L_FILTER_FORMAT, text ] ];
 	}
 
 	[_prefTable reloadData ];
@@ -411,6 +411,7 @@ static SubscriptionView * sharedInstance = nil;
 	//and title!
 	[ row setTitle: [NSString stringWithFormat: 
 		@"%s    \n   \n", //I wish I was kidding
+		//TODO: FIX THIS--subclass the row item and make it not suck
 		active[ index].name ] ];
 
 //	NSLog( @"Row: %d, title: %s, value: %d", row, [row title], [ [ row control] value ] );

@@ -36,16 +36,17 @@ static PostView * sharedInstance = nil;
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 
 	//set title to some default until we load the first article, and that'll overwrite it
-	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"PostView" ];//better name?? lol
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_POSTVIEW ];//better name?? lol
 	
 	//setup the nav bar
-	[nav showLeftButton: @"Back" withStyle: BUTTON_BACK rightButton: @"Reply" withStyle: BUTTON_BLUE ];
+	[nav showLeftButton: L_BACK withStyle: BUTTON_BACK rightButton: L_REPLY withStyle: BUTTON_BLUE ];
+//	[ nav setButton: 1 enabled: force_no_post ];
 	[nav pushNavigationItem: _titleItem];
 	[nav setDelegate: self];	
 	[nav setBarStyle: 0];
 
 	//set up the ui message telling the user we're loading... but also preventing the user from using the ui :)
-	_message = [[UIAlertSheet alloc]initWithTitle:@"Loading Message..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
+	_message = [[UIAlertSheet alloc]initWithTitle: L_LOADING_MSG buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_message setDimsBackground:YES];
 	
 	_prevView = nil;
@@ -90,7 +91,7 @@ static PostView * sharedInstance = nil;
 	//clear the rows... TODO: do we have to dealloc each of the rows...? god i hate obj-c
 	[_rows removeAllObjects ];
 	//does this actually update the title? (does navbar need to be refreshed or something...?)
-	[_titleItem setTitle: @"Loading..." ];
+	[_titleItem setTitle: L_LOADING ];
 	//tell the ui to re-get it's row data
 	[_table reloadData ];
 	//empty the textView
@@ -224,9 +225,10 @@ static PostView * sharedInstance = nil;
 		//Go back to previous view.. whichever called us, and in the opposite direction
 		if( !_prevView)
 		{
-			[ [ [ ViewController sharedInstance ] getPrevView ] refreshTitles ];
+			UIView<TitleRefresher> * view = [ [ ViewController sharedInstance ] getPrevView ];
+			[ view refreshTitles ];
 			[ [ ViewController sharedInstance ] 
-					setView: [ [ViewController sharedInstance ] getPrevView ]
+					setView: view
 					slideFromLeft: ![ [ ViewController sharedInstance] getPrevDir ] ];
 		}
 		else

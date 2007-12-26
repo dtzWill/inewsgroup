@@ -61,8 +61,8 @@ static iNewsApp * sharedInstance = nil;
 	//top navigation bar.
 	_navTop = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
-	_titleItem = [ [UINavigationItem alloc] initWithTitle: @"iNewsGroup" ];
-	[_navTop showLeftButton: @"Prefs" withStyle: BUTTON_BACK rightButton: @"Quit" withStyle: BUTTON_RED ];
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: INEWSGROUP ];
+	[_navTop showLeftButton: L_PREFS withStyle: BUTTON_BACK rightButton: L_QUIT withStyle: BUTTON_RED ];
 	[_navTop pushNavigationItem: _titleItem];
 	[_navTop setDelegate: self];	
 	[_navTop setBarStyle: 3];
@@ -76,7 +76,7 @@ static iNewsApp * sharedInstance = nil;
             [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonTag,
             [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
             [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
-            @"Subscriptions...", kUIButtonBarButtonInfo,
+            L_SUBSCRIPTIONSDOTDOTDOT, kUIButtonBarButtonInfo,
             nil
     ];
 
@@ -86,7 +86,7 @@ static iNewsApp * sharedInstance = nil;
             [NSNumber numberWithUnsignedInt:2], kUIButtonBarButtonTag,
             [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
             [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
-            @"Mark Read", kUIButtonBarButtonInfo,
+            L_MARK_READ, kUIButtonBarButtonInfo,
             nil
     ];
 
@@ -114,7 +114,7 @@ static iNewsApp * sharedInstance = nil;
 
 	_count = 0;//clear out the count
 
-	_connect = [[UIAlertSheet alloc]initWithTitle:@"Connecting..." buttons:nil defaultButtonIndex:1 delegate:self context:self];
+	_connect = [[UIAlertSheet alloc]initWithTitle: L_CONNECTING_MSG buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_connect setDimsBackground: YES];
 
 	_rows = [ [ NSMutableArray alloc] init ];
@@ -273,7 +273,7 @@ static iNewsApp * sharedInstance = nil;
 		
 		bool unread = active[ my_group[i] ].newsrc.num_unread > 0 ;
 		UIImage * img = [UIImage applicationImageNamed:
-				unread ? @"UnreadIndicator.png" : @"ReadIndicator.png" ];  
+				unread ? IMG_UNREAD : IMG_READ ];  
 
 		[ row setTitle: [NSString stringWithCString: active[ my_group[i] ].name ] ];
 

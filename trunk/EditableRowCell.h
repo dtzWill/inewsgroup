@@ -1,12 +1,22 @@
 //Will Dietz
 //EditableRowCell.h
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIPreferencesTextTableCell.h>
+
+@protocol KeyboardToggler
+
+- (void) toggleKeyboardFor: (id) sender;
+
+@end
+
+@interface KeyboardTogglerView: NSObject <KeyboardToggler>
+@end
 
 @interface EditableRowCell: UIPreferencesTextTableCell
 {
 
-	id _delegate;
+	KeyboardTogglerView * _delegate;
 }
 
 - (void) setDelegate: (id) delegate;

@@ -5,7 +5,7 @@ CC=gcc
 LD=$(CC)
 CFLAGS=-O2
 RESOLVLIB = ./libresolv.a 
-LDFLAGS= -v -Wl,-syslibroot,/usr/local/share/iphone-filesystem  -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit -framework CFNetwork -framework Message
+LDFLAGS= -v -Wl,-syslibroot,/usr/local/share/iphone-filesystem  -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit  -framework Message
 TINDIR = tin-1.8.3/src
 TININC = -I tin-1.8.3/include -I tin-1.8.3/pcre -I tin-1.8.3/src -I tin-1.8.3/intl
 TINLIB = ./libtin.a
@@ -30,9 +30,10 @@ OBJS = \
 	$(PCRELIB) \
 	$(INTLLIB) 
 
+
 all:   iNewsGroup 
 
-iNewsGroup:  $(OBJS) 
+iNewsGroup:  $(OBJS)
 	$(ARMLD) $(LDFLAGS) -o $@ $(RESOLVLIB) $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^  
 
 inewsgroup.o: inewsgroup.m
@@ -53,7 +54,7 @@ clean: local_clean
 	rm -f libtin.a
 	cd $(TINDIR) && make clean
 local_clean:
-	rm -f *.o iNewsGroup iNewsGroup-x86
+	rm -f *.o iNewsGroup
 install: all
 #	scp iNewsGroup root@192.168.255.2:
 #	scp iNewsGroup root@10.5.16.180: 
