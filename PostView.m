@@ -133,7 +133,7 @@ static PostView * sharedInstance = nil;
 
 		[ _textView setTextSize: 14 ];
 		[ _textView setText: body ];
-		[ _textView recalculateStyle ]; //TODO: needed? what does this DO? 
+//		[ _textView recalculateStyle ]; //TODO: needed? what does this DO? 
 
 		_references = [ getReferences( _postnum ) retain ];
 	//	NSLog( @"refs: %@", _references );
@@ -142,13 +142,11 @@ static PostView * sharedInstance = nil;
 		closeArticle();
 	}
 
-//	//begin fix the 'starts not viewing top' bug
-//	CGPoint p;
-//	p.x = 0.0f;
-//	p.y = 0.0f;	
-//
-//	[ _textView scrollPointVisibleAtTopLeft: p ]; 
-//	//end fix
+	//begin fix the 'starts not viewing top' bug
+	CGRect r = CGRectMake( 0 , 0, 1, 1 );
+
+	[ _textView scrollRectToVisible: r ]; 
+	//end fix
 	[ _textView setSelectionToStart ];
 
 
