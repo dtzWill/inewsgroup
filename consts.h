@@ -1,6 +1,6 @@
 //globals:
 
-#define RELEASE_AND_VERSION @"iNewsGroup 1.0.0 beta 2"
+#define RELEASE_AND_VERSION @"iNewsGroup 1.0.0 beta 3"
 #define AUTHOR @"Will Dietz"
 #define CONTACT_EMAIL @"inewsgroupdev@gmail.com"
 #define INEWSGROUP @"iNewsGroup"

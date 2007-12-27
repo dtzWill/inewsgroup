@@ -580,9 +580,6 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 	NSLog( @"References: %@", references );
 	NSLog( @"message: %@", message );
 
-
-	references = nil;
-
 	FILE * f_newmail;
 	
 	//write this to a file and then tell the tin code to add it to the postponed queue
@@ -613,6 +610,10 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 
 	fclose( f_newmail ); //yay that was fun
 
+	//now actually do the sending
+
+	//we do it this roundabout way with the postponing, because this way we avoid
+	//the ui-based post_loop 
 
 	postpone_article( F_TMPNEW );
 

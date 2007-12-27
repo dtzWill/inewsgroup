@@ -312,7 +312,7 @@ static GroupView * sharedInstance = nil;
 
 - (UITableCell *) table: (UITable *)table cellForRow: (int)row column: (int)col
 {
-	return [_rows objectAtIndex: [ _rows count ] - 1 - row ];
+	return [ _rows objectAtIndex: [ _rows count ] - 1 - row ];
 }
 
 - (UITableCell *) table: (UITable *)table cellForRow: (int)row column: (int)col
