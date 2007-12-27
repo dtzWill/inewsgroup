@@ -288,7 +288,9 @@ static GroupView * sharedInstance = nil;
 - (void) refreshTitles
 {
 
-	//empty since this functionality is now implemented on-demand in the groupitem code
+	[ _table reloadData ];
+
+	//almost empty since this functionality is now implemented on-demand in the groupitem code
 
 	//leaving here for compatbility's sake
 

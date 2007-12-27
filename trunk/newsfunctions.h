@@ -13,6 +13,8 @@ char email[ MAX_EMAIL ];
 
 bool hasConnected();
 
+bool canPost();
+
 int numSubscribed();
 
 int numActive();

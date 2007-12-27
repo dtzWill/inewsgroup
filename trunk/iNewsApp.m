@@ -117,6 +117,32 @@ static iNewsApp * sharedInstance = nil;
 	_connect = [[UIAlertSheet alloc]initWithTitle: L_CONNECTING_MSG buttons:nil defaultButtonIndex:1 delegate:self context:self];
 	[_connect setDimsBackground: YES];
 
+
+	_nopost = [[UIAlertSheet alloc] initWithFrame:CGRectMake(0, 240, 200, 240)];
+	[ _nopost addButtonWithTitle: L_OK ];
+	[ _nopost setDelegate:self];
+	
+	NSArray *btnArry = [ _nopost buttons];
+	
+	[ _nopost setDefaultButton: [btnArry objectAtIndex: 0]];
+	
+	[ _nopost setAlertSheetStyle: 1];
+
+	[ _nopost setTitle: L_CANT_POST ];
+
+	_badEmail = [[UIAlertSheet alloc] initWithFrame:CGRectMake(0, 240, 200, 240)];
+	[ _badEmail addButtonWithTitle: L_OK ];
+	[ _badEmail setDelegate:self];
+	
+	btnArry = [ _badEmail buttons];
+	
+	[ _badEmail setDefaultButton: [btnArry objectAtIndex: 0]];
+	
+	[ _badEmail setAlertSheetStyle: 1];
+
+	[ _badEmail setTitle: L_INVALID_EMAIL ];
+
+
 	_rows = [ [ NSMutableArray alloc] init ];
 
 	[self connect ];
@@ -201,6 +227,7 @@ static iNewsApp * sharedInstance = nil;
 {
 //	[ _connect setBlocksInteraction: NO ];
 //	[ _connect setRunsModal: NO ];
+	[ _connect setTitle: L_CONNECTING_MSG ];
 	[_connect presentSheetInView: [ViewController sharedInstance ] ];	 
 
 	[NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(delayedInit) userInfo:nil repeats:NO];	
@@ -241,18 +268,73 @@ static iNewsApp * sharedInstance = nil;
 	{//if fail.. just go to prefs page
 		NSLog( @"connection failed... showing prefs view" );
 		[ [ViewController sharedInstance] setView: [PrefsView sharedInstance ] slideFromLeft: NO ];
+		[ _connect dismiss ];
 	
 	}
 	else
 	{
 		[NSTimer scheduledTimerWithTimeInterval: SAVE_TIME target:self selector:@selector(saveConfig) userInfo:nil repeats:YES];	
-		updateData();
-		[self refreshTable ];
+		[ NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target: self selector: @selector( updateData ) userInfo: nil repeats: NO ];
+
+		//change the message
+		[ _connect setTitle: L_REFRESHING_MSG ];
+		
 
 	}
-	[ _connect dismiss ];
 	[ [PrefsView sharedInstance ] loadSettings ];
 }
+
+
+- (void) updateData
+{
+	updateData();
+	[ self refreshTable ];
+
+	[ _connect dismiss ];
+
+	if ( !canPost() )
+	{//inform the user if they can't post
+		[ _nopost presentSheetFromAboveView: _mainView ];
+	}
+	else
+	{
+		[ self doEmailCheck ];
+	}
+
+}
+
+- (void) doEmailCheck
+{
+	NSString * email = getEmail();
+	
+	//if invalid email, tell the user
+	if ( !email || ![ email compare: @"" ] || ![ email compare: @"(null)" ] )
+	{
+		[ _badEmail presentSheetFromAboveView: _mainView ];
+	}
+}
+
+- (void)alertSheet: (UIAlertSheet *)sheet buttonClicked: (int)button
+{
+
+	if ( sheet == _nopost )
+	{
+		[ _nopost dismiss ];
+
+		[ self doEmailCheck ];
+	}
+	else if ( sheet == _badEmail )
+	{
+		[ _badEmail dismiss ];
+		[ [ViewController sharedInstance] setView: [PrefsView sharedInstance ] slideFromLeft: NO ];	
+	}
+	else
+	{
+		NSLog ( @"FIXME: Got to buttonClicked, and it wasn't one of the sheets we expected" );
+	}
+}
+
+
 
 - (void) saveConfig
 {
