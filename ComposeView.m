@@ -45,9 +45,21 @@ static ComposeView * sharedInstance = nil;
 	[ _nav setDelegate: self];	
 	[ _nav setBarStyle: 0];
 
-	//set up the ui message telling the user we're loading... but also preventing the user from using the ui :)
-	_message = [[UIAlertSheet alloc]initWithTitle: L_SEND_MSG buttons:nil defaultButtonIndex:1 delegate:self context:self];
-	[_message setDimsBackground:YES];
+	//'sending...' alert on the bottom
+	_sending = [[UIAlertSheet alloc]initWithTitle: L_SEND_MSG buttons:nil defaultButtonIndex:1 delegate:self context:self];
+	[_sending setDimsBackground:YES];
+
+	_result = [[UIAlertSheet alloc] initWithFrame:CGRectMake(0, 240, 200, 240)];
+	[ _result addButtonWithTitle:@"Ok"];
+	[ _result setDelegate:self];
+	
+	NSArray *btnArry = [ _result buttons];
+	
+	[ _result setDefaultButton: [btnArry objectAtIndex: 0]];
+	
+	[ _result setAlertSheetStyle: 1];
+
+
 	
 	_keyboardTransitioning = false;
 	_editingMessage = false;
@@ -232,38 +244,12 @@ static ComposeView * sharedInstance = nil;
 		}
 		else
 		{ //send! try to send this message.....
+			//gui timer so the thing actually displays
+			[NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(sendMessage) userInfo:nil repeats:NO];	
+				
+			//show 'Sending...' message
+			[ _sending presentSheetInView: self ];
 
-//			NSLog ( @"about to send a message" );
-	//		NSLog ( @"test: %d", _newsgroup );
-	//		NSLog ( @"newsgroup: %@", _newsgroup );
-			if ( sendMessage( _newsgroup, _references, [ [ _rows objectAtIndex: 1 ] value ] , [ _textView text ] ) ) //!=0
-			{
-				switch( ppa_err ) //what happened?
-				{
-					case PPA_ERR_NO_MAIL: //no mail was found to send
-					case PPA_ERR_FAILED_ART_FETCH://couldn't fetch the article, possibly malformed, etc
-						//send error regarding bad article
-						break;
-					case PPA_ERR_SERVER:
-						//server denied
-						break;
-					case PPA_ERR_GLOBAL_ERR:
-					default:
-						//application error... not sure what to do here
-						break;
-				}
-
-
-
-			}
-			else
-			{//message was sent, reutrn to previous view
-
-				//go back!
-				[ [ ViewController sharedInstance ] 
-						setView: [ [ ViewController sharedInstance ] getPrevView ]
-						slideFromLeft: NO ];
-			}
 			
 
 		}
@@ -283,9 +269,62 @@ static ComposeView * sharedInstance = nil;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-//Error handling:
+//Alert handling:
 
+//callback method to send the message
+- (void) sendMessage
+{
+	[ _sending dismiss ];
+	NSString * msg;
 
+	if ( !sendMessage( _newsgroup, _references, [ [ _rows objectAtIndex: 1 ] value ] , [ _textView text ] ) )
+	{
+		switch( ppa_err ) //what happened?
+		{
+			case PPA_ERR_NO_MAIL: //no mail was found to send
+			case PPA_ERR_FAILED_ART_FETCH://couldn't fetch the article, possibly malformed, etc
+				//send error regarding bad article
+				msg = L_ERROR_PROCESSING_MAIL;
+				break;
+			case PPA_ERR_SERVER:
+				//server denied
+				msg = L_ERROR_SERVER_DENIED;
+				break;
+			case PPA_ERR_GLOBAL_ERR:
+			default:
+				//application error... not sure what to do here
+				msg = L_ERROR_APPLICATION_ERROR;
+				break;
+		}
+
+	}
+	else
+	{
+		msg = L_SENT;
+	}
+	NSLog( @"ppa_err: %d", ppa_err );
+	[ _result setTitle: msg ];
+	[ _result presentSheetFromAboveView: self ];
+
+}
+
+- (void)alertSheet: (UIAlertSheet *)sheet buttonClicked: (int)button
+{
+	if ( sheet == _result )
+	{
+		[ _result dismiss ];
+			//go back!
+			[ [ ViewController sharedInstance ] 
+					setView: [ [ ViewController sharedInstance ] getPrevView ]
+					slideFromLeft: NO ];
+	
+	}
+	else
+	{
+		NSLog ( @"FIXME: Got to buttonClicked, and it wasn't one of the sheets we expected" );
+	}
+
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //textfield:

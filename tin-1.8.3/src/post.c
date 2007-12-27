@@ -1996,7 +1996,7 @@ post_postponed_article_helpful(
 
 	if (!can_post) {
 		info_message(_(txt_cannot_post));
-		return;
+		return -1;
 	}
 
 	ng = my_strdup(newsgroups);
@@ -2004,9 +2004,9 @@ post_postponed_article_helpful(
 		*p = '\0';
 
 	snprintf(buf, sizeof(buf), _("Posting: %.*s ..."), cCOLS - 14, subject); /* TODO: -> lang.c, use strunc() */
-	post_loop(POST_POSTPONED, group_find(ng), (ask ? POST_EDIT : GLOBAL_POST), buf, GROUP_TYPE_NEWS, 0);
+	int ret = post_loop(POST_POSTPONED, group_find(ng), (ask ? POST_EDIT : GLOBAL_POST), buf, GROUP_TYPE_NEWS, 0);
 	free(ng);
-	return;
+	return ret;
 }
 
 
@@ -2199,7 +2199,7 @@ pickup_postponed_articles(
 				if (func != PROMPT_NO)
 				{
 					ppa_err = PPA_ERR_GLOBAL_ERR;
-					return TRUE; //error
+					return FALSE; //error
 				}
 				break;
 
