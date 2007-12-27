@@ -9,6 +9,7 @@
 #import "newsfunctions.h"
 #import "EditableRowCell.h" 
 #import "consts.h"
+#import "iNewsApp.h"
 
 static ComposeView * sharedInstance = nil;
 
@@ -50,7 +51,7 @@ static ComposeView * sharedInstance = nil;
 	[_sending setDimsBackground:YES];
 
 	_result = [[UIAlertSheet alloc] initWithFrame:CGRectMake(0, 240, 200, 240)];
-	[ _result addButtonWithTitle:@"Ok"];
+	[ _result addButtonWithTitle: L_OK ];
 	[ _result setDelegate:self];
 	
 	NSArray *btnArry = [ _result buttons];
@@ -117,6 +118,7 @@ static ComposeView * sharedInstance = nil;
 
 - (void) startNewMessage: (NSDictionary *) items;
 {
+
 //	NSLog( @"clearing old message data..." );
 	[self emptyOldMessage ];
 

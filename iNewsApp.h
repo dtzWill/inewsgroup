@@ -24,6 +24,7 @@
 	UIView * _mainView;
     UITable * _table;
 	UIAlertSheet * _connect;
+	UIAlertSheet * _nopost, * _badEmail;
 //    NewsListView * root;//root view
 }
 - (id)_initWithArgc:(int)fp8 argv:(const char **)fp12;	// IMP=0x323b6ab0
@@ -39,6 +40,8 @@
 - (void) refreshTable;
 
 - (void) saveConfig;
+
+- (void) doEmailCheck;
 
 @end
 

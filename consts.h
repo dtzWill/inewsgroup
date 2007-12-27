@@ -26,7 +26,7 @@ extern NSString *kUIButtonBarButtonType;
 
 
 //Timing consts
-#define REFRESH_TIME 0.3
+#define REFRESH_TIME 0.01
 #define QUIT_WAIT_TIME 5.0
 #define SAVE_TIME 20.0
 #define HTTP_REQUEST_TIMEOUT 10.0
@@ -63,11 +63,13 @@ static const NSString * kReferences = @"ref";
 #define F_NEWSRC "/var/root/.newsrc"
 #define F_NNTPSERVER "/etc/nntpserver"
 #define F_TMPNEW "/tmp/newarticle"
+#define F_POSTPONEDARTICLES "/var/root/.tin/postponed.articles"
 
 #define L_ABOUT @"About"
 #define L_BACK @"Back"
 #define L_COMPOSE @"Compose"
 #define L_CANCEL @"Cancel"
+#define L_CANT_POST @"You can't post on this server."
 #define L_CLEAR @"Clear"
 #define L_CONNECTING_MSG @"Connecting..."
 #define L_DONE @"Done"
@@ -76,6 +78,7 @@ static const NSString * kReferences = @"ref";
 #define L_ERROR_SERVER_DENIED @"ERR: Server denied"
 #define L_ERROR_APPLICATION_ERROR @"ERR: Application Error"
 #define L_GROUPVIEW @"GroupView"
+#define L_INVALID_EMAIL @"Invalid Email. Set it in order to post."
 #define L_LOADING @"Loading..."
 #define L_LOADING_MSG @"Loading Message..."
 #define L_MARK_READ @"Mark Read"

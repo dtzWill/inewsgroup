@@ -14,6 +14,10 @@ bool hasConnected()
 	return m_hasConnected;
 }
 
+bool canPost()
+{
+	return can_post;
+}
 
 
 
@@ -107,7 +111,7 @@ void setEmail( NSString * ns_email )
 	email[0] = '\0';
 	if( ns_email && [ns_email cString] )
 		strncpy( email, [ns_email cString], MAX_EMAIL );
-
+	NSLog( @"email: %s, ns_email: %@", email, ns_email );
 }
 
 
@@ -280,7 +284,7 @@ NSString * getReferences( int articlenum )
 
 	refs = get_references( arts[ articlenum ].refptr );
 	NSString * ret = [NSString stringWithCString: ( refs ? refs : "" ) ];
-	NSLog( ret );
+//	NSLog( ret );
 	
 	return [ ret retain ];
 }
@@ -566,6 +570,8 @@ void printActive()
 //sends a message synchronously
 bool sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message )
 {
+	//empty the postpone queue
+	unlink( F_POSTPONEDARTICLES );
 
 	NSLog( @"Sending Message: ");
 	NSLog( @"Newsgroups: %@", newsgroup );
