@@ -39,7 +39,7 @@
     NSMutableArray * _rows;// holds the row objects for our table 
     UINavigationItem * _titleItem;//title
     UITable * _table;
-	UIAlertSheet * _message;
+	UIAlertSheet * _sending, * _result;
 
 	//message-specific
 	NSString * _subject;

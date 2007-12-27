@@ -73,5 +73,4 @@ bool isThreadRead( int threadnum );
 
 void doSubscribe( struct t_group * group, int status );
 
-
-int sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message );
+bool sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message );

@@ -424,7 +424,7 @@ int init_server()
 //	sleep ( 5 );
 
 //DEBUG:
-	force_no_post = YES;
+//	force_no_post = YES;
 //DEBUG
 	
 	if(!([[NetworkController sharedInstance]isNetworkUp]))
@@ -571,7 +571,7 @@ void printActive()
 };
 
 //sends a message synchronously
-int sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message )
+bool sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message )
 {
 
 	NSLog( @"Sending Message: ");
