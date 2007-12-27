@@ -492,7 +492,7 @@ extern	int ppa_err;
 #define PPA_ERR_GLOBAL_ERR 3
 #define PPA_ERR_SERVER 4
 
-
+extern void update_active_after_posting( char * newsgroups );
 extern t_bool pickup_postponed_articles(t_bool ask, t_bool all);
 extern t_bool post_article(const char *groupname);
 extern t_bool reread_active_after_posting(void);

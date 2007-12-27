@@ -1799,336 +1799,339 @@ t_bool
 filter_articles(
 	struct t_group *group)
 {
-	char buf[LEN];
-	int num, inscope;
-	int i, j;
-	struct t_filter *ptr;
-	struct regex_cache *regex_cache_subj = NULL;
-	struct regex_cache *regex_cache_from = NULL;
-	struct regex_cache *regex_cache_msgid = NULL;
-	struct regex_cache *regex_cache_xref = NULL;
-	t_bool filtered = FALSE;
-	t_bool error = FALSE;
-
-	/*
-	 * check if there are any global filter rules
-	 */
-	if (group->glob_filter->num == 0)
-		return filtered;
-
-	/*
-	 * Apply global filter rules first if there are any entries
-	 */
-	/*
-	 * Check if any scope rules are active for this group
-	 * ie. group=comp.os.linux.help  scope=comp.os.linux.*
-	 */
-	inscope = set_filter_scope(group);
-	if (!cmd_line && !batch_mode)
-		wait_message(0, _(txt_filter_global_rules), inscope, group->glob_filter->num);
-	num = group->glob_filter->num;
-	ptr = group->glob_filter->filter;
-
-	/*
-	 * set up cache tables for all types of filter rules
-	 * (only for regexp matching)
-	 */
-	if (tinrc.wildcard) {
-		size_t msiz;
-
-		msiz = sizeof(struct regex_cache) * num;
-		regex_cache_subj = my_malloc(msiz);
-		regex_cache_from = my_malloc(msiz);
-		regex_cache_msgid = my_malloc(msiz);
-		regex_cache_xref = my_malloc(msiz);
-		for (j = 0; j < num; j++) {
-			regex_cache_subj[j].re = NULL;
-			regex_cache_subj[j].extra = NULL;
-			regex_cache_from[j].re = NULL;
-			regex_cache_from[j].extra = NULL;
-			regex_cache_msgid[j].re = NULL;
-			regex_cache_msgid[j].extra = NULL;
-			regex_cache_xref[j].re = NULL;
-			regex_cache_xref[j].extra = NULL;
-		}
-	}
-
-	/*
-	 * loop thru all arts applying global & local filtering rules
-	 */
-	for (i = 0; (i < top_art) && !error; i++) {
-		arts[i].score = 0;
-
-		if (tinrc.kill_level == KILL_UNREAD && IS_READ(i)) /* skip only when the article is read */
-			continue;
-
-		for (j = 0; j < num && !error; j++) {
-			if (ptr[j].inscope) {
-				/*
-				 * Filter on Subject: line
-				 */
-				if (ptr[j].subj != NULL) {
-					switch (test_regex(arts[i].subject, ptr[j].subj, ptr[j].icase, &regex_cache_subj[j])) {
-						case 1:
-							SET_FILTER(group, i, j);
-							break;
-
-						case -1:
-							error = TRUE;
-							break;
-
-						default:
-							break;
-					}
-				}
-
-				/*
-				 * Filter on From: line
-				 */
-				if (ptr[j].from != NULL) {
-					if (arts[i].name != NULL)
-						snprintf(buf, sizeof(buf), "%s (%s)", arts[i].from, arts[i].name);
-					else
-						strcpy(buf, arts[i].from);
-
-					switch (test_regex(buf, ptr[j].from, ptr[j].icase, &regex_cache_from[j])) {
-						case 1:
-							SET_FILTER(group, i, j);
-							break;
-
-						case -1:
-							error = TRUE;
-							break;
-
-						default:
-							break;
-					}
-				}
-
-				/*
-				 * Filter on Message-ID: line
-				 * Apply to Message-ID: & References: lines or
-				 * Message-ID: & last entry from References: line
-				 * Case is important here
-				 */
-				if (ptr[j].msgid != NULL) {
-					char *refs = NULL;
-					const char *myrefs = NULL;
-					const char *mymsgid = NULL;
-					int x;
-					struct t_article *art = &arts[i];
-					/*
-					 * TODO: nice idea del'd; better apply one rule on all
-					 *       fitting articles, so we can switch to an appropriate
-					 *       algorithm for each kind of rule, including the
-					 *       deleted one.
-					 */
-
-					/* myrefs does not need to be freed */
-
-					/* use full references header or just the last entry? */
-					switch (ptr[j].fullref) {
-						case FILTER_MSGID:
-							myrefs = REFS(art, refs);
-							mymsgid = MSGID(art);
-							break;
-
-						case FILTER_MSGID_LAST:
-							myrefs = art->refptr ? (art->refptr->parent ? art->refptr->parent->txt : "") : "";
-							mymsgid = MSGID(art);
-							break;
-
-						case FILTER_MSGID_ONLY:
-							myrefs = "";
-							mymsgid = MSGID(art);
-							break;
-
-						case FILTER_REFS_ONLY:
-							myrefs = REFS(art, refs);
-							mymsgid = "";
-							break;
-
-						default: /* should not happen */
-							/* CONSTANTCONDITION */
-							assert(0 != 0);
-							break;
-					}
-
-					if ((x = test_regex(myrefs, ptr[j].msgid, FALSE, &regex_cache_msgid[j])) == 0) /* no match */
-						x = test_regex(mymsgid, ptr[j].msgid, FALSE, &regex_cache_msgid[j]);
-
-					switch (x) {
-						case 1:
-							SET_FILTER(group, i, j);
-							break;
-
-						case -1:
-							error = TRUE;
-							break;
-
-						default:
-							break;
-					}
-					FreeIfNeeded(refs);
-				}
-				/*
-				 * Filter on Lines: line
-				 */
-				if ((ptr[j].lines_cmp != FILTER_LINES_NO) && (arts[i].line_count >= 0)) {
-					switch (ptr[j].lines_cmp) {
-						case FILTER_LINES_EQ:
-							if (arts[i].line_count == ptr[j].lines_num) {
-/*
-wait_message(1, "FILTERED Lines arts[%d] == [%d]", arts[i].line_count, ptr[j].lines_num);
-*/
-								SET_FILTER(group, i, j);
-							}
-							break;
-
-						case FILTER_LINES_LT:
-							if (arts[i].line_count < ptr[j].lines_num) {
-/*
-wait_message(1, "FILTERED Lines arts[%d] < [%d]", arts[i].line_count, ptr[j].lines_num);
-*/
-								SET_FILTER(group, i, j);
-							}
-							break;
-
-						case FILTER_LINES_GT:
-							if (arts[i].line_count > ptr[j].lines_num) {
-/*
-wait_message(1, "FILTERED Lines arts[%d] > [%d]", arts[i].line_count, ptr[j].lines_num);
-*/
-								SET_FILTER(group, i, j);
-							}
-							break;
-
-						default:
-							break;
-					}
-				}
-
-				/*
-				 * Filter on GNKSA code
-				 */
-				if ((ptr[j].gnksa_cmp != FILTER_LINES_NO) && (arts[i].gnksa_code >= 0)) {
-					switch (ptr[j].gnksa_cmp) {
-						case FILTER_LINES_EQ:
-							if (arts[i].gnksa_code == ptr[j].gnksa_num) {
-								SET_FILTER(group, i, j);
-							}
-							break;
-
-						case FILTER_LINES_LT:
-							if (arts[i].gnksa_code < ptr[j].gnksa_num) {
-								SET_FILTER(group, i, j);
-							}
-							break;
-
-						case FILTER_LINES_GT:
-							if (arts[i].gnksa_code > ptr[j].gnksa_num) {
-								SET_FILTER(group, i, j);
-							}
-							break;
-
-						default:
-							break;
-					}
-				}
-
-				/*
-				 * Filter on Xref: lines
-				 *
-				 * 	Xref: news.foo.bar foo.bar:666 bar.bar:999
-				 * is turned into
-				 * 	foo.bar,bar.bar
-				 */
-				if (arts[i].xref && *arts[i].xref) {
-					if (ptr[j].score && ptr[j].xref != NULL) {
-						char *s, *e, *k;
-						t_bool skip = FALSE;
-
-						s = arts[i].xref;
-						while (*s && !isspace((int) *s))
-							s++;
-						while (*s && isspace((int) *s))
-							s++;
-
-						/* reformat */
-						k = e = my_malloc(strlen(s));
-						while (*s) {
-							if (*s == ':') {
-								*e++ = ',';
-								skip = TRUE;
-							}
-							if (*s != ':' && !isspace((int) *s) && !skip)
-								*e++ = *s;
-							if (isspace((int) *s))
-								skip = FALSE;
-							s++;
-						}
-						*--e = '\0';
-
-						if (ptr[j].xref != NULL) {
-							switch (test_regex(k, ptr[j].xref, ptr[j].icase, &regex_cache_xref[j])) {
-								case 1:
-									SET_FILTER(group, i, j);
-									break;
-
-								case -1:
-									error = TRUE;
-									break;
-
-								default:
-									break;
-							}
-						}
-						free(k);
-					}
-				}
-			}
-		}
-	}
-
-	/*
-	 * throw away the contents of all regex_caches
-	 */
-	if (tinrc.wildcard) {
-		for (j = 0; j < num; j++) {
-			FreeIfNeeded(regex_cache_subj[j].re);
-			FreeIfNeeded(regex_cache_subj[j].extra);
-			FreeIfNeeded(regex_cache_from[j].re);
-			FreeIfNeeded(regex_cache_from[j].extra);
-			FreeIfNeeded(regex_cache_msgid[j].re);
-			FreeIfNeeded(regex_cache_msgid[j].extra);
-			FreeIfNeeded(regex_cache_xref[j].re);
-			FreeIfNeeded(regex_cache_xref[j].extra);
-		}
-		free(regex_cache_subj);
-		free(regex_cache_from);
-		free(regex_cache_msgid);
-		free(regex_cache_xref);
-	}
-
-	/*
-	 * now entering the main filter loop:
-	 * all articles have scored, so do kill & select
-	 */
-	if (!error) {
-		for_each_art(i) {
-			if (arts[i].score <= tinrc.score_limit_kill) {
-				if (arts[i].status == ART_UNREAD)
-					arts[i].killed = ART_KILLED_UNREAD;
-				else
-					arts[i].killed = ART_KILLED;
-				filtered = TRUE;
-				art_mark(group, &arts[i], ART_READ);
-			} else if (arts[i].score >= tinrc.score_limit_select) {
-				arts[i].selected = TRUE;
-			}
-		}
-	}
-	return filtered;
+	return FALSE;//will--we do't want filtering, and it just causes problems for us
+///		
+///		
+///			char buf[LEN];
+///			int num, inscope;
+///			int i, j;
+///			struct t_filter *ptr;
+///			struct regex_cache *regex_cache_subj = NULL;
+///			struct regex_cache *regex_cache_from = NULL;
+///			struct regex_cache *regex_cache_msgid = NULL;
+///			struct regex_cache *regex_cache_xref = NULL;
+///			t_bool filtered = FALSE;
+///			t_bool error = FALSE;
+///		
+///			/*
+///			 * check if there are any global filter rules
+///			 */
+///			if (group->glob_filter->num == 0)
+///				return filtered;
+///		
+///			/*
+///			 * Apply global filter rules first if there are any entries
+///			 */
+///			/*
+///			 * Check if any scope rules are active for this group
+///			 * ie. group=comp.os.linux.help  scope=comp.os.linux.*
+///			 */
+///			inscope = set_filter_scope(group);
+///			if (!cmd_line && !batch_mode)
+///				wait_message(0, _(txt_filter_global_rules), inscope, group->glob_filter->num);
+///			num = group->glob_filter->num;
+///			ptr = group->glob_filter->filter;
+///		
+///			/*
+///			 * set up cache tables for all types of filter rules
+///			 * (only for regexp matching)
+///			 */
+///			if (tinrc.wildcard) {
+///				size_t msiz;
+///		
+///				msiz = sizeof(struct regex_cache) * num;
+///				regex_cache_subj = my_malloc(msiz);
+///				regex_cache_from = my_malloc(msiz);
+///				regex_cache_msgid = my_malloc(msiz);
+///				regex_cache_xref = my_malloc(msiz);
+///				for (j = 0; j < num; j++) {
+///					regex_cache_subj[j].re = NULL;
+///					regex_cache_subj[j].extra = NULL;
+///					regex_cache_from[j].re = NULL;
+///					regex_cache_from[j].extra = NULL;
+///					regex_cache_msgid[j].re = NULL;
+///					regex_cache_msgid[j].extra = NULL;
+///					regex_cache_xref[j].re = NULL;
+///					regex_cache_xref[j].extra = NULL;
+///				}
+///			}
+///		
+///			/*
+///			 * loop thru all arts applying global & local filtering rules
+///			 */
+///			for (i = 0; (i < top_art) && !error; i++) {
+///				arts[i].score = 0;
+///		
+///				if (tinrc.kill_level == KILL_UNREAD && IS_READ(i)) /* skip only when the article is read */
+///					continue;
+///		
+///				for (j = 0; j < num && !error; j++) {
+///					if (ptr[j].inscope) {
+///						/*
+///						 * Filter on Subject: line
+///						 */
+///						if (ptr[j].subj != NULL) {
+///							switch (test_regex(arts[i].subject, ptr[j].subj, ptr[j].icase, &regex_cache_subj[j])) {
+///								case 1:
+///									SET_FILTER(group, i, j);
+///									break;
+///		
+///								case -1:
+///									error = TRUE;
+///									break;
+///		
+///								default:
+///									break;
+///							}
+///						}
+///		
+///						/*
+///						 * Filter on From: line
+///						 */
+///						if (ptr[j].from != NULL) {
+///							if (arts[i].name != NULL)
+///								snprintf(buf, sizeof(buf), "%s (%s)", arts[i].from, arts[i].name);
+///							else
+///								strcpy(buf, arts[i].from);
+///		
+///							switch (test_regex(buf, ptr[j].from, ptr[j].icase, &regex_cache_from[j])) {
+///								case 1:
+///									SET_FILTER(group, i, j);
+///									break;
+///		
+///								case -1:
+///									error = TRUE;
+///									break;
+///		
+///								default:
+///									break;
+///							}
+///						}
+///		
+///						/*
+///						 * Filter on Message-ID: line
+///						 * Apply to Message-ID: & References: lines or
+///						 * Message-ID: & last entry from References: line
+///						 * Case is important here
+///						 */
+///						if (ptr[j].msgid != NULL) {
+///							char *refs = NULL;
+///							const char *myrefs = NULL;
+///							const char *mymsgid = NULL;
+///							int x;
+///							struct t_article *art = &arts[i];
+///							/*
+///							 * TODO: nice idea del'd; better apply one rule on all
+///							 *       fitting articles, so we can switch to an appropriate
+///							 *       algorithm for each kind of rule, including the
+///							 *       deleted one.
+///							 */
+///		
+///							/* myrefs does not need to be freed */
+///		
+///							/* use full references header or just the last entry? */
+///							switch (ptr[j].fullref) {
+///								case FILTER_MSGID:
+///									myrefs = REFS(art, refs);
+///									mymsgid = MSGID(art);
+///									break;
+///		
+///								case FILTER_MSGID_LAST:
+///									myrefs = art->refptr ? (art->refptr->parent ? art->refptr->parent->txt : "") : "";
+///									mymsgid = MSGID(art);
+///									break;
+///		
+///								case FILTER_MSGID_ONLY:
+///									myrefs = "";
+///									mymsgid = MSGID(art);
+///									break;
+///		
+///								case FILTER_REFS_ONLY:
+///									myrefs = REFS(art, refs);
+///									mymsgid = "";
+///									break;
+///		
+///								default: /* should not happen */
+///									/* CONSTANTCONDITION */
+///									assert(0 != 0);
+///									break;
+///							}
+///		
+///							if ((x = test_regex(myrefs, ptr[j].msgid, FALSE, &regex_cache_msgid[j])) == 0) /* no match */
+///								x = test_regex(mymsgid, ptr[j].msgid, FALSE, &regex_cache_msgid[j]);
+///		
+///							switch (x) {
+///								case 1:
+///									SET_FILTER(group, i, j);
+///									break;
+///		
+///								case -1:
+///									error = TRUE;
+///									break;
+///		
+///								default:
+///									break;
+///							}
+///							FreeIfNeeded(refs);
+///						}
+///						/*
+///						 * Filter on Lines: line
+///						 */
+///						if ((ptr[j].lines_cmp != FILTER_LINES_NO) && (arts[i].line_count >= 0)) {
+///							switch (ptr[j].lines_cmp) {
+///								case FILTER_LINES_EQ:
+///									if (arts[i].line_count == ptr[j].lines_num) {
+///		/*
+///		wait_message(1, "FILTERED Lines arts[%d] == [%d]", arts[i].line_count, ptr[j].lines_num);
+///		*/
+///										SET_FILTER(group, i, j);
+///									}
+///									break;
+///		
+///								case FILTER_LINES_LT:
+///									if (arts[i].line_count < ptr[j].lines_num) {
+///		/*
+///		wait_message(1, "FILTERED Lines arts[%d] < [%d]", arts[i].line_count, ptr[j].lines_num);
+///		*/
+///										SET_FILTER(group, i, j);
+///									}
+///									break;
+///		
+///								case FILTER_LINES_GT:
+///									if (arts[i].line_count > ptr[j].lines_num) {
+///		/*
+///		wait_message(1, "FILTERED Lines arts[%d] > [%d]", arts[i].line_count, ptr[j].lines_num);
+///		*/
+///										SET_FILTER(group, i, j);
+///									}
+///									break;
+///		
+///								default:
+///									break;
+///							}
+///						}
+///		
+///						/*
+///						 * Filter on GNKSA code
+///						 */
+///						if ((ptr[j].gnksa_cmp != FILTER_LINES_NO) && (arts[i].gnksa_code >= 0)) {
+///							switch (ptr[j].gnksa_cmp) {
+///								case FILTER_LINES_EQ:
+///									if (arts[i].gnksa_code == ptr[j].gnksa_num) {
+///										SET_FILTER(group, i, j);
+///									}
+///									break;
+///		
+///								case FILTER_LINES_LT:
+///									if (arts[i].gnksa_code < ptr[j].gnksa_num) {
+///										SET_FILTER(group, i, j);
+///									}
+///									break;
+///		
+///								case FILTER_LINES_GT:
+///									if (arts[i].gnksa_code > ptr[j].gnksa_num) {
+///										SET_FILTER(group, i, j);
+///									}
+///									break;
+///		
+///								default:
+///									break;
+///							}
+///						}
+///		
+///						/*
+///						 * Filter on Xref: lines
+///						 *
+///						 * 	Xref: news.foo.bar foo.bar:666 bar.bar:999
+///						 * is turned into
+///						 * 	foo.bar,bar.bar
+///						 */
+///						if (arts[i].xref && *arts[i].xref) {
+///							if (ptr[j].score && ptr[j].xref != NULL) {
+///								char *s, *e, *k;
+///								t_bool skip = FALSE;
+///		
+///								s = arts[i].xref;
+///								while (*s && !isspace((int) *s))
+///									s++;
+///								while (*s && isspace((int) *s))
+///									s++;
+///		
+///								/* reformat */
+///								k = e = my_malloc(strlen(s));
+///								while (*s) {
+///									if (*s == ':') {
+///										*e++ = ',';
+///										skip = TRUE;
+///									}
+///									if (*s != ':' && !isspace((int) *s) && !skip)
+///										*e++ = *s;
+///									if (isspace((int) *s))
+///										skip = FALSE;
+///									s++;
+///								}
+///								*--e = '\0';
+///		
+///								if (ptr[j].xref != NULL) {
+///									switch (test_regex(k, ptr[j].xref, ptr[j].icase, &regex_cache_xref[j])) {
+///										case 1:
+///											SET_FILTER(group, i, j);
+///											break;
+///		
+///										case -1:
+///											error = TRUE;
+///											break;
+///		
+///										default:
+///											break;
+///									}
+///								}
+///								free(k);
+///							}
+///						}
+///					}
+///				}
+///			}
+///		
+///			/*
+///			 * throw away the contents of all regex_caches
+///			 */
+///			if (tinrc.wildcard) {
+///				for (j = 0; j < num; j++) {
+///					FreeIfNeeded(regex_cache_subj[j].re);
+///					FreeIfNeeded(regex_cache_subj[j].extra);
+///					FreeIfNeeded(regex_cache_from[j].re);
+///					FreeIfNeeded(regex_cache_from[j].extra);
+///					FreeIfNeeded(regex_cache_msgid[j].re);
+///					FreeIfNeeded(regex_cache_msgid[j].extra);
+///					FreeIfNeeded(regex_cache_xref[j].re);
+///					FreeIfNeeded(regex_cache_xref[j].extra);
+///				}
+///				free(regex_cache_subj);
+///				free(regex_cache_from);
+///				free(regex_cache_msgid);
+///				free(regex_cache_xref);
+///			}
+///		
+///			/*
+///			 * now entering the main filter loop:
+///			 * all articles have scored, so do kill & select
+///			 */
+///			if (!error) {
+///				for_each_art(i) {
+///					if (arts[i].score <= tinrc.score_limit_kill) {
+///						if (arts[i].status == ART_UNREAD)
+///							arts[i].killed = ART_KILLED_UNREAD;
+///						else
+///							arts[i].killed = ART_KILLED;
+///						filtered = TRUE;
+///						art_mark(group, &arts[i], ART_READ);
+///					} else if (arts[i].score >= tinrc.score_limit_select) {
+///						arts[i].selected = TRUE;
+///					}
+///				}
+///			}
+///			return filtered;
 }
 
 

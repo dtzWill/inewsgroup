@@ -616,7 +616,14 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 
 	postpone_article( F_TMPNEW );
 
-	return pickup_postponed_articles( false, true ); //ask=no, all=yes
+	bool ret =  pickup_postponed_articles( false, true ); //ask=no, all=yes
+
+	char newsgroupsline[ 256 ];
+	sprintf( newsgroupsline, "Newsgroups: %s", [ newsgroup cString ] );
+
+	update_active_after_posting( newsgroupsline );
+
+	return ret;
 
 }
 
