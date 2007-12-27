@@ -60,6 +60,7 @@ static const NSString * kReferences = @"ref";
 //Files
 #define F_NEWSAUTH "/var/root/.newsauth"
 #define F_NEWSEMAIL "/var/root/.newsemail"
+#define F_NEWSRC "/var/root/.newsrc"
 #define F_NNTPSERVER "/etc/nntpserver"
 #define F_TMPNEW "/tmp/newarticle"
 

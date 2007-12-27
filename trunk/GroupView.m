@@ -71,6 +71,29 @@ static GroupView * sharedInstance = nil;
 
 	_selectedRow = -1; //invalid
 
+	//create array to store the actual rows
+	_memoryQueue = [ [ NSMutableArray alloc] init ];
+
+	GroupViewRow * row;
+	int i;
+	for( i = 0; i < MAX_ROWS_ON_SCREEN; i++ )
+	{
+		row = [ [ GroupViewRow alloc] initWithFrame:CGRectMake(0.0f,0.0f, 320.0f, 128.0f) ]; 
+		//set font
+		[ [ row titleTextLabel]setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];	
+		[ [ row titleTextLabel] setWrapsText: YES ];
+
+		[row setShowDisclosure: YES];
+		[row setDisclosureClickable: YES];
+		[ [ row _disclosureView ] setTapDelegate: self ];
+		
+		[ _memoryQueue addObject: row ];
+	}
+
+
+
+
+
 
 	//bottom bar:
 
@@ -246,17 +269,6 @@ static GroupView * sharedInstance = nil;
 	{
 		row = [[GroupItem alloc] initWithThreadNum: i ];
 
-		if ( artsInThread( i ) > 1 )
-		{
-			[row setDisclosureStyle: 1];
-		}
-		else
-		{
-			[row setDisclosureStyle: 2];
-		}
-		[row setShowDisclosure: YES];
-		[row setDisclosureClickable: YES];
-		[ [ row _disclosureView ] setTapDelegate: self ];
 
 		[ _rows addObject: row ];
 	}
@@ -275,31 +287,12 @@ static GroupView * sharedInstance = nil;
 //any the read/unread status indicator
 - (void) refreshTitles
 {
-	int i = 0, threadnum;
-	GroupItem * cell;
-	for(; i < [ _rows count ]; i++)
-	{
-//		NSLog( @"refreshing cell %d\n", i );
-		cell = [ _rows objectAtIndex: i ];
-		threadnum = [cell threadNum];
 
-		UIImage * img = [UIImage applicationImageNamed:
-				isThreadRead( threadnum ) ?
-					IMG_READ : IMG_UNREAD ];
-//					( ( artCount > 1 )? @"ThReadIndicator.png" : @"ReadIndicator.png" )
-//					: ( ( artCount > 1 ) ? @"ThUnreadIndicator.png" : @"UnreadIndicator.png" ) ];  
+	//empty since this functionality is now implemented on-demand in the groupitem code
 
+	//leaving here for compatbility's sake
 
-		[ cell setTitle: [NSString stringWithFormat: @"%s", arts[ base[ threadnum ] ].subject ] ];
-
-		[ cell setImage: img ];
-
-		//TODO: would be cool, throughout app, to display the number of unread like in
-		//the mail app....
-		//artsInThread( threadnum ) ] ] ; //write # unread articles at some point..?
-		
-	}
-	
+	//TODO: remove this and make other code not expect it
 
 }
 
@@ -312,7 +305,15 @@ static GroupView * sharedInstance = nil;
 
 - (UITableCell *) table: (UITable *)table cellForRow: (int)row column: (int)col
 {
-	return [ _rows objectAtIndex: [ _rows count ] - 1 - row ];
+	//pretend the array is a queue....
+	GroupViewRow * newRow = [ _memoryQueue objectAtIndex: 0 ];
+	[ _memoryQueue removeObjectAtIndex: 0 ];
+	[ _memoryQueue addObject: newRow ]; 
+
+	//set the title, readjust frames, etc
+	[ [ _rows objectAtIndex: [ _rows count ] - 1 - row ] prepareRow: newRow ];
+
+	return newRow;
 }
 
 - (UITableCell *) table: (UITable *)table cellForRow: (int)row column: (int)col
@@ -321,7 +322,8 @@ static GroupView * sharedInstance = nil;
 	return [ _rows objectAtIndex: [ _rows count ] - 1 - row ]; 
 }
 
-- (void)tableRowSelected:(NSNotification *)notification {
+- (void)tableRowSelected:(NSNotification *)notification
+{
 //  NSLog(@"tableRowSelected: %d", [ _table selectedRow ]);
 
 	_selectedRow = [ _table selectedRow ];
@@ -329,8 +331,9 @@ static GroupView * sharedInstance = nil;
 */
 }
 
-- (float)table:(UITable *)aTable heightForRow:(int)row {
-	return [ [ _rows objectAtIndex: row ] rowHeight ];
+- (float)table:(UITable *)aTable heightForRow:(int)row
+{
+	return 64.0f;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -357,27 +360,13 @@ static GroupView * sharedInstance = nil;
 
 - (id) initWithThreadNum: (int) threadnum
 {
-	[super initWithFrame: CGRectMake(0.0f,0.0f, 320.0f, 128.0f)];
 
-	//set font to use....
-	[ [self titleTextLabel]setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];	
-	[ [self titleTextLabel] setWrapsText: YES ];
 	//remember our threadnum....
 	_threadnum = threadnum;
+
 	return self;
 }
 
-- (void) layoutSubviews
-{
-	[ super layoutSubviews ];
-	CGRect rect = CGRectMake( 32.0f, 0.0f, 260.0f, 16.0f * [self numLines ] );
-	//center it vertically
-	rect.origin.y = ( (64.0f - 16.0f * [self numLines ])/ 2.0f  );	
- 
-	[ [ self titleTextLabel] setFrame: rect ];	
-//	[ [ self titleTextLabel ] setWrapsText: YES ];
-//	NSLog( @"Size: x: %f, y: %f", [ _titleTextLabel textSize ].width, [_titleTextLabel textSize].height ); 
-}
 
 //accessor method..
 - (int) threadNum
@@ -387,14 +376,52 @@ static GroupView * sharedInstance = nil;
 }
 
 
+- (void) prepareRow: (GroupViewRow *) row
+{
+
+	[ row setTitle: [NSString stringWithFormat: @"%s", arts[ base[ _threadnum ] ].subject ] ];
+
+	if ( artsInThread( _threadnum ) > 1 )
+	{
+		[row setDisclosureStyle: 1];
+	}
+	else
+	{
+		[row setDisclosureStyle: 2];
+	}
+
+
+	UIImage * img = [UIImage applicationImageNamed:
+			isThreadRead( _threadnum ) ?
+				IMG_READ : IMG_UNREAD ];
+
+	[ row setImage: img ];
+
+
+
+
+}
+
+@end
+
+//Simple wrapper to handle the layout of the subviews
+@implementation GroupViewRow
+
+- (void) layoutSubviews
+{
+	[ super layoutSubviews ];
+
+	CGRect rect = CGRectMake( 32.0f, 0.0f, 260.0f, 16.0f * [self numLines ] );
+	//center it vertically
+	rect.origin.y = ( (64.0f - 16.0f * [self numLines ])/ 2.0f  );	
+ 
+	[ [ self titleTextLabel] setFrame: rect ];	
+}
+
 - (int) numLines
 {
 	return 1 + ( [_titleTextLabel textSize].width ) / 250;
 }
 
-- (float) rowHeight
-{
-	return 64.0f;
-
-}
 @end
+

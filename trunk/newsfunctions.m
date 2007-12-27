@@ -75,17 +75,10 @@ NSString * getFromString()
 //bool weCreatedNNTPServer = false;
 void setServer( NSString * server )
 {
-	//TODO:
-	//necessary?? better way?!?! gah
-/*	if ( nntp_server && weCreatedNNTPServer )
-		free( nntp_server );
-*/
-	//the above doesn't work.. and maybe eventually I'll got through the tin code..
-	//for now.. potential leak :-/
+
 	nntp_server = (char *)malloc( strlen( [server cString] ) + 1 );
 	strcpy( nntp_server, [server cString] );
-//	[server release];
-//	weCreatedNNTPServer = true;
+
 //	NSLog( @" new server: %s\n", nntp_server );
 }
 
