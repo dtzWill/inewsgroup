@@ -96,7 +96,7 @@ static PrefsView * sharedInstance = nil;
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_PREFERENCES ];
-	[nav showButtonsWithLeftTitle: L_QUIT rightTitle: L_DONE leftBack: NO ]; 
+	[nav showLeftButton: L_QUIT withStyle: BUTTON_RED rightButton: L_DONE withStyle: BUTTON_NORMAL ]; 
 	[nav pushNavigationItem: _titleItem];
 	[nav setDelegate: self];
 	[nav setBarStyle: 0];
