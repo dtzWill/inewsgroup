@@ -20,7 +20,8 @@
 @interface GroupView : UIView <TitleRefresher>
 {
 	int _groupnum;//index in my_group array
-    NSMutableArray * _rows;// holds the row objects for our table 
+	NSMutableArray * _rows;//stores rows--right now this is worthless. TODO: get rid of this, since all of the information in here is already in various places
+    NSMutableArray * _memoryQueue;
     UINavigationItem * _titleItem;//title, saved for memory purposes
     UITable * _table;//table used to display the threads
 	UIAlertSheet * _connect;//alert sheet used to display "Refreshing" text while loading the headers for this newsgroup.
@@ -50,20 +51,24 @@
 
 @end
 
-
-//class representing an element in the table--basically just a subclass of a normal
-//table row, but stores the threadnumber in with it for easy access
-@interface GroupItem: UIImageAndTextTableCell
-{
-	int _threadnum;
-
-}
-
-- (id) initWithThreadNum: (int) threadnum;
-
-- (float) rowHeight;
+@interface GroupViewRow : UIImageAndTextTableCell
 
 - (int) numLines;
 
-- (int) threadNum;
 @end
+
+//class representing an element in the table--basically just a subclass of a normal
+//table row, but stores the threadnumber in with it for easy access
+@interface GroupItem : NSObject 
+{
+	int _threadnum;
+}
+
+- (id) initWithThreadNum: (int) threadnum; 
+
+- (int) threadNum;
+
+- (void) prepareRow: (GroupViewRow *) row;
+@end
+
+
