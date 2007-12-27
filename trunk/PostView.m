@@ -71,7 +71,7 @@ static PostView * sharedInstance = nil;
 	//text view to show the message data...
 	_textView = [[UITextView alloc] initWithFrame: CGRectMake(0.0f, 48.0f + 64.0f,
 		320.0f, 480.0f - 16.0f - 48.0f - 64.0f )]; 
-	
+	[ _textView setAllowsRubberBanding: YES ];	
 
 	//add the various views to ourself..
 	[self addSubview: nav];
