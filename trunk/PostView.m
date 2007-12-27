@@ -200,8 +200,21 @@ static PostView * sharedInstance = nil;
 	if ( which == 0 ) //right
 	{
 			NSLog ( @"Reply to message!" );
+
+			NSString * subject;
+
+			if ( !strncmp( [ _subject cString ], "Re:", 3 ) ) //if it started with "Re:" already 
+			{
+				subject = [NSString stringWithString: _subject ]; //just pass it through
+			}
+			else
+			{
+				subject = [NSString stringWithFormat: @"Re: %@", _subject ];
+			}
+
+
 			NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-				[ [NSString stringWithFormat: @"Re: %@", _subject ] retain ], kSubject,
+				[ subject retain ], kSubject,
 				[ [NSString stringWithCString: active[ my_group[ _groupnum ] ].name ] retain ], kNewsGroup,		
 				[ _textView text ], kQuoteContent,
 				_references, kReferences,	
