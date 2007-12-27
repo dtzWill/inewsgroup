@@ -163,7 +163,7 @@ static int post_postponed_article_helpful(int ask, const char *subject, const ch
 //static void postpone_article(const char *the_article);
 static void setup_check_article_screen(int *init);
 static void strip_double_ngs(char *ngs_list);
-static void update_active_after_posting(char *newsgroups);
+//static void update_active_after_posting(char *newsgroups);
 static void update_posted_info_file(const char *group, int action, const char *subj, const char *a_message_id);
 #ifdef FORGERY
 	static void make_path_header(char *line);
@@ -4188,7 +4188,7 @@ reread_active_after_posting(
  * If posting was successful parse the Newgroups: line and set a flag in each
  * posted to newsgroup for later processing to update num of unread articles
  */
-static void
+void
 update_active_after_posting(
 	char *newsgroups)
 {
