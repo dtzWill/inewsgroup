@@ -95,6 +95,7 @@ static ComposeView * sharedInstance = nil;
 	_textView = [[EditTextView alloc] initWithFrame: _rectBig ];
 	[ _textView setTextSize: 20 ];
 	[ _textView setDelegate: self ];
+	[ _textView setAllowsRubberBanding: YES ];	
 
 	//Keyboard:
     _keyboard = [[EditorKeyboard alloc]
