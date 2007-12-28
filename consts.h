@@ -1,6 +1,6 @@
 //globals:
 
-#define RELEASE_AND_VERSION @"iNewsGroup 1.0.1"
+#define RELEASE_AND_VERSION @"iNewsGroup 1.0.2"
 #define AUTHOR @"Will Dietz"
 #define CONTACT_EMAIL @"inewsgroupdev@gmail.com"
 #define INEWSGROUP @"iNewsGroup"
@@ -106,7 +106,7 @@ static const NSString * kReferences = @"ref";
 #define L_UPDATING @"Updating..."
 #define L_USERNAME @"Username"
 
-#define L_FILTER_FORMAT @"Filter: @"
+#define L_FILTER_FORMAT @"Filter: %@"
 #define L_FROM_FORMAT @"From: %@"
 #define L_NEWSGROUP_FORMAT @"Newsgroup: %@"
 #define L_QUOTE_FORMAT @"> %@\n"
