@@ -80,7 +80,7 @@ static GroupView * sharedInstance = nil;
 	{
 		row = [ [ GroupViewRow alloc] initWithFrame:CGRectMake(0.0f,0.0f, 320.0f, 128.0f) ]; 
 		//set font
-		[ [ row titleTextLabel]setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];	
+		[ [ row titleTextLabel]setFont: GSFontCreateWithName( GROUP_FONT , kGSFontTraitBold, GROUP_SIZE ) ];	
 		[ [ row titleTextLabel] setWrapsText: YES ];
 
 		[row setShowDisclosure: YES];

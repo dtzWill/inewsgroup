@@ -211,7 +211,7 @@ static ThreadView * sharedInstance = nil;
 	[super initWithFrame: CGRectMake( 0.0f, 0.0f, 320.0f, 128.0f )];
 
 	//set font to use....
-	[ [self titleTextLabel]setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];	
+	[ [self titleTextLabel]setFont: GSFontCreateWithName( THREAD_FONT , kGSFontTraitBold, THREAD_SIZE ) ];	
 	[ [self titleTextLabel] setWrapsText: YES ];
 
 	_articleID = artnum;

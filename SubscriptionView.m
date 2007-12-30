@@ -72,7 +72,7 @@ static SubscriptionView * sharedInstance = nil;
 		UISwitchControl * button = [[UISwitchControl alloc] initWithFrame: CGRectMake(
  320.f - 
 114.0f, 36.0f, 114.0f, 48.0f ) ] ;
-		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,14) ];
+		[ [row titleTextLabel ] setFont: GSFontCreateWithName( SUBSCRIPTION_FONT, kGSFontTraitBold, SUBSCRIPTION_SIZE ) ];
 		[ [row titleTextLabel ] setWrapsText: YES ];
 //DEBUG
 //		[ row setTitle: @"this.is.a.ridiculously.long.group.name.dear.god.why.doesnt.it.ever.end" ];

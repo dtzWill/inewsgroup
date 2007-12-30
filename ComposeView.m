@@ -161,7 +161,7 @@ static ComposeView * sharedInstance = nil;
 	//from
 	row = [[UISimpleTableCell alloc] init ];
 	[ row setTitle: getFromString() ];
-	[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
+	[ row setFont: GSFontCreateWithName( HEADER_FONT , kGSFontTraitBold, HEADER_SIZE ) ];	
 	[ _rows addObject: row]; 
 
 ///	NSLog( @"preparing subject row" );
@@ -170,14 +170,14 @@ static ComposeView * sharedInstance = nil;
 	[ rowEdit setTitle: L_SUBJ ];
 	[ rowEdit setValue: _subject ];
 	[ rowEdit setDelegate: self ];
-	[ [ rowEdit textField] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
+	[ [ rowEdit textField] setFont: GSFontCreateWithName( HEADER_FONT , kGSFontTraitBold, HEADER_SIZE ) ];	
 	[ _rows addObject: rowEdit ];
 
 //	NSLog( @"preparing newsgroup row" );
 	//newsgroup
 	row = [[UISimpleTableCell alloc] init];
 	[ row setTitle: [NSString stringWithFormat: L_NEWSGROUP_FORMAT, _newsgroup ] ];
-	[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
+	[ row setFont: GSFontCreateWithName( HEADER_FONT , kGSFontTraitBold, HEADER_SIZE ) ];	
 	[ _rows addObject: row];
 	
 
