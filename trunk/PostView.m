@@ -72,6 +72,8 @@ static PostView * sharedInstance = nil;
 	_textView = [[UITextView alloc] initWithFrame: CGRectMake(0.0f, 48.0f + 64.0f,
 		320.0f, 480.0f - 16.0f - 48.0f - 64.0f )]; 
 	[ _textView setAllowsRubberBanding: YES ];	
+	[ _textView setEditable:NO];
+
 
 	//add the various views to ourself..
 	[self addSubview: nav];
@@ -117,13 +119,13 @@ static PostView * sharedInstance = nil;
 		//from
 		row = [[UISimpleTableCell alloc] init ];
 		[ row setTitle: articleFrom() ];
-		[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
+		[ row setFont: GSFontCreateWithName( HEADER_FONT , kGSFontTraitBold, HEADER_SIZE ) ];	
 		[ _rows addObject: row]; 
 
 		//subject	
 		row = [[UISimpleTableCell alloc] init];
 		[ row setTitle: ( _subject = articleSubject() ) ];
-		[ row setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,16) ];	
+		[ row setFont: GSFontCreateWithName( HEADER_FONT , kGSFontTraitBold, HEADER_SIZE ) ];	
 		[ _rows addObject: row];
 
 		[ _table reloadData];
@@ -131,9 +133,9 @@ static PostView * sharedInstance = nil;
 		//display subject as our title
 		[ _titleItem setTitle: articleSubject() ];
 
-		[ _textView setTextSize: 14 ];
+		[ _textView setTextSize: POST_BODY_SIZE ];
 		[ _textView setText: body ];
-//		[ _textView recalculateStyle ]; //TODO: needed? what does this DO? 
+		[ _textView recalculateStyle ]; //TODO: needed? what does this DO? 
 
 		_references = [ getReferences( _postnum ) retain ];
 	//	NSLog( @"refs: %@", _references );
@@ -141,13 +143,6 @@ static PostView * sharedInstance = nil;
 		//no longer need the article....
 		closeArticle();
 	}
-
-	//begin fix the 'starts not viewing top' bug
-	CGRect r = CGRectMake( 0 , 0, 1, 1 );
-
-	[ _textView scrollRectToVisible: r ]; 
-	//end fix
-	[ _textView setSelectionToStart ];
 
 
 	//no longer need the message.. allow the user to use the UI again

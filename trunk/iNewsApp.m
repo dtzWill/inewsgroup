@@ -361,7 +361,7 @@ static iNewsApp * sharedInstance = nil;
 
 		[ row setImage: img ];
 
-		[ [row titleTextLabel ] setFont: GSFontCreateWithName("Helvetica", kGSFontTraitBold,15) ];
+		[ [row titleTextLabel ] setFont: GSFontCreateWithName( MAIN_FONT , kGSFontTraitBold, MAIN_SIZE ) ];
 
 		[ row setDisclosureStyle: 1 ]; //BLUE
 		[row setShowDisclosure: YES];

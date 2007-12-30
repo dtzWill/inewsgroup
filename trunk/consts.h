@@ -26,7 +26,7 @@ extern NSString *kUIButtonBarButtonType;
 
 
 //Timing consts
-#define REFRESH_TIME 0.01
+#define REFRESH_TIME 0.1
 #define QUIT_WAIT_TIME 5.0
 #define SAVE_TIME 20.0
 #define HTTP_REQUEST_TIMEOUT 10.0
@@ -37,6 +37,18 @@ extern NSString *kUIButtonBarButtonType;
 //this defines the 'queue' (pool) of rows we use for displaying
 #define MAX_ROWS_ON_SCREEN 20
 
+//font defines
+#define GROUP_FONT "Helvetica"
+#define GROUP_SIZE 16.0f
+#define HEADER_FONT "Helvetica"
+#define HEADER_SIZE 16.0f
+#define POST_BODY_SIZE 14.0f
+#define SUBSCRIPTION_FONT "Helvetica"
+#define SUBSCRIPTION_SIZE 14.0f
+#define THREAD_FONT "Helvetica"
+#define THREAD_SIZE 14.0f
+#define MAIN_FONT "Helvetica"
+#define MAIN_SIZE 15.0f
 
 //0b1111111111111111111111111111111
 #define UNSIGNED_MINUS_ONE 2147483647
@@ -65,6 +77,7 @@ static const NSString * kReferences = @"ref";
 #define F_TMPNEW "/tmp/newarticle"
 #define F_POSTPONEDARTICLES "/var/root/.tin/postponed.articles"
 
+//language strings
 #define L_ABOUT @"About"
 #define L_BACK @"Back"
 #define L_COMPOSE @"Compose"
