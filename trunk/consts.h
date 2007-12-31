@@ -76,6 +76,7 @@ static const NSString * kReferences = @"ref";
 #define F_NNTPSERVER "/etc/nntpserver"
 #define F_TMPNEW "/tmp/newarticle"
 #define F_POSTPONEDARTICLES "/var/root/.tin/postponed.articles"
+#define TIN_DIR "/var/root/.tin/"
 
 //language strings
 #define L_ABOUT @"About"
@@ -104,6 +105,7 @@ static const NSString * kReferences = @"ref";
 #define L_PREFERENCES @"Preferences"
 #define L_QUIT @"Quit"
 #define L_QUOTE @"\n\nQuote:\n"
+#define L_REALNAME @"Real name"
 #define L_REFRESH @"Refresh"
 #define L_REFRESHING_MSG @"Refreshing..."
 #define L_REPLY @"Reply"
@@ -120,7 +122,7 @@ static const NSString * kReferences = @"ref";
 #define L_USERNAME @"Username"
 
 #define L_FILTER_FORMAT @"Filter: %@"
-#define L_FROM_FORMAT @"From: %@"
+#define L_FROM_FORMAT @"From: %@ <%@>"
 #define L_NEWSGROUP_FORMAT @"Newsgroup: %@"
 #define L_QUOTE_FORMAT @"> %@\n"
 #define L_SUBJ	@"Subj:"

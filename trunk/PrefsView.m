@@ -65,6 +65,12 @@ static PrefsView * sharedInstance = nil;
 	[[_row textField] setText: @""];
 	[_rows addObject: _row];
 
+	//real name
+	_row = [[UIPreferencesTextTableCell alloc] init ];
+	[_row setTitle: L_REALNAME ];
+	[ [_row textField] setText: @"" ];
+	[ _rows addObject: _row ];
+
 	//put information about iNewsGroup and author here, copyright, etc
 	//about
 	//TODO: center this?
@@ -202,6 +208,7 @@ static PrefsView * sharedInstance = nil;
 	[ [ [ _rows objectAtIndex: USER_ROW ] textField ] setText: (id)getUserName() ];
 	[ [ [ _rows objectAtIndex: PASS_ROW ] textField ] setText: (id)getPass() ];
 	[ [ [ _rows objectAtIndex: EMAIL_ROW ] textField ] setText: (id)getEmail() ]; 
+	[ [ [ _rows objectAtIndex: NAME_ROW ] textField ] setText: (id)getRealName() ]; 
 	[ _prefTable reloadData ];
 }
 
@@ -212,6 +219,7 @@ static PrefsView * sharedInstance = nil;
 	setUserName( [ [ [ _rows objectAtIndex: USER_ROW ] textField ] text ] );
 	setPassword( [ [ [ _rows objectAtIndex: PASS_ROW ] textField ] text ] );
 	setEmail( [ [ [ _rows objectAtIndex: EMAIL_ROW ] textField ] text ] );
+	setRealName( [ [ [ _rows objectAtIndex: NAME_ROW ] textField ] text ] );
 
 	saveSettingsToFiles();
 }
