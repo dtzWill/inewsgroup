@@ -399,9 +399,7 @@ static GroupView * sharedInstance = nil;
 
 	[ row setImage: img ];
 
-
-
-
+	[ row setDate: getNewestDateInThread( _threadnum ) ];
 }
 
 @end
@@ -409,20 +407,63 @@ static GroupView * sharedInstance = nil;
 //Simple wrapper to handle the layout of the subviews
 @implementation GroupViewRow
 
+- (id) initWithFrame: (CGRect) frame
+{
+	[super initWithFrame: frame ];
+	
+	_dateLabel = [[UIDateLabel alloc] initWithFrame: CGRectMake(210.0f, 10.0f, 60.0f, 30.0f)];
+	[ _dateLabel setDate: [NSDate date]];
+	[ _dateLabel setCentersHorizontally: YES];
+
+	//prepare colors so it highlights properly... sigh
+
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	float white[4] = { 1., 1., 1., 1. };
+	float transparentWhite[4] = { 1., 1., 1., 0. };
+
+	[ _dateLabel setHighlightedColor:CGColorCreate(colorSpace, white ) ];
+	[ _dateLabel setBackgroundColor:CGColorCreate(colorSpace, transparentWhite ) ];
+		
+	[ super addSubview: _dateLabel ];
+
+	return self;
+}
+
+- (void) setDate: (double) epochtime
+{
+//	NSLog( @"setDate: %d", epochtime );
+	NSDate * date = [NSDate dateWithTimeIntervalSince1970: epochtime ] ;
+	[ _dateLabel setDate: date ];
+
+}
+
+- (void) updateHighlightColors
+{
+
+//	NSLog( @"updateHighlightColors" );
+	[ super updateHighlightColors ];
+
+	[ _dateLabel setHighlighted: [ [ self titleTextLabel ] isHighlighted ] ];
+
+}
+
 - (void) layoutSubviews
 {
 	[ super layoutSubviews ];
 
-	CGRect rect = CGRectMake( 32.0f, 0.0f, 260.0f, 16.0f * [self numLines ] );
+	CGRect rect = CGRectMake( 32.0f, 0.0f, 190.0f, 16.0f * [self numLines ] );
 	//center it vertically
 	rect.origin.y = ( (64.0f - 16.0f * [self numLines ])/ 2.0f  );	
  
-	[ [ self titleTextLabel] setFrame: rect ];	
+	[ [ self titleTextLabel ] setFrame: rect ];
+
+	[ _dateLabel setFrame: CGRectMake( 210.0f, 10.0f, 80.0f, 30.0f ) ];
+
 }
 
 - (int) numLines
 {
-	return 1 + ( [_titleTextLabel textSize].width ) / 250;
+	return 1 + ( [_titleTextLabel textSize].width ) / 180;
 }
 
 @end

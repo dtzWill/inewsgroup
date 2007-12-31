@@ -4,6 +4,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <UIKit/UIView.h>
+#import <UIKit/UIDateLabel.h>
 #import "ThreadView.h"
 #import "PostView.h"
 #import "TitleRefresher.h"
@@ -52,8 +53,14 @@
 @end
 
 @interface GroupViewRow : UIImageAndTextTableCell
+{
+	UIDateLabel * _dateLabel;
+}
+- (id) initWithFrame: (CGRect) frame;
 
 - (int) numLines;
+
+- (void) setDate: (double) epochtime;
 
 @end
 

@@ -216,6 +216,23 @@ static ThreadView * sharedInstance = nil;
 
 	_articleID = artnum;
 
+	//prepare the date
+	_dateLabel = [[UIDateLabel alloc] initWithFrame: CGRectMake(210.0f, 10.0f, 60.0f, 30.0f)];
+	[ _dateLabel setDate: [ NSDate dateWithTimeIntervalSince1970: arts[ artnum ].date ] ];
+	[ _dateLabel setCentersHorizontally: YES];
+
+	//prepare colors so it highlights properly... sigh
+
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	float white[4] = { 1., 1., 1., 1. };
+	float transparentWhite[4] = { 1., 1., 1., 0. };
+
+	[ _dateLabel setHighlightedColor:CGColorCreate(colorSpace, white ) ];
+	[ _dateLabel setBackgroundColor:CGColorCreate(colorSpace, transparentWhite ) ];
+		
+	[ super addSubview: _dateLabel ];
+
+
 	return self;
 }
 
@@ -228,6 +245,7 @@ static ThreadView * sharedInstance = nil;
  
 	[ [ self titleTextLabel] setFrame: rect ];	
 
+	[ _dateLabel setFrame: CGRectMake( 210.0f, 10.0f, 80.0f, 30.0f ) ];
 }
 
 
@@ -247,6 +265,15 @@ static ThreadView * sharedInstance = nil;
 
 }
 
+- (void) updateHighlightColors
+{
+
+//	NSLog( @"updateHighlightColors" );
+	[ super updateHighlightColors ];
+
+	[ _dateLabel setHighlighted: [ [ self titleTextLabel ] isHighlighted ] ];
+
+}
 
 
 @end
