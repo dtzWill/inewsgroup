@@ -55,12 +55,15 @@
 @interface GroupViewRow : UIImageAndTextTableCell
 {
 	UIDateLabel * _dateLabel;
+	UITextLabel * _fromLabel;
 }
 - (id) initWithFrame: (CGRect) frame;
 
 - (int) numLines;
 
 - (void) setDate: (double) epochtime;
+
+- (void) setFrom: (NSString *) from;
 
 @end
 

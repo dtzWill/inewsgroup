@@ -225,7 +225,7 @@ static ThreadView * sharedInstance = nil;
 	_fromLabel = [ [UITextLabel alloc] initWithFrame: CGRectMake(210.0f, 40.0f, 65.0f, 25.0f ) ];
 	[ _fromLabel setFont: GSFontCreateWithName( THREAD_SENDER_FONT , kGSFontTraitBold, THREAD_SENDER_SIZE ) ];	
 
-	[ _fromLabel setText: (id)getSender( artnum ) ];
+	[ _fromLabel setText: (id)getSenderForArt( artnum ) ];
 	[ _fromLabel setCentersHorizontally: NO ];
 
 

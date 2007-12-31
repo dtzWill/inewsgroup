@@ -84,4 +84,6 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 
 double getNewestDateInThread( int threadnum );
 
-NSString * getSender( int artnum );
+NSString * getSenderForArt( int artnum );
+
+NSString * getSenderForThread( int threadnum );
