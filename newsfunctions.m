@@ -42,28 +42,35 @@ NSString * getServer()
 {
 	if ( nntp_server && strlen( nntp_server ) > 0 )
 		return [NSString stringWithCString: nntp_server ];
-	return nil;
+	return @"";
 }
 
 NSString * getUserName()
 {
 	if ( authusername[0] != '\0' )
 		return [NSString stringWithCString: (char *)authusername ]; 
-	return nil;
+	return @"";
 }
 
 NSString * getPass()
 {
 	if ( authpassword[0] != '\0' )
 		return [NSString stringWithCString: (char *)authpassword ];
-	return nil; 
+	return @""; 
 }
 
 NSString * getEmail()
 {
 	if ( email[0] != '\0' )
 		return [NSString stringWithCString: (char *)email ];
-	return nil; 
+	return @""; 
+}
+
+NSString * getRealName()
+{
+	if ( name[0] != '\0' )
+		return [NSString stringWithCString: (char *)name ];
+	return @"";
 }
 
 NSString * getFromString()
@@ -71,7 +78,7 @@ NSString * getFromString()
 	//TODO: eventually add the user's full name as well, as set in the
 	//preferences pane
 
-	return [NSString stringWithFormat: L_FROM_FORMAT, getEmail()];
+	return [NSString stringWithFormat: L_FROM_FORMAT, getRealName(), getEmail()];
 
 }
 
@@ -111,7 +118,13 @@ void setEmail( NSString * ns_email )
 	email[0] = '\0';
 	if( ns_email && [ns_email cString] )
 		strncpy( email, [ns_email cString], MAX_EMAIL );
-	NSLog( @"email: %s, ns_email: %@", email, ns_email );
+}
+
+void setRealName( NSString * realname )
+{
+	name[0] = '\0';
+	if( realname && [realname cString] )
+		strncpy( name, [realname cString], MAX_EMAIL );
 }
 
 
@@ -148,7 +161,8 @@ void readSettingsFromFile()
 		return;
 	}
 
-	fscanf( f_email, "%s\n", email );
+	fscanf( f_email, "%[^\n]\n", email );
+	fscanf( f_email, "%[^\n]\n", name );
 
 	fclose( f_newsauth );
 
@@ -184,6 +198,7 @@ void saveSettingsToFiles()
 	}
 
 	fprintf( f_newsemail, "%s\n", email );
+	fprintf( f_newsemail, "%s\n", name );
 
 	fclose( f_newsemail );//yay more fun
 
@@ -591,7 +606,7 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 	//else
 
 	//these aren't pushed into 'consts.h' because they aren't language-specific
-	fprintf( f_newmail, "From: %s\n", [ getEmail() cString ] );
+	fprintf( f_newmail, "From: %s <%s>\n", name, email );
 
 	fprintf( f_newmail, "Subject: %s\n", [ subject cString ] ); 
 

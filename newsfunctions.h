@@ -7,7 +7,7 @@
 //Interaction between iNewsGroup and the tin code
 
 char email[ MAX_EMAIL ];
-
+char name[ MAX_EMAIL ];
 
 //methods:
 
@@ -35,6 +35,7 @@ NSString * getServer();
 NSString * getUserName();
 NSString * getPassword();
 NSString * getEmail();
+NSString * getRealName();
 NSString * getFromString();
 
 void setServer( NSString * server );
@@ -44,6 +45,8 @@ void setUserName( NSString * user );
 void setPassword( NSString * pass );
 
 void setEmail( NSString * ns_email );
+
+void setRealName( NSString * realname );
 
 void readSettingsFromFile();
 

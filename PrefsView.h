@@ -14,6 +14,7 @@
 #define USER_ROW 1
 #define PASS_ROW 2
 #define EMAIL_ROW 3
+#define NAME_ROW 4
 
 @interface PrefsView: UIView
 {
