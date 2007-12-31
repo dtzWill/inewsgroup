@@ -5,6 +5,7 @@
 #import <UIKit/UIKit.h>
 #import <UIKit/UIView.h>
 #import <UIKit/UIImageAndTextTableCell.h>
+#import <UIKit/UIDateLabel.h>
 #import "PostView.h";
 #import "TitleRefresher.h"
 
@@ -40,7 +41,7 @@
 @interface ThreadViewItem: UIImageAndTextTableCell
 {
 	int _articleID;
-
+	UIDateLabel * _dateLabel;
 }
 
 - (id) initWithArticle: (int) artnum;

@@ -627,6 +627,18 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 
 }
 
+double getNewestDateInThread( int threadnum )
+{
+	double date = arts[ base[ threadnum ] ].date ;
+	int i, art;
+	for_each_art_in_thread( i, threadnum )
+	{
+		if ( arts[i].date > date ) date = arts[i].date;
+	}
+
+
+	return date;
+}
 
 
 

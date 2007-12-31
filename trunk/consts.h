@@ -39,7 +39,7 @@ extern NSString *kUIButtonBarButtonType;
 
 //font defines
 #define GROUP_FONT "Helvetica"
-#define GROUP_SIZE 16.0f
+#define GROUP_SIZE 14.0f
 #define HEADER_FONT "Helvetica"
 #define HEADER_SIZE 16.0f
 #define POST_BODY_SIZE 14.0f
