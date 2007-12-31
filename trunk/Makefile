@@ -39,7 +39,7 @@ iNewsGroup:  $(OBJS)
 inewsgroup.o: inewsgroup.m
 	$(ARMCC) -c $(FLAGS) $(TININC) $< -o $@
 
-%.o:    %.m %.h
+%.o:    %.m %.h consts.h
 	$(ARMCC) -c $(FLAGS) $(TININC) $< -o $@
 
 $(PCRELIB): 

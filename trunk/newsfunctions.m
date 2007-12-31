@@ -655,6 +655,22 @@ double getNewestDateInThread( int threadnum )
 	return date;
 }
 
+NSString * getSender( int artnum )
+{
+//	if ( arts[artnum].name )
+//		return [ NSString stringWithCString: arts[artnum].name ];
+	if ( arts[artnum].from )
+	{
+		NSString * sender = [ NSString stringWithCString: arts[artnum].from ];
+		if ( [ sender length ] > 0 )
+		{
+			sender = [ sender substringToIndex: [ sender length ] - 2 ]; //remove '\n'
+		}
+		
+		return sender;
+	} 
+	return @"";
+}
 
 
 
