@@ -79,6 +79,7 @@ static ComposeView * sharedInstance = nil;
 	[_table setDataSource: self];
 	[_table setDelegate: self];
 	[_table reloadData];
+	[ _table setAllowsRubberBanding: NO ];	
 
 
 	//go below the headers, no keyboard

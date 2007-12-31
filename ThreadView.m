@@ -217,12 +217,12 @@ static ThreadView * sharedInstance = nil;
 	_articleID = artnum;
 
 	//prepare the date
-	_dateLabel = [[UIDateLabel alloc] initWithFrame: CGRectMake(210.0f, 10.0f, 80.0f, 30.0f)];
+	_dateLabel = [[UIDateLabel alloc] initWithFrame: CGRectMake(210.0f, 10.0f, 65.0f, 30.0f)];
 	[ _dateLabel setDate: [ NSDate dateWithTimeIntervalSince1970: arts[ artnum ].date ] ];
 	[ _dateLabel setCentersHorizontally: YES];
 
 	//prepare the 'from' label
-	_fromLabel = [ [UITextLabel alloc] initWithFrame: CGRectMake(210.0f, 40.0f, 80.0f, 25.0f ) ];
+	_fromLabel = [ [UITextLabel alloc] initWithFrame: CGRectMake(210.0f, 40.0f, 65.0f, 25.0f ) ];
 	[ _fromLabel setFont: GSFontCreateWithName( THREAD_SENDER_FONT , kGSFontTraitBold, THREAD_SENDER_SIZE ) ];	
 
 	[ _fromLabel setText: (id)getSender( artnum ) ];
@@ -251,14 +251,14 @@ static ThreadView * sharedInstance = nil;
 - (void) layoutSubviews
 {
 	[ super layoutSubviews ];
-	CGRect rect = CGRectMake( 32.0f, 0.0f, 190.0f, 16.0f * [self numLines ] );
+	CGRect rect = CGRectMake( 32.0f, 0.0f, 185.0f, 16.0f * [self numLines ] );
 	//center it vertically
 	rect.origin.y = ( (64.0f - 16.0f * [self numLines ])/ 2.0f  );	
  
 	[ [ self titleTextLabel] setFrame: rect ];	
 
-	[ _dateLabel setFrame: CGRectMake( 210.0f, 10.0f, 80.0f, 30.0f ) ];
-	[ _fromLabel setFrame: CGRectMake( 210.0f, 40.0f, 80.0f, 25.0f ) ];
+	[ _dateLabel setFrame: CGRectMake( 210.0f, 10.0f, 65.0f, 30.0f ) ];
+	[ _fromLabel setFrame: CGRectMake( 210.0f, 40.0f, 65.0f, 25.0f ) ];
 }
 
 
@@ -269,7 +269,7 @@ static ThreadView * sharedInstance = nil;
 
 - (int) numLines
 {
-	return 1 + ( [_titleTextLabel textSize].width ) / 190;
+	return 1 + ( [_titleTextLabel textSize].width ) / 180;
 }
 
 - (float) rowHeight

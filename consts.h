@@ -1,6 +1,6 @@
 //globals:
 
-#define RELEASE_AND_VERSION @"iNewsGroup 1.0.2"
+#define RELEASE_AND_VERSION @"iNewsGroup 1.0.3"
 #define AUTHOR @"Will Dietz"
 #define CONTACT_EMAIL @"inewsgroupdev@gmail.com"
 #define INEWSGROUP @"iNewsGroup"
@@ -32,6 +32,7 @@ extern NSString *kUIButtonBarButtonType;
 #define HTTP_REQUEST_TIMEOUT 10.0
 
 //if your email is longer than this, too bad
+//also used from 'from' header length, similar comment applies
 #define MAX_EMAIL 100
 
 //this defines the 'queue' (pool) of rows we use for displaying

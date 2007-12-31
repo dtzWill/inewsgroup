@@ -66,6 +66,7 @@ static PostView * sharedInstance = nil;
 	[_table setDataSource: self];
 	[_table setDelegate: self];
 	[_table reloadData];
+	[ _table setAllowsRubberBanding: NO ];	
 
 	
 	//text view to show the message data...
