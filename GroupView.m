@@ -463,7 +463,7 @@ static GroupView * sharedInstance = nil;
 
 - (int) numLines
 {
-	return 1 + ( [_titleTextLabel textSize].width ) / 180;
+	return 1 + ( [_titleTextLabel textSize].width ) / 190;
 }
 
 @end

@@ -42,6 +42,7 @@
 {
 	int _articleID;
 	UIDateLabel * _dateLabel;
+	UITextLabel * _fromLabel;
 }
 
 - (id) initWithArticle: (int) artnum;

@@ -10,6 +10,7 @@ char email[ MAX_EMAIL ];
 char name[ MAX_EMAIL ];
 
 //methods:
+//TODO: organize these
 
 bool hasConnected();
 
@@ -82,3 +83,5 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 
 
 double getNewestDateInThread( int threadnum );
+
+NSString * getSender( int artnum );

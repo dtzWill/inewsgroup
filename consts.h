@@ -46,6 +46,8 @@ extern NSString *kUIButtonBarButtonType;
 #define SUBSCRIPTION_FONT "Helvetica"
 #define SUBSCRIPTION_SIZE 14.0f
 #define THREAD_FONT "Helvetica"
+#define THREAD_SENDER_FONT "Helvetica"
+#define THREAD_SENDER_SIZE 10.0f
 #define THREAD_SIZE 14.0f
 #define MAIN_FONT "Helvetica"
 #define MAIN_SIZE 15.0f
