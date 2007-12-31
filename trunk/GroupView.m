@@ -411,7 +411,7 @@ static GroupView * sharedInstance = nil;
 {
 	[super initWithFrame: frame ];
 	
-	_dateLabel = [[UIDateLabel alloc] initWithFrame: CGRectMake(210.0f, 10.0f, 60.0f, 30.0f)];
+	_dateLabel = [[UIDateLabel alloc] initWithFrame: CGRectMake(210.0f, 10.0f, 65.0f, 30.0f)];
 	[ _dateLabel setDate: [NSDate date]];
 	[ _dateLabel setCentersHorizontally: YES];
 
@@ -451,19 +451,19 @@ static GroupView * sharedInstance = nil;
 {
 	[ super layoutSubviews ];
 
-	CGRect rect = CGRectMake( 32.0f, 0.0f, 190.0f, 16.0f * [self numLines ] );
+	CGRect rect = CGRectMake( 32.0f, 0.0f, 185.0f, 16.0f * [self numLines ] );
 	//center it vertically
 	rect.origin.y = ( (64.0f - 16.0f * [self numLines ])/ 2.0f  );	
  
 	[ [ self titleTextLabel ] setFrame: rect ];
 
-	[ _dateLabel setFrame: CGRectMake( 210.0f, 10.0f, 80.0f, 30.0f ) ];
+	[ _dateLabel setFrame: CGRectMake( 210.0f, 10.0f, 65.0f, 30.0f ) ];
 
 }
 
 - (int) numLines
 {
-	return 1 + ( [_titleTextLabel textSize].width ) / 190;
+	return 1 + ( [_titleTextLabel textSize].width ) / 180;
 }
 
 @end
