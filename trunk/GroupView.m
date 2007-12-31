@@ -400,6 +400,8 @@ static GroupView * sharedInstance = nil;
 	[ row setImage: img ];
 
 	[ row setDate: getNewestDateInThread( _threadnum ) ];
+
+	[ row setFrom: getSenderForThread( _threadnum ) ];
 }
 
 @end
@@ -415,6 +417,13 @@ static GroupView * sharedInstance = nil;
 	[ _dateLabel setDate: [NSDate date]];
 	[ _dateLabel setCentersHorizontally: YES];
 
+	//prepare the 'from' label
+	_fromLabel = [ [UITextLabel alloc] initWithFrame: CGRectMake(210.0f, 40.0f, 65.0f, 25.0f ) ];
+	[ _fromLabel setFont: GSFontCreateWithName( THREAD_SENDER_FONT , kGSFontTraitBold, THREAD_SENDER_SIZE ) ];	
+
+	[ _fromLabel setText: @"" ];
+	[ _fromLabel setCentersHorizontally: NO ];
+
 	//prepare colors so it highlights properly... sigh
 
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -424,7 +433,11 @@ static GroupView * sharedInstance = nil;
 	[ _dateLabel setHighlightedColor:CGColorCreate(colorSpace, white ) ];
 	[ _dateLabel setBackgroundColor:CGColorCreate(colorSpace, transparentWhite ) ];
 		
+	[ _fromLabel setHighlightedColor:CGColorCreate(colorSpace, white ) ];
+	[ _fromLabel setBackgroundColor:CGColorCreate(colorSpace, transparentWhite ) ];
+
 	[ super addSubview: _dateLabel ];
+	[ super addSubview: _fromLabel ];
 
 	return self;
 }
@@ -435,6 +448,11 @@ static GroupView * sharedInstance = nil;
 	NSDate * date = [NSDate dateWithTimeIntervalSince1970: epochtime ] ;
 	[ _dateLabel setDate: date ];
 
+}
+
+- (void) setFrom: (NSString *) from
+{
+	[ _fromLabel setText: from ];
 }
 
 - (void) updateHighlightColors

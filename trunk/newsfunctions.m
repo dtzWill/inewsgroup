@@ -655,24 +655,27 @@ double getNewestDateInThread( int threadnum )
 	return date;
 }
 
-NSString * getSender( int artnum )
+NSString * getSenderForArt( int artnum )
 {
+//name doesn't seemt to be loaded until we load the rest of the article....
 //	if ( arts[artnum].name )
 //		return [ NSString stringWithCString: arts[artnum].name ];
 	if ( arts[artnum].from )
 	{
-		NSString * sender = [ NSString stringWithCString: arts[artnum].from ];
-		if ( [ sender length ] > 0 )
-		{
-			sender = [ sender substringToIndex: [ sender length ] - 2 ]; //remove '\n'
-		}
-		
-		return sender;
+		return [ NSString stringWithCString: arts[artnum].from ];
 	} 
 	return @"";
 }
 
+NSString * getSenderForThread( int threadnum )
+{
+	if ( arts[ base[ threadnum ] ].from )
+	{
+		return [ NSString stringWithCString: arts[ base[ threadnum ] ].from ];
+	}
+	return @"";
 
+}
 
 //TODO: add function to fix all memory that's part of
 //		--newsfunctions
