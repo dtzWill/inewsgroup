@@ -4,8 +4,7 @@ ARMLD=$(ARMCC)
 CC=gcc
 LD=$(CC)
 CFLAGS=-O2
-RESOLVLIB = ./libresolv.a 
-LDFLAGS= -Wl,-syslibroot,/usr/local/share/iphone-filesystem  -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit  -framework Message -DBIND_8_COMPAT
+LDFLAGS= -Wl,-syslibroot,/usr/local/share/iphone-filesystem  -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit  -framework Message
 TINDIR = tin-1.8.3/src
 TININC = -I tin-1.8.3/include -I tin-1.8.3/pcre -I tin-1.8.3/src -I tin-1.8.3/intl
 TINLIB = ./libtin.a
@@ -34,13 +33,13 @@ OBJS = \
 all:   iNewsGroup 
 
 iNewsGroup:  $(OBJS)
-	$(ARMLD) $(LDFLAGS) -o $@ $(RESOLVLIB) $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^  
+	$(ARMLD) $(LDFLAGS) -o $@ $(PCRELIB) $(INTLFLAGS) -lcurses $(TINLIB) $^  
 
 inewsgroup.o: inewsgroup.m
-	$(ARMCC) -c $(FLAGS) $(TININC) $< -o $@
+	$(ARMCC) -c $(CFLAGS) $(TININC) $< -o $@
 
 %.o:    %.m %.h consts.h
-	$(ARMCC) -c $(FLAGS) $(TININC) $< -o $@
+	$(ARMCC) -c $(CFLAGS) $(TININC) $< -o $@
 
 $(PCRELIB): 
 	cd $(TINDIR) && make
