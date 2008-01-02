@@ -4,7 +4,15 @@ ARMLD=$(ARMCC)
 CC=gcc
 LD=$(CC)
 CFLAGS=-O2
-LDFLAGS= -Wl,-syslibroot,/usr/local/share/iphone-filesystem  -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework GraphicsServices -framework UIKit -framework LayerKit  -framework Message
+LDFLAGS= \
+	-Wl,-syslibroot,/usr/local/share/iphone-filesystem \
+	-lobjc -ObjC -framework CoreFoundation \
+	-framework Foundation \
+	-framework CoreGraphics \
+	-framework GraphicsServices \
+	-framework UIKit \
+	-framework LayerKit \
+	-framework Message
 TINDIR = tin-1.8.3/src
 TININC = -I tin-1.8.3/include -I tin-1.8.3/pcre -I tin-1.8.3/src -I tin-1.8.3/intl
 TINLIB = ./libtin.a

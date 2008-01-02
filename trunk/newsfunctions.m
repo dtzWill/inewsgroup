@@ -247,7 +247,9 @@ bool openArticle( int groupnum, int articlenum )
 */
 	//This line looks worthless, but some code we call here needs this to be set appropriately.  Sigh... 
 	curr_group = &active[ my_group[ groupnum ] ];
-	//DAMN YOU CURR_GROUP :-(
+
+//	tinrc.wrap_column = 1000;
+
 	return art_open( false, &arts[ articlenum ], //which article? THIS article
 		curr_group,//grab the group
 		&_curArt,//store it in our article data structure
@@ -262,6 +264,17 @@ NSString *	readArticleContent()
 	NSMutableString * body = [[NSMutableString alloc] init];
 	char * line;
 	int i; 
+/*
+	rewind( _curArt.raw );
+
+	NSLog( @"Raw Data" );
+	while ( ( line = tin_fgets( _curArt.raw, TRUE ) ) != NULL )
+	{
+		NSLog( @"%s\n", line );
+	}
+*/
+	rewind( _curArt.cooked );
+
 	//i=1, to skip the 'Newsgroups: " line that should have been
 	//removed with the headers, but apparently not.
 	for (i = 1; i < _curArt.cooked_lines; i++) {
