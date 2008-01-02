@@ -1159,6 +1159,7 @@ art_open(
 	t_bool show_progress_meter,
 	char *pmesg)
 {
+	wrap_lines = 0; //Will--don't wrap things, we'll handle this in our view
 	FILE *fp;
 
 	memset(artinfo, 0, sizeof(t_openartinfo));
