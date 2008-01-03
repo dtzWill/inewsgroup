@@ -1855,7 +1855,8 @@ check_auth(
 			break;
 		default:	
 		//????	
-			break;
+			wait_message( 0, "Unknown/Unhandled return for MOTD request: %d\n", i );
+			return -1;
 	}
 
 	return 0;
