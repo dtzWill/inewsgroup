@@ -259,15 +259,15 @@ static iNewsApp * sharedInstance = nil;
 
 - (void) delayedInit
 {
-	[self performSelectorOnMainThread: @selector(delayedInitSel) withObject: nil waitUntilDone: YES];
-}
-
-- (void) delayedInitSel
-{
+//	[self performSelectorOnMainThread: @selector(delayedInitSel) withObject: nil waitUntilDone: NO];
+//}
+//
+//- (void) delayedInitSel
+//{
 	if(	!init_server() )
 	{//if fail.. just go to prefs page
 		NSLog( @"connection failed... showing prefs view" );
-		[ [ViewController sharedInstance] setView: [PrefsView sharedInstance ] slideFromLeft: NO ];
+		[ NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target: self selector:@selector( gotoPrefs ) userInfo: nil repeats: NO ];
 		[ _connect dismiss ];
 	
 	}
@@ -282,6 +282,11 @@ static iNewsApp * sharedInstance = nil;
 
 	}
 	[ [PrefsView sharedInstance ] loadSettings ];
+}
+
+- (void) gotoPrefs
+{
+	[ [ViewController sharedInstance] setView: [PrefsView sharedInstance ] slideFromLeft: NO ];
 }
 
 

@@ -480,6 +480,10 @@ int init_server()
 
 	tinrc.auto_reconnect = true;
 	tinrc.cache_overview_files = true;
+
+	//These don't seem to have any effect, possibly overwritten by
+	//group->attributes->thread_arts for the individual group 
+//	tinrc.thread_articles = 0;
 	tinrc.thread_articles = 3;//subject and reference
 
 	changed = true; //flag ripped out of auth.c so we can tell it
@@ -536,7 +540,7 @@ int init_server()
 	int worked = check_auth(); //make sure we're auth'd....
 
 
-//	NSLog( @"\n\nworked: %d\n", worked );
+	NSLog( @"\n\ncheck_auth: %d\n", worked );
 	if ( worked == -1 )//if failure....
 	{
 		return false; // :-(
