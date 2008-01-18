@@ -57,7 +57,7 @@ static ViewController *sharedInstance = nil;
 	_prevView = _curView;
 	_curView = view;
 
-    [ self  transition:dir toView:view ];
+	[ self  transition:dir toView:view ];
 
 }
 

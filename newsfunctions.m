@@ -445,7 +445,7 @@ bool ResolveHostname( char * hostname )
 
 	if ( error == kDNSServiceErr_NoError )//good so far...
 	{
-    	int dns_sd_fd = DNSServiceRefSockFD(service);
+		int dns_sd_fd = DNSServiceRefSockFD(service);
 		int nfds = dns_sd_fd + 1;
 		fd_set readfds;
 		struct timeval tv;

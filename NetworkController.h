@@ -10,16 +10,16 @@
 
 @interface NetworkController : NSObject
 {
-    struct __SCDynamicStore *_store;	// 4 = 0x4
-    NSString *_domainName;	// 8 = 0x8
-    NSMutableDictionary *_reachabilityObjects;	// 12 = 0xc
-    NSMutableSet *_reachableHosts;	// 16 = 0x10
-    unsigned int _waitingForDialToFinish:1;	// 20 = 0x14
-    unsigned int _checkedNetwork:1;	// 20 = 0x14
-    unsigned int _isNetworkUp:1;	// 20 = 0x14
-    unsigned int _isFatPipe:1;	// 20 = 0x14
-    unsigned int _edgeRequested:1;	// 20 = 0x14
-    NSTimer *_notificationTimer;	// 24 = 0x18
+	struct __SCDynamicStore *_store;	// 4 = 0x4
+	NSString *_domainName;	// 8 = 0x8
+	NSMutableDictionary *_reachabilityObjects;	// 12 = 0xc
+	NSMutableSet *_reachableHosts;	// 16 = 0x10
+	unsigned int _waitingForDialToFinish:1;	// 20 = 0x14
+	unsigned int _checkedNetwork:1;	// 20 = 0x14
+	unsigned int _isNetworkUp:1;	// 20 = 0x14
+	unsigned int _isFatPipe:1;	// 20 = 0x14
+	unsigned int _edgeRequested:1;	// 20 = 0x14
+	NSTimer *_notificationTimer;	// 24 = 0x18
 }
 
 + (id)sharedInstance;	// IMP=0x30b96e29

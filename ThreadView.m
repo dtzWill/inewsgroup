@@ -51,7 +51,7 @@ static ThreadView * sharedInstance = nil;
 	[super initWithFrame: rect];
 
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
-	    0.0f, 0.0f, 320.0f, 48.0f)];
+		0.0f, 0.0f, 320.0f, 48.0f)];
 
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_THREADVIEW ];//better name?? lol
 	[nav showButtonsWithLeftTitle: L_BACK rightTitle: nil leftBack: YES ];
@@ -65,10 +65,10 @@ static ThreadView * sharedInstance = nil;
 	_rows = [ [ NSMutableArray alloc] init ];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 480.0f - 16.0f - 48.0f)];
+		320.0f, 480.0f - 16.0f - 48.0f)];
 	//col_subj
 	UITableColumn * col = [[UITableColumn alloc] initWithTitle: @"thread"
-	    identifier: @"thread" width: 320.0f]; //200.0f or so
+		identifier: @"thread" width: 320.0f]; //200.0f or so
 	
 	[_table addTableColumn: col]; 
 	[_table setDataSource: self];

@@ -56,7 +56,7 @@ static GroupView * sharedInstance = nil;
 
 	//Build navigation bar....
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
-	    0.0f, 0.0f, 320.0f, 48.0f)];
+		0.0f, 0.0f, 320.0f, 48.0f)];
 	[nav setDelegate: self];	
 	[nav setBarStyle: 0];
 
@@ -75,10 +75,10 @@ static GroupView * sharedInstance = nil;
 
 	//create table used to display the rows
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 480.0f - 16.0f - 48.0f*2)];
+		320.0f, 480.0f - 16.0f - 48.0f*2)];
 	//our table has a single column...
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"articles"
-	    identifier: @"articles" width: 320.0f];
+		identifier: @"articles" width: 320.0f];
 
 	//finish initializing the table	
 	[_table addTableColumn: col]; 
@@ -116,25 +116,25 @@ static GroupView * sharedInstance = nil;
 	//bottom bar:
 
 	//create buttons...
-    NSDictionary *btnCompose = [NSDictionary dictionaryWithObjectsAndKeys:
-            //self, kUIButtonBarButtonTarget,
-            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
-            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonTag,
-            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
-            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
-            L_NEW_MSG, kUIButtonBarButtonInfo,
-            nil
-    ];
+	NSDictionary *btnCompose = [NSDictionary dictionaryWithObjectsAndKeys:
+				//self, kUIButtonBarButtonTarget,
+		@"buttonBarItemTapped:", kUIButtonBarButtonAction,
+		[NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonTag,
+		[NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
+		[NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
+		L_NEW_MSG, kUIButtonBarButtonInfo,
+		nil
+	];
 
-    NSDictionary *btnMarkRead = [NSDictionary dictionaryWithObjectsAndKeys:
-            //self, kUIButtonBarButtonTarget,
-            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
-            [NSNumber numberWithUnsignedInt:2], kUIButtonBarButtonTag,
-            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
-            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
-            L_MARK_READ, kUIButtonBarButtonInfo,
-            nil
-    ];
+	NSDictionary *btnMarkRead = [NSDictionary dictionaryWithObjectsAndKeys:
+		//self, kUIButtonBarButtonTarget,
+		@"buttonBarItemTapped:", kUIButtonBarButtonAction,
+		[NSNumber numberWithUnsignedInt:2], kUIButtonBarButtonTag,
+		[NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
+		[NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
+		L_MARK_READ, kUIButtonBarButtonInfo,
+		nil
+	];
 
 	NSArray *items = [NSArray arrayWithObjects:btnCompose,btnMarkRead, nil];
 	UIButtonBar *buttonBar = [[UIButtonBar alloc] initInView: self withFrame:CGRectMake(0.0f, 480.0f-16.0f-48.0f, 320.0f, 48.0f) withItemList:items];
@@ -143,18 +143,14 @@ static GroupView * sharedInstance = nil;
 	[buttonBar registerButtonGroup:1 withButtons:buttons withCount:2];
 	[buttonBar showButtonGroup:1 withDuration:0.];
 	[buttonBar setDelegate: self];
-//    [buttonBar setBarStyle:2];
-    [buttonBar setButtonBarTrackingMode: 2];
+//	[buttonBar setBarStyle:2];
+	[buttonBar setButtonBarTrackingMode: 2];
 
 //	[ [ buttonBar viewWithTag: 1 ] setEnabled: force_no_post ];
 	[ [ buttonBar viewWithTag: 2 ]//2='mark read' button
-            setFrame:CGRectMake( 320.0f	-80.0f, 0.0f, 64.0f, 48.0f) //right-align
-        ]; 
+		setFrame:CGRectMake( 320.0f	-80.0f, 0.0f, 64.0f, 48.0f) //right-align
+	]; 
 	
-
-
-
-
 	//add views to ourself
 	[self addSubview: nav];
 	[self addSubview: _table];
@@ -181,7 +177,7 @@ static GroupView * sharedInstance = nil;
 		
 			break;
 
-        case 2://mark selected group read
+		case 2://mark selected group read
 			if( _selectedRow >= 0 )
 			{
 				for_each_art_in_thread( i ,
@@ -240,7 +236,7 @@ static GroupView * sharedInstance = nil;
 	[_table reloadData ]; 
 
 	//call us back in a bit--this is used to allow the gui to update itself (in particular, to render _connect ) before continuing
-    [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(getArticles) userInfo:nil repeats:NO];	
+	[NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(getArticles) userInfo:nil repeats:NO];	
 
 }
 

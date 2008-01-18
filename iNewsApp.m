@@ -80,7 +80,7 @@ static iNewsApp * sharedInstance = nil;
 
 	//top navigation bar.
 	_navTop = [[UINavigationBar alloc] initWithFrame: CGRectMake(
-	    0.0f, 0.0f, 320.0f, 48.0f)];
+		0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: INEWSGROUP ];
 	[_navTop showLeftButton: L_PREFS withStyle: BUTTON_BACK rightButton: L_QUIT withStyle: BUTTON_RED ];
 	[_navTop pushNavigationItem: _titleItem];
@@ -90,25 +90,25 @@ static iNewsApp * sharedInstance = nil;
 	//bottom bar:
 	_selectedRow = -1; //invalid
 	//create buttons...
-    NSDictionary *btnSubs = [NSDictionary dictionaryWithObjectsAndKeys:
-            //self, kUIButtonBarButtonTarget,
-            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
-            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonTag,
-            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
-            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
-            L_SUBSCRIPTIONSDOTDOTDOT, kUIButtonBarButtonInfo,
-            nil
-    ];
+	NSDictionary *btnSubs = [NSDictionary dictionaryWithObjectsAndKeys:
+			//self, kUIButtonBarButtonTarget,
+			@"buttonBarItemTapped:", kUIButtonBarButtonAction,
+			[NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonTag,
+			[NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
+			[NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
+			L_SUBSCRIPTIONSDOTDOTDOT, kUIButtonBarButtonInfo,
+			nil
+	];
 
-    NSDictionary *btnMarkRead = [NSDictionary dictionaryWithObjectsAndKeys:
-            //self, kUIButtonBarButtonTarget,
-            @"buttonBarItemTapped:", kUIButtonBarButtonAction,
-            [NSNumber numberWithUnsignedInt:2], kUIButtonBarButtonTag,
-            [NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
-            [NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
-            L_MARK_READ, kUIButtonBarButtonInfo,
-            nil
-    ];
+	NSDictionary *btnMarkRead = [NSDictionary dictionaryWithObjectsAndKeys:
+			//self, kUIButtonBarButtonTarget,
+			@"buttonBarItemTapped:", kUIButtonBarButtonAction,
+			[NSNumber numberWithUnsignedInt:2], kUIButtonBarButtonTag,
+			[NSNumber numberWithUnsignedInt:3], kUIButtonBarButtonStyle,
+			[NSNumber numberWithUnsignedInt:1], kUIButtonBarButtonType,
+			L_MARK_READ, kUIButtonBarButtonInfo,
+			nil
+	];
 
 	NSArray *items = [NSArray arrayWithObjects:btnSubs,btnMarkRead, nil];
 	UIButtonBar *buttonBar = [[UIButtonBar alloc] initInView: _mainView withFrame:CGRectMake(0.0f, 480.0f-16.0f-48.0f, 320.0f, 48.0f) withItemList:items];
@@ -117,12 +117,12 @@ static iNewsApp * sharedInstance = nil;
 	[buttonBar registerButtonGroup:1 withButtons:buttons withCount:2];
 	[buttonBar showButtonGroup:1 withDuration:0.];
 	[buttonBar setDelegate: self];
-//    [buttonBar setBarStyle:2];
-    [buttonBar setButtonBarTrackingMode: 2];
+//	[buttonBar setBarStyle:2];
+	[buttonBar setButtonBarTrackingMode: 2];
 
 	[ [ buttonBar viewWithTag: 2 ]//2='mark read' button
-            setFrame:CGRectMake( 320.0f	-80.0f, 0.0f, 64.0f, 48.0f) //right-align
-        ]; 
+			setFrame:CGRectMake( 320.0f	-80.0f, 0.0f, 64.0f, 48.0f) //right-align
+		]; 
 
 
 
@@ -168,9 +168,9 @@ static iNewsApp * sharedInstance = nil;
 	[self connect ];
 
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 480.0f - 16.0f - 48.0f*2 )];
+		320.0f, 480.0f - 16.0f - 48.0f*2 )];
 	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"subscribedgroups"
-	    identifier: @"subscribedgroups" width: 320.0f];
+		identifier: @"subscribedgroups" width: 320.0f];
 
 	
 	[_table addTableColumn: col]; 
@@ -209,7 +209,7 @@ static iNewsApp * sharedInstance = nil;
 		
 			break;
 
-        case 2://mark selected group read
+		case 2://mark selected group read
 			if( _selectedRow >= 0 )
 			{
 				markGroupRead( _selectedRow );	
@@ -223,7 +223,7 @@ static iNewsApp * sharedInstance = nil;
 - (BOOL)respondsToSelector:(SEL)aSelector
 {
 //	NSLog(@"respondsToSelector: %@", NSStringFromSelector(aSelector));
-    return [super respondsToSelector: aSelector];
+	return [super respondsToSelector: aSelector];
 }
 
 //Methods to make table work...:
@@ -264,7 +264,7 @@ static iNewsApp * sharedInstance = nil;
 
 - (void)dealloc {
 	//TODO: MAKE THIS DO WHAT IT'S SUPPOSED TO  
-      /*
+	  /*
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_path release];
 	[_files release];

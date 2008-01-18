@@ -57,7 +57,7 @@ static SubscriptionView * sharedInstance = nil;
 	_prefTable = [[UIPreferencesTable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
 	320.0f, 480.0f - 16.0f - 48.0f*2 )  ];
 	[_prefTable setDataSource: self];
-    [_prefTable setDelegate: self];
+	[_prefTable setDelegate: self];
 	[_prefTable setBottomBufferHeight:44.0f];
 
 	//initialize the row array
@@ -106,7 +106,7 @@ static SubscriptionView * sharedInstance = nil;
 
 	//setup the navbar
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
-	    0.0f, 0.0f, 320.0f, 48.0f)];
+		0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_SUBSCRIPTIONS ];
 	[nav showButtonsWithLeftTitle: L_SEARCH rightTitle: L_DONE leftBack: NO ]; 
 	[nav pushNavigationItem: _titleItem];
@@ -268,7 +268,7 @@ static SubscriptionView * sharedInstance = nil;
 - (BOOL) preferencesTable: (UIPreferencesTable*)table isLabelGroup: (int)group 
 {
 	return false;
-    switch (group)
+	switch (group)
 	{
 		case 0: return true;
 		case 1: return false;
@@ -282,13 +282,13 @@ static SubscriptionView * sharedInstance = nil;
 - (float)preferencesTable:(UIPreferencesTable *)aTable heightForRow:(int)row inGroup:(int)group withProposedHeight:(float)proposed {
 //	NSLog( @"Proposed height: %d", proposed );
   switch (group) {
-    case 0:
-      return 30;
-    case 1:
-      if ( row >= 0 ) return 70;
-		return 0;
-     default:
-      return proposed;
+	case 0:
+		return 30;
+	case 1:
+		if ( row >= 0 ) return 70;
+			return 0;
+	default:
+		return proposed;
   }
 }
 

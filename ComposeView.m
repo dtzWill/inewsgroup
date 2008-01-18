@@ -55,7 +55,7 @@ static ComposeView * sharedInstance = nil;
 	[super initWithFrame: rect];
 
 	_nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
-	    0.0f, 0.0f, 320.0f, 48.0f)];
+		0.0f, 0.0f, 320.0f, 48.0f)];
 
 	//set title to some default until we load the first article, and that'll overwrite it
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_COMPOSE ];
@@ -88,10 +88,10 @@ static ComposeView * sharedInstance = nil;
 
 	//create our table...
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 96.0f )];
+		320.0f, 96.0f )];
 	//col_subj
 	UITableColumn * col = [[UITableColumn alloc] initWithTitle: @"msg"
-	    identifier: @"msg" width: 320.0f];
+		identifier: @"msg" width: 320.0f];
 	//finish initializing our table...
 	[_table addTableColumn: col]; 
 	[_table setDataSource: self];
@@ -117,15 +117,15 @@ static ComposeView * sharedInstance = nil;
 	[ _textView setAllowsRubberBanding: YES ];	
 
 	//Keyboard:
-    _keyboard = [[EditorKeyboard alloc]
-		    initWithFrame:CGRectMake(0.0f, 480.0f, 320.0f, 480.0f ) ];
+	_keyboard = [[EditorKeyboard alloc]
+		initWithFrame:CGRectMake(0.0f, 480.0f, 320.0f, 480.0f ) ];
 
 
 	//add the various views to ourself..
 	[ self addSubview: _nav];
 	[ self addSubview: _table];
 	[ self addSubview: _textView];
-    [ self addSubview:_keyboard];
+	[ self addSubview:_keyboard];
 
 	[ self setOpaque: YES ];
 	[ self setBackgroundColor: [ _textView backgroundColor ] ]; 
@@ -380,25 +380,25 @@ static ComposeView * sharedInstance = nil;
 
 - (void)showKeyboard
 {
-    if( ! _keyboardShown && !_keyboardTransitioning )
-    {
+	if( ! _keyboardShown && !_keyboardTransitioning )
+	{
 	[_keyboard show];
 
 	_keyboardShown = YES;
 	_keyboardTransitioning = YES;
-    }
+	}
 }
 
 
 - (void)hideKeyboard
 {
-    if( _keyboardShown && !_keyboardTransitioning )
-    {
-	[_keyboard hide];
+	if( _keyboardShown && !_keyboardTransitioning )
+	{
+			[_keyboard hide];
 
-	_keyboardShown = NO;
-	_keyboardTransitioning = YES;
-    }
+			_keyboardShown = NO;
+			_keyboardTransitioning = YES;
+	}
 }
 
 - (void)keyboardTransitionOver
@@ -408,23 +408,23 @@ static ComposeView * sharedInstance = nil;
 
 - (void)toggleKeyboardFor: (id) sender
 {
-    if( _keyboardShown )
-    {
+	if( _keyboardShown )
+	{
 		if ( sender == _textView )
 		{
 			return;	//don't let the user's tapping in the message dialog close it
 		}
-    	else if ( sender == self )
+		else if ( sender == self )
 		{
-		   [NSTimer scheduledTimerWithTimeInterval: KEYBOARD_DELAY target:self selector:@selector(adjustForHiddenKeyboard) userInfo:nil repeats:NO];	
+			[NSTimer scheduledTimerWithTimeInterval: KEYBOARD_DELAY target:self selector:@selector(adjustForHiddenKeyboard) userInfo:nil repeats:NO];	
 		} else
 		{
-		   [NSTimer scheduledTimerWithTimeInterval: KEYBOARD_DELAY target:self selector:@selector(keyboardTransitionOver) userInfo:nil repeats:NO];	
+			[NSTimer scheduledTimerWithTimeInterval: KEYBOARD_DELAY target:self selector:@selector(keyboardTransitionOver) userInfo:nil repeats:NO];	
 		}
 		[self hideKeyboard];
-    }
-    else
-    {
+	}
+	else
+	{
 		if ( sender == _textView )
 		{
 			[NSTimer scheduledTimerWithTimeInterval: KEYBOARD_DELAY target:self selector:@selector(adjustForShownKeyboard) userInfo:nil repeats:NO];	
@@ -433,7 +433,7 @@ static ComposeView * sharedInstance = nil;
 		   [NSTimer scheduledTimerWithTimeInterval: KEYBOARD_DELAY target:self selector:@selector(keyboardTransitionOver) userInfo:nil repeats:NO];	
 		}
 		[self showKeyboard];
-    }
+	}
 }
 
 
@@ -443,7 +443,7 @@ static ComposeView * sharedInstance = nil;
 - (BOOL)respondsToSelector:(SEL)aSelector
 {
 //	NSLog(@"COMPOSE: respondsToSelector: %@", NSStringFromSelector(aSelector));
-    return [super respondsToSelector: aSelector];
+	return [super respondsToSelector: aSelector];
 }
 
 

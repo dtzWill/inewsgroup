@@ -56,9 +56,9 @@
 	EditTextView * _textView;
 	UINavigationBar * _nav;
 	EditorKeyboard * _keyboard;
-    NSMutableArray * _rows;
-    UINavigationItem * _titleItem;
-    UITable * _table;
+	NSMutableArray * _rows;
+	UINavigationItem * _titleItem;
+	UITable * _table;
 	UIAlertSheet * _sending, * _result; 
 
 	//message-specific
