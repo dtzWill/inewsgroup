@@ -1,3 +1,24 @@
+//Will Dietz
+//consts.h
+
+/*
+    This file is part of iNewsGroup.
+
+    iNewsGroup is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    iNewsGroup is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with iNewsGroup.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 //globals:
 
 #define RELEASE_AND_VERSION @"iNewsGroup 1.0.3"
@@ -29,7 +50,7 @@ extern NSString *kUIButtonBarButtonType;
 #define REFRESH_TIME 0.1
 #define QUIT_WAIT_TIME 5.0
 #define SAVE_TIME 20.0
-#define HTTP_REQUEST_TIMEOUT 10.0
+#define DNS_RESOLV_TIMEOUT 10.0
 
 //if your email is longer than this, too bad
 //also used from 'from' header length, similar comment applies

@@ -1813,6 +1813,9 @@ list_motd(
 
 //Will
 //use MOTD command to check auth.....
+//horrible hack. sigh...
+//idea is to execute some arbitrary command and hope it complains to use if we aren't auth'd.
+//why checking the /motd/ is auth-protected is beyond me....
 int
 check_auth(
 	void)
@@ -1852,11 +1855,15 @@ check_auth(
 				my_flush();
 				sleep((l >> 1) | 0x01);
 			}
+		case ERR_COMMAND: //server: "wtf are you talking about this 'motd' thing??"
+		case ERR_CMDSYN: //syntax error...(how??)
+		case ERR_MOTD: //NO MOTD AVAILABLE, not an error
 			break;
 		default:	
 		//????	
 			wait_message( 0, "Unknown/Unhandled return for MOTD request: %d\n", i );
 			return -1;
+
 	}
 
 	return 0;

@@ -63,7 +63,7 @@ clean: local_clean
 local_clean:
 	rm -f *.o iNewsGroup
 install: all
-#	scp iNewsGroup root@192.168.255.2:
+	scp iNewsGroup root@192.168.255.2:
 #	scp iNewsGroup root@10.5.16.180: 
-	scp iNewsGroup root@172.16.1.34:
+#	scp iNewsGroup root@172.16.1.34:
 # I have 3 wireless networks.. don't ask.

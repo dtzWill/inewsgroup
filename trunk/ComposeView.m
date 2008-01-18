@@ -1,5 +1,24 @@
 //Will Dietz
 //ComposeView.m
+//Compose a message, and sent it.
+
+/*
+    This file is part of iNewsGroup.
+
+    iNewsGroup is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    iNewsGroup is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with iNewsGroup.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
 
 #import "ComposeView.h"
 #import "ViewController.h" 
@@ -15,6 +34,7 @@ static ComposeView * sharedInstance = nil;
 
 @implementation ComposeView
 
+//singleton
 + (ComposeView *)sharedInstance
 {
 	if ( sharedInstance )
@@ -38,10 +58,10 @@ static ComposeView * sharedInstance = nil;
 	    0.0f, 0.0f, 320.0f, 48.0f)];
 
 	//set title to some default until we load the first article, and that'll overwrite it
-	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_COMPOSE ];//better name?? lol
+	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_COMPOSE ];
 	
 	//setup the nav bar
-	[ _nav showLeftButton: L_CANCEL withStyle: BUTTON_BACK rightButton: L_SEND withStyle: BUTTON_BLUE ];	// IMP=0x323d7894
+	[ _nav showLeftButton: L_CANCEL withStyle: BUTTON_BACK rightButton: L_SEND withStyle: BUTTON_BLUE ];	
 	[ _nav pushNavigationItem: _titleItem];
 	[ _nav setDelegate: self];	
 	[ _nav setBarStyle: 0];
@@ -59,8 +79,6 @@ static ComposeView * sharedInstance = nil;
 	[ _result setDefaultButton: [btnArry objectAtIndex: 0]];
 	
 	[ _result setAlertSheetStyle: 1];
-
-
 	
 	_keyboardTransitioning = false;
 	_editingMessage = false;
