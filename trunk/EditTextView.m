@@ -26,26 +26,26 @@
 
 - (void) mouseUp:(struct __GSEvent *)fp8
 {
-    if( ! [self isScrolling] )
-    {
-	if( [_delegate respondsToSelector:@selector(toggleKeyboardFor:)] )
+	if( ! [self isScrolling] )
 	{
-	    [_delegate performSelector: @selector(toggleKeyboardFor:) withObject: self];
+		if( [_delegate respondsToSelector:@selector(toggleKeyboardFor:)] )
+		{
+			[_delegate performSelector: @selector(toggleKeyboardFor:) withObject: self];
+		}
 	}
-    }
-    [super mouseUp:fp8];
+	[super mouseUp:fp8];
 }
 
 - (BOOL)webView:(id)fp8 shouldInsertText:(id)text replacingDOMRange:(id)fp16 givenAction:(int)fp20
 {
-    if( [_delegate respondsToSelector:@selector(shouldInsertText:)] )
-    {
-	if( ! [_delegate performSelector: @selector(shouldInsertText:) withObject: text] )
+	if( [_delegate respondsToSelector:@selector(shouldInsertText:)] )
 	{
-	    return FALSE;
+		if( ! [_delegate performSelector: @selector(shouldInsertText:) withObject: text] )
+		{
+			return FALSE;
+		}
 	}
-    }
-    return [super webView:fp8 shouldInsertText:text replacingDOMRange:fp16 givenAction:fp20];
+	return [super webView:fp8 shouldInsertText:text replacingDOMRange:fp16 givenAction:fp20];
 }
 
 @end

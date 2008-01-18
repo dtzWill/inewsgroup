@@ -33,9 +33,9 @@
 	int _groupnum;
 	int _threadnum;//index in my_group
 	
-    NSMutableArray * _rows;// holds the row objects for our table 
-    UINavigationItem * _titleItem;//title
-    UITable * _table;
+	NSMutableArray * _rows;// holds the row objects for our table 
+	UINavigationItem * _titleItem;//title
+	UITable * _table;
 
 }
 

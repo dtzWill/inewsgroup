@@ -46,12 +46,12 @@
 
 - (BOOL)autoCapitalizationPreference
 {
-  return false;
+	return false;
 }
 
 - (BOOL)autoCorrectionPreference
 {
-  return true;
+	return true;
 }
 
 @end
@@ -64,35 +64,35 @@
 
 - (void) show
 {
-    [self setTransform:CGAffineTransformMake(1,0,0,1,0,0)];
-    [self setFrame:CGRectMake(0.0f, 480.0, 320.0f, 480.0f)];
-
-    struct CGAffineTransform trans =
-	CGAffineTransformMakeTranslation(0, -235);
-    UITransformAnimation *translate =
-	[[UITransformAnimation alloc] initWithTarget: self];
-    [translate setStartTransform: CGAffineTransformMake(1,0,0,1,0,0)];
-    [translate setEndTransform: trans];
-    [[[UIAnimator alloc] init] addAnimation:translate
-			       withDuration: KEYBOARD_DELAY start:YES];
+	[self setTransform:CGAffineTransformMake(1,0,0,1,0,0)];
+	[self setFrame:CGRectMake(0.0f, 480.0, 320.0f, 480.0f)];
+	
+	struct CGAffineTransform trans =
+		CGAffineTransformMakeTranslation(0, -235);
+	UITransformAnimation *translate =
+		[[UITransformAnimation alloc] initWithTarget: self];
+	[translate setStartTransform: CGAffineTransformMake(1,0,0,1,0,0)];
+	[translate setEndTransform: trans];
+	[[[UIAnimator alloc] init] addAnimation:translate
+		withDuration: KEYBOARD_DELAY start:YES];
 }
 
 - (void) hide
 {
-    struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
-    rect.origin.x = rect.origin.y = 0.0f;
-    
-    [self setTransform:CGAffineTransformMake(1,0,0,1,0,0)];
-    [self setFrame:CGRectMake(0.0f, 235.0, 320.0f, 480.0f)];
-    
-    struct CGAffineTransform trans =
-	CGAffineTransformMakeTranslation(0, 235);
-    UITransformAnimation *translate =
-	[[UITransformAnimation alloc] initWithTarget: self];
-    [translate setStartTransform: CGAffineTransformMake(1,0,0,1,0,0)];
-    [translate setEndTransform: trans];
-    [[[UIAnimator alloc] init] addAnimation:translate
-			       withDuration: KEYBOARD_DELAY start:YES];
+	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
+	rect.origin.x = rect.origin.y = 0.0f;
+	
+	[self setTransform:CGAffineTransformMake(1,0,0,1,0,0)];
+	[self setFrame:CGRectMake(0.0f, 235.0, 320.0f, 480.0f)];
+	
+	struct CGAffineTransform trans =
+		CGAffineTransformMakeTranslation(0, 235);
+	UITransformAnimation *translate =
+		[[UITransformAnimation alloc] initWithTarget: self];
+	[translate setStartTransform: CGAffineTransformMake(1,0,0,1,0,0)];
+	[translate setEndTransform: trans];
+	[[[UIAnimator alloc] init] addAnimation:translate
+		withDuration: KEYBOARD_DELAY start:YES];
 }
 
 

@@ -51,7 +51,7 @@ static PrefsView * sharedInstance = nil;
 	_prefTable = [[UIPreferencesTable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
 	320.0f, 480.0f - 16.0f - 48.0f)  ];
 	[_prefTable setDataSource: self];
-    [_prefTable setDelegate: self];
+	[_prefTable setDelegate: self];
 	[_prefTable setBottomBufferHeight:44.0f];
 
 	//init both arrays...
@@ -118,7 +118,7 @@ static PrefsView * sharedInstance = nil;
 
 	//initialize the navbar
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
-	    0.0f, 0.0f, 320.0f, 48.0f)];
+		0.0f, 0.0f, 320.0f, 48.0f)];
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_PREFERENCES ];
 	[nav showLeftButton: L_QUIT withStyle: BUTTON_RED rightButton: L_DONE withStyle: BUTTON_NORMAL ]; 
 	[nav pushNavigationItem: _titleItem];
@@ -188,7 +188,7 @@ static PrefsView * sharedInstance = nil;
 
 - (BOOL) preferencesTable: (UIPreferencesTable*)table isLabelGroup: (int)group 
 {
-    switch (group)
+	switch (group)
 	{
 		case 0: return true;
 		case 1: return false;

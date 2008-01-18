@@ -51,7 +51,7 @@ static PostView * sharedInstance = nil;
 	[super initWithFrame: rect];
 
 	UINavigationBar *nav = [[UINavigationBar alloc] initWithFrame: CGRectMake(
-	    0.0f, 0.0f, 320.0f, 48.0f)];
+		0.0f, 0.0f, 320.0f, 48.0f)];
 
 	//set title to some default until we load the first article, and that'll overwrite it
 	_titleItem = [ [UINavigationItem alloc] initWithTitle: L_POSTVIEW ];//better name?? lol
@@ -75,10 +75,10 @@ static PostView * sharedInstance = nil;
 
 	//create our table...
 	_table = [[UITable alloc] initWithFrame: CGRectMake(0.0f, 48.0f,
-	    320.0f, 64.0f )];//480.0f - 16.0f - 48.0f - 350.0f)];
+		320.0f, 64.0f )];//480.0f - 16.0f - 48.0f - 350.0f)];
 	//col_subj
 	UITableColumn * col = [[UITableColumn alloc] initWithTitle: @"post"
-	    identifier: @"post" width: 320.0f];
+		identifier: @"post" width: 320.0f];
 	//finish initializing our table...
 	[_table addTableColumn: col]; 
 	[_table setDataSource: self];
@@ -119,7 +119,7 @@ static PostView * sharedInstance = nil;
 	[_textView setText: @""];
 
 	//set timer to call us back on getPost--allow the gui to update itself
-    [NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(getPost) userInfo:nil repeats:NO];	
+	[NSTimer scheduledTimerWithTimeInterval: REFRESH_TIME target:self selector:@selector(getPost) userInfo:nil repeats:NO];	
 }
 
 - (void) getPost
