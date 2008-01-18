@@ -1,6 +1,27 @@
 //newsfunctions.c
 //Will Dietz
+
+/*
+    This file is part of iNewsGroup.
+
+    iNewsGroup is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    iNewsGroup is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with iNewsGroup.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 #import <Foundation/Foundation.h>
+#import <Foundation/NSHost.h>
+#import <dns_sd.h>
 #import <UIKit/UIKit.h>
 #import "newsfunctions.h"
 #import "tin.h"
@@ -364,13 +385,12 @@ void readNewsRC()
 {
 	//TODO: do something with this number?
 	read_news_via_nntp = true;
-	list_active = true;
-	newsrc_active = false;
-//	newsrc_active = true;
-//	list_active = false; 
-	int num_subscribed = read_newsrc( newsrc, true );
 //	list_active = true;
 //	newsrc_active = false;
+	newsrc_active = true;
+	list_active = false; 
+	int num_subscribed = read_newsrc( newsrc, true );
+
 
 }
 
@@ -406,52 +426,67 @@ void init()
 
 }
 
-//ty rss for code structure
-bool fakeHTTPRequest( char * url )
+//dns request
+bool ResolveHostname( char * hostname )
 {
-	NSURLResponse *response=0;
-	NSError *error=0;
-	NSData * responsedata;
-	NSString * urlstr = [NSString stringWithFormat: @"http://%s", url ];
-	NSURL * newsserverurl = [NSURL URLWithString: urlstr];
-	
-	NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL: newsserverurl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval: HTTP_REQUEST_TIMEOUT ];
-	if ( ! theRequest )
+	NSString * name = [NSString stringWithFormat: @"%s", hostname ];
+
+	NSLog( @"Resolving for %@", name );
+	DNSServiceErrorType error;
+	DNSServiceRef service;
+
+	error = DNSServiceQueryRecord( &service, 0 /*no flags*/,
+		0 /*all network interfaces */,
+		hostname,
+		kDNSServiceType_A, //we want the ipv4 addy
+		kDNSServiceClass_IN,//..internet! :)
+		0, /*no callback..hopefully it doesn't mind this :) */
+		NULL /*no context*/ );
+
+	if ( error == kDNSServiceErr_NoError )//good so far...
 	{
-		NSLog( @"Error in request");
-		return false;
-	}	
-	responsedata = [NSURLConnection sendSynchronousRequest: theRequest returningResponse: &response error: &error];
+    	int dns_sd_fd = DNSServiceRefSockFD(service);
+		int nfds = dns_sd_fd + 1;
+		fd_set readfds;
+		struct timeval tv;
 	
-	if ( ! responsedata )
-	{
-		NSLog(@"Error in fakeHTTPrequest!");
-		return false;
+		FD_ZERO(&readfds);
+		FD_SET(dns_sd_fd, &readfds);
+		tv.tv_sec = DNS_RESOLV_TIMEOUT;
+		tv.tv_usec = 0;
+		bool ret = false;
+		int result = select(nfds, &readfds, (fd_set*)NULL, (fd_set*)NULL, &tv);
+		if (result > 0)
+		{
+			if (FD_ISSET(dns_sd_fd, &readfds))
+			{
+				NSLog( @"resolved %s to %@", hostname, [ [ NSHost hostWithName: name ] address ] );
+				ret = true;
+			}
+		}
+		//clean up and return accordingly
+		DNSServiceRefDeallocate( service );
+		return ret;
+
 	}
-	
+	//clean up....
+	DNSServiceRefDeallocate( service );
 
-//	CFRelease( message );
-//	CFRelease( newsserverurl );
-//	CFRelease( data );
-	
-//	[urlstr release];
+	NSLog( @"dns error: %d", error );
 
-	NSLog( @"done with httprequest");
-	return true;
+
+	//maybe?
+	NSLog( @"dns address: %@", [ [ NSHost hostWithName: name ] address ] );
+	return ( [ [ NSHost hostWithName: name ] addresses ] == nil );
 }
 
 int init_server()
 {
 	NSLog( @"Checking connection....");
-	//make sure we have a connection.. we'll need it :)
-//	[[NetworkController sharedInstance]keepEdgeUp];									
-//	[[NetworkController sharedInstance]bringUpEdge];
-//	sleep ( 5 );
 
 //DEBUG:
 //	force_no_post = YES;
 //DEBUG
-	
 	if(!([[NetworkController sharedInstance]isNetworkUp]))
 	{
 		if(![[NetworkController sharedInstance]isEdgeUp])
@@ -505,25 +540,11 @@ int init_server()
 	force_auth_on_conn_open = ( authpassword[0] != '\0' );
 	NSLog( @"Force auth: %d", force_auth_on_conn_open );
 
+	if ( !ResolveHostname( (char *)nntp_server ) )
+		return false; //DNS failed :(
+
 	int connect = nntp_open();
-//	NSLog( @"nntp_open: %d", connect );
-	if ( connect == -65 ) //if failed due to system call, particularly "no route to host"
-	{
-		NSLog( @"Connect failed  --couldn't resolve host, trying http req" );
-//		[ [MessageController sharedInstance] setAlertText: @"Can't find server.  Trying to force dns resolution..." ];
-		if ( !fakeHTTPRequest( (char *)nntp_server ) )//if we can't connect at all
-		{
-			NSLog( @"Failed to connect!" );
-			return false;	
-		}
-		NSLog( @"Reconnecting...." );
-		if ( ( connect = nntp_open() ) != 0 )
-		{
-			NSLog( @"Failed to connect!" );
-			return false;
-		}	
-		
-	}
+
 	if ( connect != 0 )
 	{
 		switch( connect )
@@ -559,10 +580,10 @@ int updateData()
 {
 	if ( hasConnected() )
 	{	
-		newsrc_active = false;
-		list_active = true;
-//		newsrc_active = true;
-//		list_active = false;
+//		newsrc_active = false;
+//		list_active = true;
+		newsrc_active = true;
+		list_active = false;
 	
 //		[ [MessageController sharedInstance] setAlertText: @"Reading active file..." ];	
 		read_news_active_file();
