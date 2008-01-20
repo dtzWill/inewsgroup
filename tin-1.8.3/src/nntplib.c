@@ -1820,13 +1820,9 @@ int
 check_auth(
 	void)
 {
-	char *ptr;
-	char buf[NNTP_STRLEN];
 	int i;
-	unsigned int l = 0;
 
-	buf[0] = '\0';
-	i = new_nntp_command("LIST MOTD", OK_MOTD, buf, sizeof(buf));
+	i = new_nntp_command("GROUP INVALID", ERR_NOGROUP, NULL, 0);
 
 //	wait_message( 0, "i: %d\n", i );
 
@@ -1840,24 +1836,11 @@ check_auth(
 		case ERR_AUTHBAD: 
 			return -1;	
 
-		case OK_MOTD:
-			while ((ptr = tin_fgets(FAKE_NNTP_FP, FALSE)) != NULL) {
-				/*
-				 * TODO: - store a hash value of the entire motd in the server-rc
-				 *         and only if it differs from the old value display the
-				 *         motd?
-				 *       - use some sort of pager?
-				 *       - -> lang.c
-				 */
-				l++;
-			}
-			if (l) {
-				my_flush();
-				sleep((l >> 1) | 0x01);
-			}
+		case ERR_NOGROUP: 
+			//the expected result
 		case ERR_COMMAND: //server: "wtf are you talking about this 'motd' thing??"
 		case ERR_CMDSYN: //syntax error...(how??)
-		case ERR_MOTD: //NO MOTD AVAILABLE, not an error
+	//	case ERR_MOTD: //NO MOTD AVAILABLE, not an error
 			break;
 		default:	
 		//????	
@@ -1865,6 +1848,9 @@ check_auth(
 			return -1;
 
 	}
+//	my_flush();
+
+//	TIN_FCLOSE( FAKE_NNTP_FP );
 
 	return 0;
 }
