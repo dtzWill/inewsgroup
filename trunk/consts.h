@@ -75,7 +75,8 @@ extern NSString *kUIButtonBarButtonType;
 #define MAIN_SIZE 15.0f
 
 //0b1111111111111111111111111111111
-#define UNSIGNED_MINUS_ONE 2147483647
+#define MAX_INT 2147483647
+
 
 //from tin source, duplicated here for reference, etc
 //#define PPA_ERR_NONE 0

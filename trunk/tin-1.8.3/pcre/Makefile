@@ -32,11 +32,11 @@ CPPOPTS = \
 	-DPOSIX_MALLOC_THRESHOLD=10 \
 	-DHAVE_CONFIG_H -I. -I../include
 
-RANLIB	= ranlib
+RANLIB	= arm-apple-darwin-ranlib
 RM	= rm
 
 PRELIB	= lib
-ARCHIVE	= ar rv
+ARCHIVE	= arm-apple-darwin-ar rv
 
 ##########################################################################
 

@@ -48,7 +48,8 @@ int run_test( char * server, char * user, char * pass )
 	if ( ( f_nntpserver = fopen( "nntpserver", "w" ) ) == 0 )
 	{
 		//error! :(
-		return;
+		perror( "failed to open nntpserver" );
+		return 0;
 	}
 	//else
 	fprintf( f_nntpserver, "%s\n", server );
@@ -58,10 +59,11 @@ int run_test( char * server, char * user, char * pass )
 
 	//update ~/.newsauth
 	
-	if ( ( f_newsauth = fopen( "~/.newsauth", "w" ) )== 0 )
+	if ( ( f_newsauth = fopen( "/home/will/.newsauth", "w" ) )== 0 )
 	{
+		perror( "failed to open newsauth" );
 		//error :(
-		return;
+		return 0;
 	}
 	//TODO: smarter behavior here?
 	if (pass && strcmp( pass, "" ) &&
@@ -69,6 +71,8 @@ int run_test( char * server, char * user, char * pass )
 		fprintf( f_newsauth, "%s\t%s\t%s\n",server, pass, user ); 	
 
 	fclose( f_newsauth );
+
+	unlink( "/home/will/.newsrc" );
 
 		
 
@@ -89,10 +93,12 @@ int run_test( char * server, char * user, char * pass )
 
 	printf( "server: %s\n", nntp_server ) ;	
 
-	printf( "force_no_post: %d", force_no_post );
+	printf( "force_no_post: %d\n", force_no_post );
 
+	strcpy( authusername, user );
+	strcpy( authpassword, pass );
 	force_auth_on_conn_open = ( authpassword[0] != '\0' );
-	printf( "Force auth: %d", force_auth_on_conn_open );
+	printf( "Force auth: %d\n", force_auth_on_conn_open );
 
 //we assume if testing on x86 we have good working dns/gethostbyname
 //	if ( !ResolveHostname( (char *)nntp_server ) )
@@ -109,7 +115,7 @@ int run_test( char * server, char * user, char * pass )
 			default:
 				break;
 		}
-		printf( "nntp_open() != 0, failing" );
+		printf( "nntp_open() != 0, failing\n" );
 		return 0;
 	}
 
@@ -121,8 +127,16 @@ int run_test( char * server, char * user, char * pass )
 	{
 		return 0; // :-(
 	}
+	newsrc_active = 1;
+	list_active = 0;
 
+	read_news_active_file();
+
+	read_newsgroups_file( 1 );
+
+	printf(" closing...." );
 	nntp_close();
+	printf( "Success\n" );
 	return 1;//it worked!!! \o/
 }
 
@@ -169,10 +183,10 @@ int main( int argc, char ** argv )
 		}
 		printf( "\n" );
 
-		if (! run_test( server, user, pass ) );
+		if ( run_test( server, user, pass ) == 0 )
 		{
-			fprintf( stderr, "Failed test %d:", i );
-			return -1;
+			fprintf( stderr, "Failed test %d\n", i );
+			return i;
 		}
 		i++;
 	}

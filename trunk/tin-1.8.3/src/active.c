@@ -361,7 +361,8 @@ read_newsrc_active_file(
 
 					case ERR_ACCESS:
 						error_message("%s%s", cCRLF, line);
-						tin_done(NNTP_ERROR_EXIT);
+						//will--don't quit! keep on trucking
+						//tin_done(NNTP_ERROR_EXIT);
 						/* keep lint quiet: */
 						/* FALLTHROUGH */
 
@@ -421,16 +422,18 @@ read_newsrc_active_file(
 
 	fclose(fp);
 
-	/*
-	 * Exit if active file wasn't read correctly or is empty
-	 */
-	if (tin_errno || !num_active) {
-		if (newsrc_active && !num_active)
-			error_message(_(txt_error_server_has_no_listed_groups), newsrc);
-		else
-			error_message(_(txt_active_file_is_empty), (read_news_via_nntp ? _(txt_servers_active) : news_active_file));
-		tin_done(EXIT_FAILURE);
-	}
+
+//Will--we don't want this check--the gui is the one that checks/handles this
+//	/*
+//	 * Exit if active file wasn't read correctly or is empty
+//	 */
+//	if (tin_errno || !num_active) {
+//		if (newsrc_active && !num_active)
+//			error_message(_(txt_error_server_has_no_listed_groups), newsrc);
+//		else
+//			error_message(_(txt_active_file_is_empty), (read_news_via_nntp ? _(txt_servers_active) : news_active_file));
+//		tin_done(EXIT_FAILURE);
+//	}
 
 	if (!batch_mode)
 		my_fputs("\n", stdout);
@@ -528,10 +531,11 @@ read_active_file(
 	/*
 	 * Exit if active file wasn't read correctly or is empty
 	 */
-	if (tin_errno || !num_active) {
-		error_message(_(txt_active_file_is_empty), (read_news_via_nntp ? _(txt_servers_active) : news_active_file));
-		tin_done(EXIT_FAILURE);
-	}
+//let the gui deal with it--Will
+//	if (tin_errno || !num_active) {
+//		error_message(_(txt_active_file_is_empty), (read_news_via_nntp ? _(txt_servers_active) : news_active_file));
+//		tin_done(EXIT_FAILURE);
+//	}
 
 	if (!batch_mode)
 		my_fputs("\n", stdout);

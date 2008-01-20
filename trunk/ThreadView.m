@@ -87,8 +87,8 @@ static ThreadView * sharedInstance = nil;
 - (void)tableRowSelected:(NSNotification *)notification {
 //  NSLog(@"tableRowSelected!");
 	int i = [ _table selectedRow ], j, k=0;
-	//ouch @ hardcoded max value o_O
-	if ( i != UNSIGNED_MINUS_ONE )
+
+	if ( i != MAX_INT )
   	{
 
 //		NSLog( @" looking for: %d", i );
