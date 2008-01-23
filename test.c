@@ -127,8 +127,8 @@ int run_test( char * server, char * user, char * pass )
 	{
 		return 0; // :-(
 	}
-	newsrc_active = 1;
-	list_active = 0;
+	newsrc_active = 0;
+	list_active = 1;
 
 	read_news_active_file();
 
