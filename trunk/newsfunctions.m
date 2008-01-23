@@ -427,7 +427,7 @@ void init()
 }
 
 //dns request
-bool ResolveHostname( char * hostname )
+bool resolveHostname( char * hostname )
 {
 	NSString * name = [NSString stringWithFormat: @"%s", hostname ];
 
@@ -438,10 +438,10 @@ bool ResolveHostname( char * hostname )
 	error = DNSServiceQueryRecord( &service, 0 /*no flags*/,
 		0 /*all network interfaces */,
 		hostname,
-		kDNSServiceType_A, //we want the ipv4 addy
-		kDNSServiceClass_IN,//..internet! :)
-		0, /*no callback..hopefully it doesn't mind this :) */
-		NULL /*no context*/ );
+		kDNSServiceType_A, /* we want the ipv4 addy */ 
+		kDNSServiceClass_IN, /* internet */
+		0, /* no callback */ 
+		NULL /* no context */ );
 
 	if ( error == kDNSServiceErr_NoError )//good so far...
 	{
@@ -460,6 +460,7 @@ bool ResolveHostname( char * hostname )
 		{
 			if (FD_ISSET(dns_sd_fd, &readfds))
 			{
+				//remove this if you want to compile in c, not obj-c
 				NSLog( @"resolved %s to %@", hostname, [ [ NSHost hostWithName: name ] address ] );
 				ret = true;
 			}
@@ -474,10 +475,7 @@ bool ResolveHostname( char * hostname )
 
 	NSLog( @"dns error: %d", error );
 
-
-	//maybe?
-	NSLog( @"dns address: %@", [ [ NSHost hostWithName: name ] address ] );
-	return ( [ [ NSHost hostWithName: name ] addresses ] == nil );
+	return false;
 }
 
 int init_server()
@@ -540,7 +538,7 @@ int init_server()
 	force_auth_on_conn_open = ( authpassword[0] != '\0' );
 	NSLog( @"Force auth: %d", force_auth_on_conn_open );
 
-	if ( !ResolveHostname( (char *)nntp_server ) )
+	if ( !resolveHostname( (char *)nntp_server ) )
 		return false; //DNS failed :(
 
 	int connect = nntp_open();
@@ -580,10 +578,10 @@ int updateData()
 {
 	if ( hasConnected() )
 	{	
-//		newsrc_active = false;
-//		list_active = true;
-		newsrc_active = true;
-		list_active = false;
+		newsrc_active = false;
+		list_active = true;
+//		newsrc_active = true;
+//		list_active = false;
 	
 //		[ [MessageController sharedInstance] setAlertText: @"Reading active file..." ];	
 		read_news_active_file();
