@@ -1,4 +1,4 @@
-//newsfunctions.c
+//newsfunctions.m
 //Will Dietz
 
 /*
@@ -27,6 +27,14 @@
 #import "tin.h"
 #import "extern.h"
 #import "NetworkController.h"
+
+//file name consts used for user flexibility.... wish I knew a better way to do this 
+char F_NEWSAUTH_HOME[ MAX_FILENAME_LEN ];
+char F_NEWSEMAIL_HOME[ MAX_FILENAME_LEN ];
+char F_NEWSRC_HOME[ MAX_FILENAME_LEN ];
+char F_POSTPONED_HOME[ MAX_FILENAME_LEN ];
+char F_TIN_DIR_HOME[ MAX_FILENAME_LEN ];
+
 
 bool m_hasConnected;
 
@@ -148,7 +156,6 @@ void setRealName( NSString * realname )
 		strncpy( name, [realname cString], MAX_EMAIL );
 }
 
-
 void readSettingsFromFile()
 {
 
@@ -156,7 +163,7 @@ void readSettingsFromFile()
 
 	//update ~/.newsauth
 	
-	if ( ( f_newsauth = fopen( F_NEWSAUTH, "r" ) )== 0 )
+	if ( ( f_newsauth = fopen( F_NEWSAUTH_HOME, "r" ) )== 0 )
 	{
 		//error :(
 		return;
@@ -176,7 +183,7 @@ void readSettingsFromFile()
 
 	//read from ~/.newsemail
 
-	if ( ( f_email = fopen( F_NEWSEMAIL, "r" ) ) == 0 )
+	if ( ( f_email = fopen( F_NEWSEMAIL_HOME, "r" ) ) == 0 )
 	{
 		//error :(
 		return;
@@ -212,7 +219,7 @@ void saveSettingsToFiles()
 
 	//update ~/.newsemail
 
-	if ( ( f_newsemail = fopen( F_NEWSEMAIL, "w" ) ) == 0 )
+	if ( ( f_newsemail = fopen( F_NEWSEMAIL_HOME, "w" ) ) == 0 )
 	{
 		//error :(
 		return;
@@ -226,7 +233,7 @@ void saveSettingsToFiles()
 
 	//update ~/.newsauth
 	
-	if ( ( f_newsauth = fopen( F_NEWSAUTH, "w" ) )== 0 )
+	if ( ( f_newsauth = fopen( F_NEWSAUTH_HOME, "w" ) )== 0 )
 	{
 		//error :(
 		return;
@@ -423,6 +430,23 @@ void init()
 //	read_newsauth_file( nntp_server, user, pass );
 
 	//colorSpace = CGColorSpaceCreateDeviceRGB();
+
+
+	struct passwd * p = getpwuid( getuid() );
+	char * home = p->pw_dir; 
+
+	strncpy( F_NEWSAUTH_HOME, home, MAX_FILENAME_LEN - 1 ); 
+	strncpy( F_NEWSEMAIL_HOME, home, MAX_FILENAME_LEN - 1 ); 
+	strncpy( F_NEWSRC_HOME, home, MAX_FILENAME_LEN - 1 ); 
+	strncpy( F_POSTPONED_HOME, home, MAX_FILENAME_LEN - 1 ); 
+	strncpy( F_TIN_DIR_HOME, home, MAX_FILENAME_LEN - 1 ); 
+
+	//TODO: use strncat
+	strcat( F_NEWSAUTH_HOME, F_NEWSAUTH ); 
+	strcat( F_NEWSEMAIL_HOME, F_NEWSEMAIL );
+	strcat( F_NEWSRC_HOME, F_NEWSRC );
+	strcat( F_POSTPONED_HOME , F_POSTPONEDARTICLES );
+	strcat( F_TIN_DIR_HOME, TIN_DIR );
 
 }
 
@@ -622,7 +646,7 @@ void printActive()
 bool sendMessage( NSString * newsgroup, NSString * references, NSString * subject, NSString * message )
 {
 	//empty the postpone queue
-	unlink( F_POSTPONEDARTICLES );
+	unlink( F_POSTPONED_HOME );
 
 	NSLog( @"Sending Message: ");
 	NSLog( @"Newsgroups: %@", newsgroup );

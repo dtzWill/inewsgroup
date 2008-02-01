@@ -498,5 +498,15 @@ static GroupView * sharedInstance = nil;
 	return 1 + ( [_titleTextLabel textSize].width ) / 180;
 }
 
+- (void) dealloc
+{
+	[ _dateLabel release ];
+	[ _fromLabel release ];
+
+
+	[ super dealloc ];
+
+}
+
 @end
 
