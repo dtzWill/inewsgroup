@@ -21,7 +21,7 @@
 
 //globals:
 
-#define RELEASE_AND_VERSION @"iNewsGroup 1.0.3"
+#define RELEASE_AND_VERSION @"iNewsGroup 1.0.4"
 #define AUTHOR @"Will Dietz"
 #define CONTACT_EMAIL @"inewsgroupdev@gmail.com"
 #define INEWSGROUP @"iNewsGroup"
@@ -55,6 +55,9 @@ extern NSString *kUIButtonBarButtonType;
 //if your email is longer than this, too bad
 //also used from 'from' header length, similar comment applies
 #define MAX_EMAIL 100
+
+//ditto from above
+#define MAX_FILENAME_LEN 100
 
 //this defines the 'queue' (pool) of rows we use for displaying
 #define MAX_ROWS_ON_SCREEN 20
@@ -95,13 +98,13 @@ static const NSString * kReferences = @"ref";
 
 
 //Files
-#define F_NEWSAUTH "/var/root/.newsauth"
-#define F_NEWSEMAIL "/var/root/.newsemail"
-#define F_NEWSRC "/var/root/.newsrc"
+#define F_NEWSAUTH "/.newsauth"
+#define F_NEWSEMAIL "/.newsemail"
+#define F_NEWSRC "/.newsrc"
 #define F_NNTPSERVER "/etc/nntpserver"
 #define F_TMPNEW "/tmp/newarticle"
-#define F_POSTPONEDARTICLES "/var/root/.tin/postponed.articles"
-#define TIN_DIR "/var/root/.tin/"
+#define F_POSTPONEDARTICLES "/.tin/postponed.articles"
+#define TIN_DIR "/.tin/"
 
 //language strings
 #define L_ABOUT @"About"
@@ -130,7 +133,7 @@ static const NSString * kReferences = @"ref";
 #define L_PREFERENCES @"Preferences"
 #define L_QUIT @"Quit"
 #define L_QUOTE @"\n\nQuote:\n"
-#define L_REALNAME @"Real name"
+#define L_REALNAME @"Name"
 #define L_REFRESH @"Refresh"
 #define L_REFRESHING_MSG @"Refreshing..."
 #define L_REPLY @"Reply"

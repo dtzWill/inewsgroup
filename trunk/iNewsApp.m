@@ -263,15 +263,14 @@ static iNewsApp * sharedInstance = nil;
 
 
 - (void)dealloc {
-	//TODO: MAKE THIS DO WHAT IT'S SUPPOSED TO  
-	  /*
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[_path release];
-	[_files release];
-	[_extensions release];
-	[_table release];
-	_delegate = nil;
-*/
+	  
+	[ _rows release ];
+	[ _titleItem release];
+	[ _mainView release ];
+	[ _table release ];
+	[ _connect release ];
+	[ _nopost release ];
+	[ _badEmail release ];
 
 	[super dealloc];
 

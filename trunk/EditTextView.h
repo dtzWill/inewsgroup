@@ -1,7 +1,6 @@
 //Will Dietz
 //EditTextView.h
 //Editable UITextView, used in ComposeView
-
 /*
     This file is part of iNewsGroup.
 

@@ -22,6 +22,7 @@
 #import <UIKit/UIKit.h>
 #import "consts.h"
 #import "iNewsApp.h"
+#import <pwd.h>
 
 //run the main app!
 int main(int argc, char **argv)
@@ -31,6 +32,13 @@ int main(int argc, char **argv)
 	NSLog( @"starting... \n" );	
 
 	//make sure this directory exists!
+	struct passwd * p = getpwuid( getuid() );
+	char * home = p->pw_dir;
+
+	char buffer[ MAX_FILENAME_LEN ];
+	strncpy( buffer, home, MAX_FILENAME_LEN - 1 );
+	strcat( buffer, TIN_DIR );
+
 	mkdir( TIN_DIR, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP ); 
 
 	
