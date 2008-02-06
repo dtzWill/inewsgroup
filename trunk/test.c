@@ -43,7 +43,6 @@ int run_test( char * server, char * user, char * pass )
 {
 	//save parameters to proper files, etc
 	FILE * f_nntpserver, * f_newsauth, * f_newsemail;
-	//update /etc/nntpserver
 	
 	if ( ( f_nntpserver = fopen( "nntpserver", "w" ) ) == 0 )
 	{

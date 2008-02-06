@@ -34,6 +34,8 @@ char F_NEWSEMAIL_HOME[ MAX_FILENAME_LEN ];
 char F_NEWSRC_HOME[ MAX_FILENAME_LEN ];
 char F_POSTPONED_HOME[ MAX_FILENAME_LEN ];
 char F_TIN_DIR_HOME[ MAX_FILENAME_LEN ];
+char F_NNTP_HOME[ MAX_FILENAME_LEN ];
+char F_TMPNEW_HOME[ MAX_FILENAME_LEN ];
 
 
 bool m_hasConnected;
@@ -207,7 +209,7 @@ void saveSettingsToFiles()
 	NSLog( @"\ntrying to save...." );	 
 	//update /etc/nntpserver
 	
-	if ( ( f_nntpserver = fopen( F_NNTPSERVER, "w" ) ) == 0 )
+	if ( ( f_nntpserver = fopen( F_NNTP_HOME, "w" ) ) == 0 )
 	{
 		//error! :(
 		return;
@@ -435,11 +437,15 @@ void init()
 	struct passwd * p = getpwuid( getuid() );
 	char * home = p->pw_dir; 
 
+
+	//the following is all just to make the files that are in ~/* go to the right place
 	strncpy( F_NEWSAUTH_HOME, home, MAX_FILENAME_LEN - 1 ); 
 	strncpy( F_NEWSEMAIL_HOME, home, MAX_FILENAME_LEN - 1 ); 
 	strncpy( F_NEWSRC_HOME, home, MAX_FILENAME_LEN - 1 ); 
 	strncpy( F_POSTPONED_HOME, home, MAX_FILENAME_LEN - 1 ); 
 	strncpy( F_TIN_DIR_HOME, home, MAX_FILENAME_LEN - 1 ); 
+	strncpy( F_NNTP_HOME, home, MAX_FILENAME_LEN - 1 ); 
+	strncpy( F_TMPNEW_HOME, home, MAX_FILENAME_LEN - 1 ); 
 
 	//TODO: use strncat
 	strcat( F_NEWSAUTH_HOME, F_NEWSAUTH ); 
@@ -447,6 +453,8 @@ void init()
 	strcat( F_NEWSRC_HOME, F_NEWSRC );
 	strcat( F_POSTPONED_HOME , F_POSTPONEDARTICLES );
 	strcat( F_TIN_DIR_HOME, TIN_DIR );
+	strcat( F_NNTP_HOME, F_NNTPSERVER );
+	strcat( F_TMPNEW_HOME, F_TMPNEW );
 
 }
 
@@ -548,7 +556,7 @@ int init_server()
 	
 	//batch_mode = true;//silence/speed things up...?
 
-	char * server = getserverbyfile( NNTP_SERVER_FILE );
+	char * server = getserverbyfile( F_NNTP_HOME );
 	if( !server )
 		return false;//no server name, don't even try it
 	//else
@@ -658,7 +666,7 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 	
 	//write this to a file and then tell the tin code to add it to the postponed queue
 
-	if ( ( f_newmail = fopen( F_TMPNEW, "w" ) ) == 0 )
+	if ( ( f_newmail = fopen( F_TMPNEW_HOME, "w" ) ) == 0 )
 	{
 		//error! :(
 		return;
@@ -689,7 +697,7 @@ bool sendMessage( NSString * newsgroup, NSString * references, NSString * subjec
 	//we do it this roundabout way with the postponing, because this way we avoid
 	//the ui-based post_loop 
 
-	postpone_article( F_TMPNEW );
+	postpone_article( F_TMPNEW_HOME );
 
 	bool ret =  pickup_postponed_articles( false, true ); //ask=no, all=yes
 
