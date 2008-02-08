@@ -29,6 +29,9 @@
 #include "extern.h"
 #include <stdio.h>
 
+char NEWSRC[ 100 ];
+char NEWSAUTH[ 100 ];
+
 void init()
 {
 	init_alloc();
@@ -36,6 +39,14 @@ void init()
 	init_selfinfo();
 	init_group_hash();
 	set_signal_handlers();
+
+	char * home = getpwuid( getuid() )->pw_dir;
+
+	strncpy( NEWSRC, home, 99 );
+	strncpy( NEWSAUTH, home, 99 );
+
+	strcat( NEWSRC, "/.newsrc" );
+	strcat( NEWSAUTH, "/.newsauth" );
 
 }
 
@@ -58,7 +69,7 @@ int run_test( char * server, char * user, char * pass )
 
 	//update ~/.newsauth
 	
-	if ( ( f_newsauth = fopen( "/home/will/.newsauth", "w" ) )== 0 )
+	if ( ( f_newsauth = fopen( NEWSAUTH, "w" ) )== 0 )
 	{
 		perror( "failed to open newsauth" );
 		//error :(
@@ -71,7 +82,7 @@ int run_test( char * server, char * user, char * pass )
 
 	fclose( f_newsauth );
 
-	unlink( "/home/will/.newsrc" );
+	unlink( NEWSRC );
 
 		
 
