@@ -21,7 +21,7 @@
 
 //globals:
 
-#define RELEASE_AND_VERSION @"iNewsGroup 1.0.5"
+#define RELEASE_AND_VERSION @"iNewsGroup 1.0.6"
 #define AUTHOR @"Will Dietz"
 #define CONTACT_EMAIL @"inewsgroupdev@gmail.com"
 #define INEWSGROUP @"iNewsGroup"
@@ -102,7 +102,7 @@ static const NSString * kReferences = @"ref";
 #define F_NEWSEMAIL "/.newsemail"
 #define F_NEWSRC "/.newsrc"
 #define F_NNTPSERVER "/.nntpserver"
-#define F_TMPNEW ".newarticle"
+#define F_TMPNEW "/.newarticle"
 #define F_POSTPONEDARTICLES "/.tin/postponed.articles"
 #define TIN_DIR "/.tin/"
 
