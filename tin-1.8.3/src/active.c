@@ -220,14 +220,26 @@ parse_active_line(
 	q = strtok(NULL, ACTIVE_SEP);	/* group min count */
 	r = strtok(NULL, ACTIVE_SEP);	/* mod status or path to mailgroup */
 
-	if (!p || !q || !r) {
+	if (!p || !q ) {// || ! r ) {
 		error_message(_(txt_bad_active_file), line);
 		return FALSE;
 	}
 
 	*max = atol(p);
 	*min = atol(q);
-	strcpy(moderated, r);
+	if ( r )
+	{
+		strcpy(moderated, r);
+	}
+	else
+	{
+		//Will-- I'm adding this for a user using a server that doesn't pass the flag field
+		//I'm 'breaking' it to assume the flag is 'y'.... obviously it'd be better to have the
+		//server fixed.
+		strcpy( moderated, "y" );
+	}
+
+
 
 	return TRUE;
 }
