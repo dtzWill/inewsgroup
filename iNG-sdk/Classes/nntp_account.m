@@ -7,9 +7,10 @@
 //
 
 #import "nntp_account.h"
-#import "resolv.h"
+#import "resolveHostname.h"
 
 #import <arpa/inet.h>
+#import <fcntl.h>
 
 //preferences
 #define K_SERVER @"server"
@@ -470,6 +471,9 @@
 {
 	//just pull from defaults :)
 	NSMutableData * subscribed = [ [ NSUserDefaults standardUserDefaults ] objectForKey: K_SUBSCRIBED ];
+
+	//loop var
+	int i;
 	if ( !subscribed )
 	{
 		//fetch with "list subscriptions" ?
@@ -481,7 +485,7 @@
 			NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
 			NSLog ( @"%d", [ subscribed length ] / sizeof( NNTPGroup ) );
 		//	NSLog( @"line count: %d", [ lines count ] );
-			for ( int i = 0; i < [ lines count ]; i++ )
+			for ( i = 0; i < [ lines count ]; i++ )
 			{
 				strncpy( sub_arr[i].name, [ [ lines objectAtIndex: i ] UTF8String ], sizeof( sub_arr[i].name ) );;
 				sub_arr[i].hasUnread = true;//it /*could*/ be empty
@@ -502,7 +506,7 @@
 	{
 		NSLog( @"%d", [ subscribed length ]/sizeof( NNTPGroup ) );
 		NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
-		for ( int i =0; i < [ subscribed length ] / sizeof( NNTPGroup ); i++ )
+		for ( i = 0; i < [ subscribed length ] / sizeof( NNTPGroup ); i++ )
 		{
 			NSLog( @"Subscribed to: %s", sub_arr[i].name );
 		}

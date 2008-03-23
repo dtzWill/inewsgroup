@@ -1,5 +1,5 @@
 /*
- *  resolve.m
+ *  resolveHostname.m
  *  iNG
  *
  *  Created by Will Dietz on 3/17/08.
@@ -7,7 +7,7 @@
  *
  */
 
-#import "resolv.h"
+#import "resolveHostname.h"
 
 #import <arpa/inet.h>
 #import <netinet/in.h>

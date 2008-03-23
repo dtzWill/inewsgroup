@@ -1,31 +1,32 @@
 //
-//  StartView.m
+//  AccountView.m
 //  iNG
 //
 //  Created by Will Dietz on 3/16/08.
 //  Copyright __MyCompanyName__ 2008. All rights reserved.
 //
 
-#import "StartView.h"
+#import "AccountView.h"
 #import "ViewController.h"
 
 #import "nntp_account.h"
 
-@implementation StartView
+@implementation AccountView
 
-- (void) loadView
+
+- initWithFrame: (CGRect) rect
 {
-	_table = [ [UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStylePlain];
-
-//	UITableColumn *col = [[UITableColumn alloc] initWithTitle: @"accounts"
-//		identifier: @"accounts" width: 320.0f];
-
+	self = [ super initWithFrame: rect ];
+	_table = [ [UITableView alloc] initWithFrame: rect ];
 	
 	[ _table setDelegate: self ];
 	[ _table setDataSource: self ];
 
 	[ self addSubview: _table ];
+
+	//create account
 	_account = [ [ nntp_account alloc ] init ];
+	
 	//put actual auth information here! (obviously this is just for testing)
 	[ _account setServer: @"news.cs.uiuc.edu" ];
 	[ _account setPort: 119 ];
@@ -45,8 +46,20 @@
 	{
 		NSLog( @"error connecting or auth!" );
 	}
+
 	[ _table reloadData ];
+
+	return self;
 }
+
+- (void) dealloc
+{
+	[ _table release ];
+	[ _account release ];
+
+	[ super dealloc ];
+}
+
 
 /*-----------------------------------------------------------------------------
  *  Table delegate methods: (data source and delegate )

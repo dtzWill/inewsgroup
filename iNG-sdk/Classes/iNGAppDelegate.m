@@ -7,8 +7,7 @@
 //
 
 #import "iNGAppDelegate.h"
-#import "ViewController.h"
-#import "StartView.h"
+#import "AccountViewController.h"
 
 @implementation iNGAppDelegate
 
@@ -18,26 +17,25 @@
 - (void)applicationDidFinishLaunching:(UIApplication *)application {	
 	// Create window
 	self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+
+	//Root viewcontroller:
+	AccountViewController * avc = [ [ [ AccountViewController alloc ] init ] autorelease ];
+	UINavigationController * nav = [ [ UINavigationController alloc ] initWithRootViewController: avc ];
+
+	contentView = [ nav view ];
 	
-    // Set up starting view (StartView)
-	self.contentView = [[[StartView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
-
-	[ contentView loadView ];
-
-	[ [ ViewController sharedInstance ] addSubview: (StartView *)contentView ];
-	[ [ ViewController sharedInstance ] setCurView: (StartView *)contentView ];
-    
 	// Add ViewController as our primary content...
-	[window addSubview: [ ViewController sharedInstance ] ];
+	[ window addSubview: contentView ];
     
 	// Show window
 	[window makeKeyAndVisible];
+
 }
 
-- (void)dealloc {
-	[contentView release];
-	[window release];
-	[super dealloc];
+- (void)dealloc
+{
+	[ window release ];
+	[ super dealloc ];
 }
 
 @end
