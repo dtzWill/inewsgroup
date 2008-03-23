@@ -1,5 +1,5 @@
 /*
- *  resolve.h
+ *  resolveHostname.h
  *  iNG
  *
  *  Created by Will Dietz on 3/17/08.
