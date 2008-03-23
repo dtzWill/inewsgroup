@@ -15,7 +15,7 @@
 		289E37760D53116900ACCF19 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 289E37750D53116900ACCF19 /* AccountView.m */; };
 		BECCBF0F0D94B817001F2856 /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECCBF0E0D94B817001F2856 /* AccountViewController.m */; };
 		BED513B60D8ED96A003DC505 /* nntp_account.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513B50D8ED96A003DC505 /* nntp_account.m */; };
-		BED513E20D8F3419003DC505 /* resolvHostname.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513E10D8F3419003DC505 /* resolvHostname.m */; };
+		BED513E20D8F3419003DC505 /* resolveHostname.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513E10D8F3419003DC505 /* resolveHostname.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,7 +36,7 @@
 		BED513B50D8ED96A003DC505 /* nntp_account.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = nntp_account.m; sourceTree = "<group>"; };
 		BED513B90D8EEF38003DC505 /* NNTPDataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTPDataTypes.h; sourceTree = "<group>"; };
 		BED513BC0D8F2BCB003DC505 /* resolveHostname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resolveHostname.h; sourceTree = "<group>"; };
-		BED513E10D8F3419003DC505 /* resolvHostname.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = resolvHostname.m; sourceTree = "<group>"; };
+		BED513E10D8F3419003DC505 /* resolveHostname.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = resolveHostname.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,7 +145,7 @@
 				BED513B50D8ED96A003DC505 /* nntp_account.m */,
 				BED513B90D8EEF38003DC505 /* NNTPDataTypes.h */,
 				BED513BC0D8F2BCB003DC505 /* resolveHostname.h */,
-				BED513E10D8F3419003DC505 /* resolvHostname.m */,
+				BED513E10D8F3419003DC505 /* resolveHostname.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -206,7 +206,7 @@
 				1D3623260D0F684500981E51 /* iNGAppDelegate.m in Sources */,
 				289E37760D53116900ACCF19 /* AccountView.m in Sources */,
 				BED513B60D8ED96A003DC505 /* nntp_account.m in Sources */,
-				BED513E20D8F3419003DC505 /* resolvHostname.m in Sources */,
+				BED513E20D8F3419003DC505 /* resolveHostname.m in Sources */,
 				BECCBF0F0D94B817001F2856 /* AccountViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

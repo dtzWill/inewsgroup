@@ -256,7 +256,7 @@
 			sepNavWindowFrame = "{{38, 194}, {750, 558}}";
 		};
 	};
-	BED513E10D8F3419003DC505 /* resolvHostname.m */ = {
+	BED513E10D8F3419003DC505 /* resolveHostname.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {877, 1036}}";
 			sepNavSelRange = "{639, 9}";
