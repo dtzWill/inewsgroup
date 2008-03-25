@@ -12,7 +12,6 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		289E37760D53116900ACCF19 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 289E37750D53116900ACCF19 /* AccountView.m */; };
 		BECCBF0F0D94B817001F2856 /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECCBF0E0D94B817001F2856 /* AccountViewController.m */; };
 		BED513B60D8ED96A003DC505 /* nntp_account.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513B50D8ED96A003DC505 /* nntp_account.m */; };
 		BED513E20D8F3419003DC505 /* resolveHostname.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513E10D8F3419003DC505 /* resolveHostname.m */; };
@@ -25,8 +24,6 @@
 		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* iNG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iNG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		289E37740D53116900ACCF19 /* AccountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
-		289E37750D53116900ACCF19 /* AccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* iNG_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iNG_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -128,8 +125,6 @@
 		BED513860D8DF99B003DC505 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				289E37740D53116900ACCF19 /* AccountView.h */,
-				289E37750D53116900ACCF19 /* AccountView.m */,
 				1D3623240D0F684500981E51 /* iNGAppDelegate.h */,
 				1D3623250D0F684500981E51 /* iNGAppDelegate.m */,
 				BECCBF0D0D94B817001F2856 /* AccountViewController.h */,
@@ -204,7 +199,6 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* iNGAppDelegate.m in Sources */,
-				289E37760D53116900ACCF19 /* AccountView.m in Sources */,
 				BED513B60D8ED96A003DC505 /* nntp_account.m in Sources */,
 				BED513E20D8F3419003DC505 /* resolveHostname.m in Sources */,
 				BECCBF0F0D94B817001F2856 /* AccountViewController.m in Sources */,

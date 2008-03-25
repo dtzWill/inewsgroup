@@ -22,6 +22,8 @@
 
 }
 
++ (nntp_account *) sharedInstance;
+
 //init constructor
 - (nntp_account *) init;
 

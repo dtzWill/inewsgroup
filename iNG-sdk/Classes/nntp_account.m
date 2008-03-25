@@ -35,7 +35,18 @@
         [[NSBundle mainBundle] pathForResource:@"groups" ofType:@""]
 
 
+static nntp_account * sharedInstance = nil;
+
 @implementation nntp_account
+
++ (nntp_account * ) sharedInstance
+{
+	if ( sharedInstance )
+		return sharedInstance;
+	//else
+	return sharedInstance = [ [ nntp_account alloc ] init ];
+}
+
 //init constructor
 - (nntp_account *) init
 {
@@ -144,6 +155,7 @@
 
 	if ( ( sockd = socket( PF_INET, SOCK_STREAM, 0 ) ) < 0 )
 	{
+		sockd = 0;
 		return NO;
 	}
 
@@ -151,6 +163,7 @@
 	if ( ( arg = fcntl( sockd, F_GETFL, NULL ) ) < 0 )
 	{
 		close( sockd );
+		sockd = 0;
 		return NO;
 	}
 
@@ -159,6 +172,7 @@
 	if( fcntl( sockd, F_SETFL, arg ) < 0 )
 	{
 		close( sockd );
+		sockd = 0;
 		return NO;
 	} 
 
@@ -181,11 +195,13 @@
 			if ( res < 0 && errno != EINTR )
 			{
 				close( sockd );
+				sockd = 0;
 				return NO;//error connecting
 			}
 			else if ( res == 0 )
 			{
 				close( sockd );
+				sockd = 0;
 				return NO;//timeout :(
 			}
 			//res > 0
@@ -195,6 +211,7 @@
 			if ( getsockopt( sockd, SOL_SOCKET, SO_ERROR, (void*)(&optval), &optlen ) < 0 ) 
 			{
 				close( sockd );
+				sockd = 0;
 				return NO;//error in getsockopt, treat as connect error
 			}
 
@@ -202,6 +219,7 @@
 			{
 				//connect didn't go so well
 				close( sockd );
+				sockd = 0;
 				return NO;
 			}
 		}
@@ -209,6 +227,7 @@
 		{
 			//not the errorcode we expected..so error
 			close( sockd );
+			sockd = 0;
 			return NO;
 		}
 	}
@@ -217,6 +236,7 @@
 	if ( ( arg = fcntl( sockd, F_GETFL, NULL ) ) < 0 )
 	{
 		close( sockd );
+		sockd = 0;
 		return NO;
 	}
 
@@ -225,6 +245,7 @@
 	if ( fcntl( sockd, F_SETFL, arg ) < 0 )
 	{
 		close( sockd );
+		sockd = 0;
 		return NO;
 	}
 
@@ -647,5 +668,26 @@
 
 //TODO: POSTING SUPPORT!
 //TODO: THREADING!
+
+
+- (void) dealloc
+{
+	[ _arts release ];
+	[ _groups release ];
+	[ _subscribed release ];
+	if ( sockd )
+	{
+		close( sockd );
+		sockd = 0;
+	}
+
+	if ( self == sharedInstance ) //it BETTER!
+	{
+		sharedInstance = nil;
+	}
+
+	[ super dealloc ];
+}
+
 
 @end
