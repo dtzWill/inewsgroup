@@ -25,7 +25,7 @@
 	contentView = [ nav view ];
 	
 	// Add ViewController as our primary content...
-	[ window addSubview: contentView ];
+	[ window addSubview: (UIView *)contentView ];
     
 	// Show window
 	[window makeKeyAndVisible];
