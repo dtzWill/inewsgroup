@@ -15,10 +15,11 @@
 	//run-time data
 	NSMutableArray * _arts;//		NNTPArticle's (containing the headers)
 	NSData * _groups;//		NNTPGroup's
-	int sockd;//fd for the socket connection
+	int _sockd;//fd for the socket connection
 
 	//data to save (other than account information)
 	NSMutableArray * _subscribed;// strings of the subscribed groups.
+	bool _canPost;
 
 }
 
@@ -43,7 +44,7 @@
 - (void) setServer: (NSString *) server;
 - (void) setPort: (int) port;
 
-
+- (bool) isValid;
 
 /*-----------------------------------------------------------------------------
  *  NNTP methods

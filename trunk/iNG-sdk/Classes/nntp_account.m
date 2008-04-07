@@ -12,21 +12,28 @@
 #import <arpa/inet.h>
 #import <fcntl.h>
 
-//preferences
-#define K_SERVER @"server"
-#define K_PORT @"port"
-#define K_USER @"user"
-#define K_PASSWORD @"password"
-#define K_MAX_ART_CACHE @"maxartcache"
-#define K_SUBSCRIBED @"subscribed"
-//group cache
-#define K_GROUPS @"active_groups"
+//comment this out to hide the nslog'ing of network read/writes
+//#define DEBUG_NETWORK_ACTIVITY 1
 
-#define DEFAULT_SERVER @"news.yourservergoeshere.com"
-#define DEFAULT_PORT 119
-#define DEFAULT_USER @""
-#define DEFAULT_PASSWORD @""
-#define DEFAULT_MAX_ART_CACHE 100
+//NOTE these *must* match the keys as defined in
+//Root.plist in Settings.bundle
+//preferences
+#define K_SERVER @"SERVER"
+#define K_PORT @"PORT"
+#define K_USER @"USER"
+#define K_PASSWORD @"PASSWORD"
+#define K_MAX_ART_CACHE @"MAXARTCACHE"
+#define K_SUBSCRIBED @"SUBSCRIBED"
+//group cache
+#define K_GROUPS @"ACTIVE_GROUPS"
+
+
+//these go in the Settings.bundle now
+//#define DEFAULT_SERVER @"news.yourservergoeshere.com"
+//#define DEFAULT_PORT 119
+//#define DEFAULT_USER @""
+//#define DEFAULT_PASSWORD @""
+//#define DEFAULT_MAX_ART_CACHE 100
 
 #define CONNECT_TIMEOUT 10
 #define COMMAND_TIMEOUT 10
@@ -51,20 +58,12 @@ static nntp_account * sharedInstance = nil;
 - (nntp_account *) init
 {
 	self = [ super init ];
-	//set defaults
-	NSMutableDictionary * defs = [[ NSMutableDictionary alloc ] init ];
-	[ defs setObject: DEFAULT_SERVER forKey: K_SERVER ];
-	[ defs setObject: [ NSNumber numberWithInt: DEFAULT_PORT ] forKey: K_PORT ];
-	[ defs setObject: DEFAULT_USER forKey: K_USER ];
-	[ defs setObject: DEFAULT_PASSWORD forKey: K_PASSWORD ];
-	[ defs setObject: [ NSNumber numberWithInt: DEFAULT_MAX_ART_CACHE ] forKey: K_MAX_ART_CACHE ];
-//	[ defs setObject: DEFAULT_SUBSCRIBED forKey: K_SUBSCRIBED ];
-	[ [ NSUserDefaults standardUserDefaults ] registerDefaults: defs ];
 
-	sockd = 0;
+	_sockd = 0;
 	_arts = nil;
 	_groups = nil;
 	_subscribed = nil;
+	_canPost = false;
 
 	return self;
 }
@@ -87,20 +86,15 @@ static nntp_account * sharedInstance = nil;
 }
 - (int) getPort
 {
-	NSNumber * nPort = [ [ NSUserDefaults standardUserDefaults ] objectForKey: K_PORT ];
-	int port = [ nPort intValue ];
-	[ nPort release ];
-	return port;
+	return  [ [ NSUserDefaults standardUserDefaults ] integerForKey: K_PORT ];
 }
 - (bool) isConnected;
 {
-	//TODO: actually implement
-	return NO;
+	return _sockd != 0;
 }
 - (bool) canPost
 {
-	//TODO: actually implement
-	return YES;
+	return _canPost;
 }
 
 - (void) setUser: (NSString *) user
@@ -123,6 +117,15 @@ static nntp_account * sharedInstance = nil;
 	[ [ NSUserDefaults standardUserDefaults ] setInteger: port forKey: K_PORT ];
 }
 
+
+- (bool) isValid
+{//returns if we 'reasonably' think the data is valid.
+	//check if set, not the (invalid) default and not empty
+	return (
+		[ self getServer ] &&
+		[ [ self getServer ] compare: @"news.example.com" ] &&
+		[ [ self getServer ] compare: @"" ] );
+}
 
 
 /*-----------------------------------------------------------------------------
@@ -148,31 +151,32 @@ static nntp_account * sharedInstance = nil;
 	if ( nsip == nil )
 	{
 		//couldn't resolve!
+		NSLog( @"Bad server or resolution failure!" );
 		return NO;
 
 	}
 	const char * serverip = [ nsip UTF8String ];
 
-	if ( ( sockd = socket( PF_INET, SOCK_STREAM, 0 ) ) < 0 )
+	if ( ( _sockd = socket( PF_INET, SOCK_STREAM, 0 ) ) < 0 )
 	{
-		sockd = 0;
+		_sockd = 0;
 		return NO;
 	}
 
 	//make it non-blocking
-	if ( ( arg = fcntl( sockd, F_GETFL, NULL ) ) < 0 )
+	if ( ( arg = fcntl( _sockd, F_GETFL, NULL ) ) < 0 )
 	{
-		close( sockd );
-		sockd = 0;
+		close( _sockd );
+		_sockd = 0;
 		return NO;
 	}
 
 	arg |= O_NONBLOCK; 
 	
-	if( fcntl( sockd, F_SETFL, arg ) < 0 )
+	if( fcntl( _sockd, F_SETFL, arg ) < 0 )
 	{
-		close( sockd );
-		sockd = 0;
+		close( _sockd );
+		_sockd = 0;
 		return NO;
 	} 
 
@@ -181,7 +185,7 @@ static nntp_account * sharedInstance = nil;
 	s_add.sin_port = htons( [ self getPort ] );
 	s_add.sin_addr.s_addr = inet_addr( serverip );//must be an IP!
 
-	res = connect( sockd, (struct sockaddr *)&s_add, sizeof( struct sockaddr_in) );
+	res = connect( _sockd, (struct sockaddr *)&s_add, sizeof( struct sockaddr_in) );
 	if ( res < 0 )
 	{
 		if ( errno == EINPROGRESS )
@@ -189,63 +193,63 @@ static nntp_account * sharedInstance = nil;
 			tv.tv_sec = CONNECT_TIMEOUT;
 			tv.tv_usec = 0;
 			FD_ZERO( &fdset );
-			FD_SET( sockd, &fdset );
-			res = select( sockd + 1, NULL, &fdset, NULL, &tv );//wait until connect finishes or timeout
+			FD_SET( _sockd, &fdset );
+			res = select( _sockd + 1, NULL, &fdset, NULL, &tv );//wait until connect finishes or timeout
 
 			if ( res < 0 && errno != EINTR )
 			{
-				close( sockd );
-				sockd = 0;
+				close( _sockd );
+				_sockd = 0;
 				return NO;//error connecting
 			}
 			else if ( res == 0 )
 			{
-				close( sockd );
-				sockd = 0;
+				close( _sockd );
+				_sockd = 0;
 				return NO;//timeout :(
 			}
 			//res > 0
 
 			//make sure things went smoothly...
 
-			if ( getsockopt( sockd, SOL_SOCKET, SO_ERROR, (void*)(&optval), &optlen ) < 0 ) 
+			if ( getsockopt( _sockd, SOL_SOCKET, SO_ERROR, (void*)(&optval), &optlen ) < 0 ) 
 			{
-				close( sockd );
-				sockd = 0;
+				close( _sockd );
+				_sockd = 0;
 				return NO;//error in getsockopt, treat as connect error
 			}
 
 			if ( optval )
 			{
 				//connect didn't go so well
-				close( sockd );
-				sockd = 0;
+				close( _sockd );
+				_sockd = 0;
 				return NO;
 			}
 		}
 		else
 		{
 			//not the errorcode we expected..so error
-			close( sockd );
-			sockd = 0;
+			close( _sockd );
+			_sockd = 0;
 			return NO;
 		}
 	}
 
 	//back to blocking since that's what we want
-	if ( ( arg = fcntl( sockd, F_GETFL, NULL ) ) < 0 )
+	if ( ( arg = fcntl( _sockd, F_GETFL, NULL ) ) < 0 )
 	{
-		close( sockd );
-		sockd = 0;
+		close( _sockd );
+		_sockd = 0;
 		return NO;
 	}
 
 	arg &= ~O_NONBLOCK;//make it blocking again..
 
-	if ( fcntl( sockd, F_SETFL, arg ) < 0 )
+	if ( fcntl( _sockd, F_SETFL, arg ) < 0 )
 	{
-		close( sockd );
-		sockd = 0;
+		close( _sockd );
+		_sockd = 0;
 		return NO;
 	}
 
@@ -267,7 +271,7 @@ static nntp_account * sharedInstance = nil;
 	//TODO: non-blocking, and TIMEOUT.
 
 	NSUInteger newline_index = -1;
-	int res = recv( sockd, buffer, sizeof( buffer ) - 1, MSG_PEEK );
+	int res = recv( _sockd, buffer, sizeof( buffer ) - 1, MSG_PEEK );
 	if ( res != -1 )
 	{
 		buffer[res]='\0';
@@ -278,17 +282,16 @@ static nntp_account * sharedInstance = nil;
 		return nil;
 	}
 
-	NSLog( @"recv %d, %@", res, ret );
 	if ( ( newline_index = [ ret rangeOfString: @"\n" ].location ) != NSNotFound )
 	{
 		NSString * line = [ ret substringToIndex: newline_index ];
 		//actually read it.. but only up to the newline
-		read( sockd, buffer, newline_index + 1 );
+		read( _sockd, buffer, newline_index + 1 );
+#ifdef DEBUG_NETWORK_ACTIVITY		
 		NSLog( @"recv'd: %d, %@", newline_index, line );
+#endif //DEBUG_NETWORK_ACTIVITY
 		return line;
 	}
-
-//	NSLog( @"Couldn't find break in ||%@||", ret );
 
 	return nil;
 }
@@ -305,6 +308,16 @@ static nntp_account * sharedInstance = nil;
 	return [ response characterAtIndex: 0 ] == '2';
 }
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  interpretModeReaderResponse
+ *  Description:  sets _canPost depending on the response we get via mode reader 
+ * =====================================================================================
+ */
+- (void) interpretModeReaderResponse: (NSString *) response
+{
+	_canPost = [ response hasPrefix: @"201" ]; //201 means we can post;
+}
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -318,10 +331,12 @@ static nntp_account * sharedInstance = nil;
 	//and make use of COMMAND_TIMEOUT... like in the
 	//connect code
 	NSString * fullcmd = [ NSString stringWithFormat: @"%@ %@\n", command, arg ];
+#ifdef DEBUG_NETWORK_ACTIVITY
 	NSLog( @"Sending command: %@", fullcmd );
+#endif //DEBUG_NETWORK_ACTIVITY
 
 	int len = [ fullcmd length ];
-	int res = send( sockd, [ fullcmd UTF8String ], len, 0 );
+	int res = send( _sockd, [ fullcmd UTF8String ], len, 0 );
 	if ( res == -1 || res != len )//yes latter implies former, but just being clear
 	{//if error or didn't send all
 		return false;
@@ -369,13 +384,13 @@ static nntp_account * sharedInstance = nil;
 {
 	NSString * response;
 	NSLog( @"User: %@, Pass: %@", [ self getUser ], [ self getPassword ] );
-	if ( forceAuth || [ [ self getUser ] compare: DEFAULT_USER ] )
+	if ( forceAuth || [ [ self getUser ] compare: @"" ] )
 	{
 		//here we send 1x or 2x, and then get the responses
 
 		[self sendCommand: @"AUTHINFO USER" withArg: [ self getUser ] ];
 		//TODO: actually check for the 381 req'd the password
-		if ( [ [ self getPassword ] compare: DEFAULT_PASSWORD ] )
+		if ( [ [ self getPassword ] compare: @"" ] )
 		{//if password exists...
 			[ self sendCommand: @"AUTHINFO PASS" withArg: [ self getPassword ] ];
 			response = [ self getLine ];
@@ -403,6 +418,10 @@ static nntp_account * sharedInstance = nil;
 			//since all auth attempts failed...
 			return false;
 		}
+		//we might be able to post now when we couldn't before...
+		[ self sendCommand: @"MODE" withArg: @"READER" ]; //(response to this tells us if we can post or not)
+		//update canPost accordingly
+		[ self interpretModeReaderResponse: [ self getLine ] ];
 
 		//sweet
 		return true;
@@ -675,10 +694,10 @@ static nntp_account * sharedInstance = nil;
 	[ _arts release ];
 	[ _groups release ];
 	[ _subscribed release ];
-	if ( sockd )
+	if ( _sockd )
 	{
-		close( sockd );
-		sockd = 0;
+		close( _sockd );
+		_sockd = 0;
 	}
 
 	if ( self == sharedInstance ) //it BETTER!

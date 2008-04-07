@@ -12,10 +12,27 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		BE88702F0DA9494400F372E6 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE88702E0DA9494400F372E6 /* AccountView.m */; };
+		BE8870D50DA9759C00F372E6 /* GroupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8870D40DA9759C00F372E6 /* GroupListViewController.m */; };
+		BE9434B80DA1FAB700911EA8 /* Settings.bundle in Copy Settings.bundle */ = {isa = PBXBuildFile; fileRef = BE9434800DA1F43200911EA8 /* Settings.bundle */; };
 		BECCBF0F0D94B817001F2856 /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECCBF0E0D94B817001F2856 /* AccountViewController.m */; };
 		BED513B60D8ED96A003DC505 /* nntp_account.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513B50D8ED96A003DC505 /* nntp_account.m */; };
 		BED513E20D8F3419003DC505 /* resolveHostname.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513E10D8F3419003DC505 /* resolveHostname.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BE9434BA0DA1FABB00911EA8 /* Copy Settings.bundle */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 1;
+			files = (
+				BE9434B80DA1FAB700911EA8 /* Settings.bundle in Copy Settings.bundle */,
+			);
+			name = "Copy Settings.bundle";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -27,6 +44,11 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* iNG_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iNG_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE88702D0DA9494400F372E6 /* AccountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
+		BE88702E0DA9494400F372E6 /* AccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
+		BE8870D30DA9759C00F372E6 /* GroupListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupListViewController.h; sourceTree = "<group>"; };
+		BE8870D40DA9759C00F372E6 /* GroupListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupListViewController.m; sourceTree = "<group>"; };
+		BE9434800DA1F43200911EA8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		BECCBF0D0D94B817001F2856 /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
 		BECCBF0E0D94B817001F2856 /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
 		BED513B40D8ED96A003DC505 /* nntp_account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nntp_account.h; sourceTree = "<group>"; };
@@ -108,6 +130,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BE9434800DA1F43200911EA8 /* Settings.bundle */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
 			name = Resources;
@@ -122,13 +145,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		BE8870D20DA9756000F372E6 /* AccountView */ = {
+			isa = PBXGroup;
+			children = (
+				BECCBF0D0D94B817001F2856 /* AccountViewController.h */,
+				BECCBF0E0D94B817001F2856 /* AccountViewController.m */,
+				BE88702D0DA9494400F372E6 /* AccountView.h */,
+				BE88702E0DA9494400F372E6 /* AccountView.m */,
+			);
+			name = AccountView;
+			sourceTree = "<group>";
+		};
+		BE8870D60DA975A400F372E6 /* Group List */ = {
+			isa = PBXGroup;
+			children = (
+				BE8870D30DA9759C00F372E6 /* GroupListViewController.h */,
+				BE8870D40DA9759C00F372E6 /* GroupListViewController.m */,
+			);
+			name = "Group List";
+			sourceTree = "<group>";
+		};
 		BED513860D8DF99B003DC505 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				1D3623240D0F684500981E51 /* iNGAppDelegate.h */,
 				1D3623250D0F684500981E51 /* iNGAppDelegate.m */,
-				BECCBF0D0D94B817001F2856 /* AccountViewController.h */,
-				BECCBF0E0D94B817001F2856 /* AccountViewController.m */,
+				BE8870D20DA9756000F372E6 /* AccountView */,
+				BE8870D60DA975A400F372E6 /* Group List */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -152,9 +195,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "iNG" */;
 			buildPhases = (
-				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				BE9434BA0DA1FABB00911EA8 /* Copy Settings.bundle */,
 			);
 			buildRules = (
 			);
@@ -182,16 +225,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		1D60588D0D05DD3D006BFB54 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		1D60588E0D05DD3D006BFB54 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -202,6 +235,8 @@
 				BED513B60D8ED96A003DC505 /* nntp_account.m in Sources */,
 				BED513E20D8F3419003DC505 /* resolveHostname.m in Sources */,
 				BECCBF0F0D94B817001F2856 /* AccountViewController.m in Sources */,
+				BE88702F0DA9494400F372E6 /* AccountView.m in Sources */,
+				BE8870D50DA9759C00F372E6 /* GroupListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,7 +285,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = aspen1.2;
+				SDKROOT = iphoneos2.0;
 			};
 			name = Debug;
 		};
@@ -259,7 +294,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				PREBINDING = NO;
-				SDKROOT = aspen1.2;
+				SDKROOT = iphoneos2.0;
 			};
 			name = Release;
 		};

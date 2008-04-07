@@ -7,13 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "nntp_account.h"
 
-@interface AccountViewController : UIViewController <UITableViewDelegate,UITableViewDataSource> {
-
-	nntp_account * _account;//just one for now :)
-	NNTPGroup * _subs;//just a pointer to make things easier
-	int _subs_count;//length of above array
+@interface AccountViewController : UIViewController {
+	//\o/ nothing
 
 }
 
