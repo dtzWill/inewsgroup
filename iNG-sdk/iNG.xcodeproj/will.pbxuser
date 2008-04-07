@@ -2,9 +2,9 @@
 {
 	1D3623250D0F684500981E51 /* iNGAppDelegate.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {877, 560}}";
-			sepNavSelRange = "{923, 0}";
-			sepNavVisRange = "{483, 373}";
+			sepNavIntBoundsRect = "{{0, 0}, {877, 518}}";
+			sepNavSelRange = "{675, 29}";
+			sepNavVisRange = "{458, 394}";
 		};
 	};
 	1D6058900D05DD3D006BFB54 /* iNG */ = {
@@ -14,9 +14,10 @@
 		);
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeArchitecture = i386;
-		activeBuildConfigurationName = Release;
+		activeArchitecture = armv6;
+		activeBuildConfigurationName = Debug;
 		activeExecutable = BED513450D8DF301003DC505 /* iNG */;
+		activeSDKForArchive = iphoneos2.0;
 		activeTarget = 1D6058900D05DD3D006BFB54 /* iNG */;
 		addToTargets = (
 			1D6058900D05DD3D006BFB54 /* iNG */,
@@ -81,7 +82,7 @@
 					16,
 					200,
 					50,
-					183,
+					87,
 				);
 				PBXFileTableDataSourceColumnsKey = (
 					PBXSymbolsDataSource_SymbolTypeIconID,
@@ -114,16 +115,30 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 228104027;
-			PBXWorkspaceStateSaveDate = 228104027;
-		};
-		perUserProjectItems = {
-			BE23ECBD0D90D7CE008DB578 = BE23ECBD0D90D7CE008DB578 /* PBXTextBookmark */;
-			BE23ECBE0D90D7CE008DB578 = BE23ECBE0D90D7CE008DB578 /* PBXTextBookmark */;
-			BECCBF180D94BAF8001F2856 = BECCBF180D94BAF8001F2856 /* PBXTextBookmark */;
-			BECCBF190D94BAF8001F2856 = BECCBF190D94BAF8001F2856 /* PBXTextBookmark */;
-			BEFD7B790D9897D80023812B /* PBXTextBookmark */ = BEFD7B790D9897D80023812B /* PBXTextBookmark */;
-			BEFD7B7A0D9897D80023812B /* PBXTextBookmark */ = BEFD7B7A0D9897D80023812B /* PBXTextBookmark */;
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					107,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 229226832;
+			PBXWorkspaceStateSaveDate = 229226832;
 		};
 		sourceControlManager = BED513490D8DF30D003DC505 /* Source Control */;
 		userBuildSettings = {
@@ -137,41 +152,34 @@
 			sepNavWindowFrame = "{{15, 215}, {750, 558}}";
 		};
 	};
-	BE23ECBD0D90D7CE008DB578 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "error: syntax error before ']' token";
-		fRef = 1D3623250D0F684500981E51 /* iNGAppDelegate.m */;
-		rLen = 1;
-		rLoc = 22;
-		rType = 1;
+	BE88702D0DA9494400F372E6 /* AccountView.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {877, 560}}";
+			sepNavSelRange = "{774, 0}";
+			sepNavVisRange = "{492, 204}";
+		};
 	};
-	BE23ECBE0D90D7CE008DB578 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 1D3623250D0F684500981E51 /* iNGAppDelegate.m */;
-		name = "iNGAppDelegate.m: 43";
-		rLen = 0;
-		rLoc = 864;
-		rType = 0;
-		vrLen = 388;
-		vrLoc = 475;
+	BE88702E0DA9494400F372E6 /* AccountView.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {877, 1652}}";
+			sepNavSelRange = "{4301, 0}";
+			sepNavVisRange = "{2784, 462}";
+		};
 	};
-	BECCBF180D94BAF8001F2856 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "error: 'StartView' undeclared (first use in this function)";
-		fRef = 1D3623250D0F684500981E51 /* iNGAppDelegate.m */;
-		rLen = 1;
-		rLoc = 21;
-		rType = 1;
+	BE8870D30DA9759C00F372E6 /* GroupListViewController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {877, 294}}";
+			sepNavSelRange = "{402, 0}";
+			sepNavVisRange = "{171, 231}";
+		};
 	};
-	BECCBF190D94BAF8001F2856 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 1D3623250D0F684500981E51 /* iNGAppDelegate.m */;
-		name = "iNGAppDelegate.m: 37";
-		rLen = 0;
-		rLoc = 892;
-		rType = 0;
-		vrLen = 448;
-		vrLoc = 339;
+	BECCBF0E0D94B817001F2856 /* AccountViewController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {948, 1526}}";
+			sepNavSelRange = "{4054, 0}";
+			sepNavVisRange = "{2721, 423}";
+			sepNavWindowFrame = "{{15, 61}, {750, 685}}";
+		};
 	};
 	BED513450D8DF301003DC505 /* iNG */ = {
 		isa = PBXExecutable;
@@ -222,9 +230,10 @@
 	};
 	BED513B50D8ED96A003DC505 /* nntp_account.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {877, 9002}}";
-			sepNavSelRange = "{3384, 73}";
-			sepNavVisRange = "{3234, 246}";
+			sepNavIntBoundsRect = "{{0, 0}, {877, 5320}}";
+			sepNavSelRange = "{18790, 0}";
+			sepNavVisRange = "{5415, 198}";
+			sepNavWindowFrame = "{{341, 108}, {750, 558}}";
 		};
 	};
 	BED513B90D8EEF38003DC505 /* NNTPDataTypes.h */ = {
@@ -244,27 +253,9 @@
 	};
 	BED513E10D8F3419003DC505 /* resolveHostname.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {877, 1036}}";
-			sepNavSelRange = "{639, 9}";
-			sepNavVisRange = "{512, 320}";
+			sepNavIntBoundsRect = "{{0, 0}, {877, 1120}}";
+			sepNavSelRange = "{1742, 88}";
+			sepNavVisRange = "{1546, 464}";
 		};
-	};
-	BEFD7B790D9897D80023812B /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "warning: assignment from distinct Objective-C type";
-		fRef = 1D3623250D0F684500981E51 /* iNGAppDelegate.m */;
-		rLen = 1;
-		rLoc = 24;
-		rType = 1;
-	};
-	BEFD7B7A0D9897D80023812B /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 1D3623250D0F684500981E51 /* iNGAppDelegate.m */;
-		name = "iNGAppDelegate.m: 42";
-		rLen = 0;
-		rLoc = 923;
-		rType = 0;
-		vrLen = 370;
-		vrLoc = 483;
 	};
 }

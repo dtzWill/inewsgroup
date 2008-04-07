@@ -26,6 +26,10 @@
  */
 NSString * resolveHostname( const char * hostname )
 {
+	if ( !hostname )
+	{
+		return nil;
+	}
 	NSString * name = [NSString stringWithFormat: @"%s", hostname ];
 
 	if ( inet_addr( hostname ) != INADDR_NONE )
