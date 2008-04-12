@@ -12,8 +12,6 @@
 
 @interface GroupListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 
-	NNTPGroupBasic * _subs;
-	int _subs_count;//keeps track of length of above array
 }
 
 - (void) connect;

@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-#import "NNTPTypes.h"
+#import "NNTPArticle.h"
 
 @interface NNTPAccount : NSObject {
 
 	//run-time data
 	NSMutableArray * _arts;//		NNTPArticle's (containing the headers)
-	NSData * _groups;//		NNTPGroup's
+	NSArray * _groups;//		NSString's containing list of group names
 	int _sockd;//fd for the socket connection
 
 	//data to save (other than account information)
@@ -109,15 +109,15 @@
  *                if cache doesn't exist, it'll get a new listing
  * =====================================================================================
  */
-- (NSData *) getGroupList: (bool) forceRefresh;
+- (NSArray *) getGroupList: (bool) forceRefresh;
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  subscribedGroups
- *  Description:  Returns array containing the subscribed groups. (of type NTTPGroup)
+ *  Description:  Returns array containing the subscribed groups. (of type NTTPGroupBasic)
  * =====================================================================================
  */
-- (NSData *) subscribedGroups;
+- (NSArray *) subscribedGroups;
 
 
 /* 
@@ -134,7 +134,7 @@
  * ===  FUNCTION  ======================================================================
  *         Name:  setGroupAndFetchHeaders
  *  Description:  Enters the specified group
- *                also uses XOVER to get the headers.
+ *                also gets the headers
  *                Uses the progressdelegate.
  * =====================================================================================
  */

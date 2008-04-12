@@ -8,6 +8,7 @@
 
 #import "NNTPAccount.h"
 #import "resolveHostname.h"
+#import "NNTPGroupBasic.h"
 
 #import <arpa/inet.h>
 #import <fcntl.h>
@@ -38,9 +39,9 @@
 #define CONNECT_TIMEOUT 10
 #define COMMAND_TIMEOUT 10
 
-#define GROUPS_FILE   \
-        [[NSBundle mainBundle] pathForResource:@"groups" ofType:@""]
-
+#define RESOURCEPATH [ [ NSBundle mainBundle ] resourcePath ]
+#define F_SUBS [ RESOURCEPATH stringByAppendingPathComponent: @"subs.data" ]
+#define F_GROUPS [ RESOURCEPATH stringByAppendingPathComponent: @"groups.data" ]
 
 static NNTPAccount * sharedInstance = nil;
 
@@ -57,13 +58,14 @@ static NNTPAccount * sharedInstance = nil;
 //init constructor
 - (NNTPAccount *) init
 {
-	self = [ super init ];
-
-	_sockd = 0;
-	_arts = nil;
-	_groups = nil;
-	_subscribed = nil;
-	_canPost = false;
+	if ( self = [ super init ] )
+	{
+		_sockd = 0;
+		_arts = nil;
+		_groups = nil;
+		_subscribed = nil;
+		_canPost = false;
+	}
 
 	return self;
 }
@@ -90,7 +92,7 @@ static NNTPAccount * sharedInstance = nil;
 }
 - (bool) isConnected;
 {
-	//TODO: possible do more than check if we ever connected successfully...
+	//TODO: possibly do more than check if we ever connected successfully...
 	return _sockd != 0;
 }
 - (bool) canPost
@@ -449,78 +451,95 @@ static NNTPAccount * sharedInstance = nil;
  *                if cache doesn't exist, it'll get a new listing
  * =====================================================================================
  */
-- (NSData *) getGroupList: (bool) forceRefresh
+- (NSArray *) getGroupList: (bool) forceRefresh
 {
-///	//TODO: once read file into memory... leave it there (and re-use it)?
-///	NSString * groups_file = GROUPS_FILE;
-///	NSMutableData * groups_array = nil;
-///
-///
-///	if ( !forceRefresh )
-///	{
-///		if ( _groups ) return _groups;
-///
-///		if ( groups_file )
-///		{
-///			groups_array = [ NSMutableData dataWithContentsOfFile: groups_file ];
-///		}
-///
-///		if ( groups_array != nil )
-///		{
-///			if ( _groups ) [ _groups release ];
-///			_groups = groups_array;
-///			return groups_array;
-///		}
-///	}
-///
-///	//if get here, either we were forced to refresh, or failed to read the cache...
-///
-///	[ self sendCommand: @"LIST" withArg: @"ACTIVE" ];
-///	if ( [self isSuccessfulCommand: [ self getLine ] ] )
-///	{
-///		NSArray * lines = [ self getResponse ];
-///		groups_array = [ [ NSMutableData alloc ] initWithLength: sizeof( NNTPGroup ) * [ lines count ] ];	
-///		NNTPGroup * groups_data = (NNTPGroup *)[ groups_array bytes ];
-///
-///		NSEnumerator * enumer = [ lines objectEnumerator ];
-///		NSString * line;
-///
-///		int i = 0;
-///		while  ( line = [ enumer nextObject ] )
-///		{
-///			NNTPGroup group = [ self NNTPGroupFromNSString: line ];
-///			group.hasUnread = false;//we don't keep track of this for unsubscribed groups
-///		
-///			NSLog( @"Got group: %s", group.name  );
-///			groups_data[i++] = group;
-///		}
-///		
-///		//write it back!
-///		if ( groups_array )
-///		{
-///			[ groups_array writeToFile: groups_file atomically: YES ];	
-///			NSLog( @"wrote groups to file" );
-///		}
-///
-///		if ( _groups ) [ _groups release ];
-///		_groups = groups_array;
-///		return groups_array;
-///	}
-///
+	//TODO: once read file into memory... leave it there (and re-use it)?
+	NSMutableArray * groups_array = nil;
+
+	//create file if it doesn't exist
+	if ( ![ [ NSFileManager defaultManager ] fileExistsAtPath: F_GROUPS ] )
+	{
+		[ [ NSFileManager defaultManager ] createFileAtPath: F_GROUPS contents: nil attributes: nil ];
+	}
+
+	if ( !forceRefresh )
+	{
+		if ( _groups ) return _groups;
+
+		groups_array = [ NSMutableData dataWithContentsOfFile: F_GROUPS ];
+
+		if ( groups_array != nil )
+		{
+			if ( _groups ) [ _groups release ];
+			_groups = groups_array;
+			return groups_array;
+		}
+	}
+
+	//if get here, either we were forced to refresh, or failed to read the cache...
+
+	[ self sendCommand: @"LIST" withArg: @"ACTIVE" ];
+	if ( [self isSuccessfulCommand: [ self getLine ] ] )
+	{
+		NSArray * lines = [ self getResponse ];
+
+		//we have a list of the groups in 'lines', but we want to strip
+		//all the unneeded data.  we don't track high/low/anything
+		//for non-subscribed groups, only we want a list
+		//of what exists
+		groups_array = [ NSMutableArray arrayWithCapacity: [ lines count ] ];	
+
+		NSEnumerator * enumer = [ lines objectEnumerator ];
+		NSString * line;
+
+		//TODO: do we care/need 'i'?
+		int i = 0;
+		while  ( line = [ enumer nextObject ] )
+		{
+
+			NSArray * parts = [ line componentsSeparatedByString: @" " ];
+			[ groups_array addObject: [ parts objectAtIndex: 0 ] ]; 
+			i++;
+			[ parts release ];
+		}
+		
+		//write it back!
+		if ( groups_array )
+		{
+			[ groups_array writeToFile: F_GROUPS atomically: YES ];	
+			NSLog( @"wrote groups to file" );
+		}
+
+		if ( _groups ) [ _groups release ];
+		_groups = groups_array;
+		return groups_array;
+	}
+
 	return nil;//:-(
-///
+
 }
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  subscribedGroups
- *  Description:  Returns array containing the subscribed groups. (of type NTTPGroup)
+ *  Description:  Returns array containing the subscribed groups. (of type NTTPGroupBasic)
  * =====================================================================================
  */
-- (NSData *) subscribedGroups
+- (NSArray *) subscribedGroups
 {
-	//just pull from defaults :)
-	NSMutableData * subscribed = [ [ NSUserDefaults standardUserDefaults ] objectForKey: K_SUBSCRIBED ];
+	//XXX
+	if ( _subscribed ) return _subscribed;
+
+	//load from file if we can
+
+	//create file if it doesn't exist
+	if ( ![ [ NSFileManager defaultManager ] fileExistsAtPath: F_SUBS ] )
+	{
+		[ [ NSFileManager defaultManager ] createFileAtPath: F_SUBS contents: nil attributes: nil ];
+	}
+
+	NSDictionary * rootObject = [ NSKeyedUnarchiver unarchiveObjectWithFile: F_SUBS ];
+	NSMutableArray * subscribed = [ rootObject valueForKey: @"subscribed" ];
 
 	//loop var
 	int i;
@@ -530,22 +549,27 @@ static NNTPAccount * sharedInstance = nil;
 		[ self sendCommand: @"LIST" withArg: @"SUBSCRIPTIONS" ];
 		if ( [ self isSuccessfulCommand: [ self getLine ] ] )
 		{
-///			NSArray * lines = [ self getResponse ];
-///			subscribed = [ [ NSMutableData alloc ] initWithLength: sizeof( NNTPGroup ) * [ lines count ] ];
-///			NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
-///			NSLog ( @"%d", [ subscribed length ] / sizeof( NNTPGroup ) );
-///		//	NSLog( @"line count: %d", [ lines count ] );
-///			for ( i = 0; i < [ lines count ]; i++ )
-///			{
-///				strncpy( sub_arr[i].name, [ [ lines objectAtIndex: i ] UTF8String ], sizeof( sub_arr[i].name ) );;
-///				sub_arr[i].hasUnread = true;//it /*could*/ be empty
-///				sub_arr[i].low = 0;
-///				sub_arr[i].high = 0;
-///				sub_arr[i].count = 0;
-///				NSLog( @"%s", sub_arr[i].name );
-///			}
-///			[ [ NSUserDefaults standardUserDefaults ] setObject: subscribed forKey: K_SUBSCRIBED ];
-///
+			NSArray * lines = [ self getResponse ];
+			subscribed = [ NSMutableArray arrayWithCapacity: [ lines count ] ];
+		//	NSLog( @"line count: %d", [ lines count ] );
+			for ( i = 0; i < [ lines count ]; i++ )
+			{
+				NNTPGroupBasic * subscribedGroup = [ [ NNTPGroupBasic alloc ] initWithName: [ lines objectAtIndex: i ] ];
+				[ subscribed addObject: subscribedGroup ];
+			}
+
+			//write it back!
+			if ( subscribed )
+			{
+				NSMutableDictionary * rootObject;
+				rootObject = [ [ [ NSMutableDictionary alloc ] init ] autorelease ];
+				[ rootObject setValue: subscribed forKey:@"subscribed" ];
+				NSLog( @"save subscriptions: %d", [ NSKeyedArchiver archiveRootObject: rootObject toFile: F_SUBS ] );
+			}
+
+			_subscribed = subscribed;
+			[ _subscribed retain ];
+
 			return subscribed;
 		}
 		
@@ -554,12 +578,9 @@ static NNTPAccount * sharedInstance = nil;
 	}
 	else
 	{
-//		NSLog( @"%d", [ subscribed length ]/sizeof( NNTPGroup ) );
-//		NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
-//		for ( i = 0; i < [ subscribed length ] / sizeof( NNTPGroup ); i++ )
-//		{
-//			NSLog( @"Subscribed to: %s", sub_arr[i].name );
-//		}
+		//print out subscriptions for debug's sake?
+		NSLog( @"already had subscription list!" );
+		_subscribed = subscribed;
 
 	}
 
@@ -580,7 +601,7 @@ static NNTPAccount * sharedInstance = nil;
 	 * depending on server latency, number of subscribed groups, etc, it may or may not be efficient to send multiple 'group GROUPNAME' requests--/might/ be better to simply do a 'list', store that, and keep track of that.
 	 * just something to keep in mind
 	 */
-	NSData * subscribed = [ self subscribedGroups ];
+	NSArray * subscribed = [ self subscribedGroups ];
 
 ///	NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
 ///
@@ -630,7 +651,7 @@ static NNTPAccount * sharedInstance = nil;
  * ===  FUNCTION  ======================================================================
  *         Name:  setGroupAndFetchHeaders
  *  Description:  Enters the specified group
- *                also uses XOVER to get the headers.
+ *                also gets the headers
  *                Uses the progressdelegate.
  * =====================================================================================
  */
