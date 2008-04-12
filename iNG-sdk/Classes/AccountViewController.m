@@ -11,6 +11,8 @@
 #import "AccountView.h"
 #import "authinfo.h"
 
+#import "NNTPAccount.h"
+
 
 @implementation AccountViewController
 
@@ -28,10 +30,10 @@
 {
 	NSLog( @"loading view" );
 	//TEMP UNTIL NSUSERDEFAULTS RESOLVED!
-	[ [ nntp_account sharedInstance ] setServer: @"news.cs.uiuc.edu" ];
-	[ [ nntp_account sharedInstance ] setPort: 119 ];
-	[ [ nntp_account sharedInstance ] setUser: @"wdietz2" ];
-	[ [ nntp_account sharedInstance ] setPassword: MY_PASS ];//would rather not check my pass into svn :)
+	[ [ NNTPAccount sharedInstance ] setServer: @"news.cs.uiuc.edu" ];
+	[ [ NNTPAccount sharedInstance ] setPort: 119 ];
+	[ [ NNTPAccount sharedInstance ] setUser: @"wdietz2" ];
+	[ [ NNTPAccount sharedInstance ] setPassword: MY_PASS ];//would rather not check my pass into svn :)
 
 	AccountView *view = [ [ AccountView alloc ] initWithFrame:[ UIScreen mainScreen ].applicationFrame ];
 	self.view = view;

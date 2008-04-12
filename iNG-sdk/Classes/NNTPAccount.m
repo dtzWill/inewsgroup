@@ -1,19 +1,19 @@
 //
-//  nntp_account.m
+//  NNTPAccount.m
 //  iNG
 //
 //  Created by Will Dietz on 3/17/08.
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
-#import "nntp_account.h"
+#import "NNTPAccount.h"
 #import "resolveHostname.h"
 
 #import <arpa/inet.h>
 #import <fcntl.h>
 
 //comment this out to hide the nslog'ing of network read/writes
-//#define DEBUG_NETWORK_ACTIVITY 1
+#define DEBUG_NETWORK_ACTIVITY 1
 
 //NOTE these *must* match the keys as defined in
 //Root.plist in Settings.bundle
@@ -42,20 +42,20 @@
         [[NSBundle mainBundle] pathForResource:@"groups" ofType:@""]
 
 
-static nntp_account * sharedInstance = nil;
+static NNTPAccount * sharedInstance = nil;
 
-@implementation nntp_account
+@implementation NNTPAccount
 
-+ (nntp_account * ) sharedInstance
++ (NNTPAccount * ) sharedInstance
 {
 	if ( sharedInstance )
 		return sharedInstance;
 	//else
-	return sharedInstance = [ [ nntp_account alloc ] init ];
+	return sharedInstance = [ [ NNTPAccount alloc ] init ];
 }
 
 //init constructor
-- (nntp_account *) init
+- (NNTPAccount *) init
 {
 	self = [ super init ];
 
@@ -90,6 +90,7 @@ static nntp_account * sharedInstance = nil;
 }
 - (bool) isConnected;
 {
+	//TODO: possible do more than check if we ever connected successfully...
 	return _sockd != 0;
 }
 - (bool) canPost
@@ -140,6 +141,11 @@ static nntp_account * sharedInstance = nil;
  */
 - (bool) connect
 {
+	if ( [self isConnected ] )
+	{
+		//TODO: possibly do a simple command to verify we're up
+		return true;
+	}
 	struct sockaddr_in s_add;
 	fd_set fdset; 
 	struct timeval tv;
@@ -279,6 +285,7 @@ static nntp_account * sharedInstance = nil;
 	}
 	else
 	{
+		NSLog( @"Error in getLine", errno );
 		return nil;
 	}
 
@@ -292,6 +299,8 @@ static nntp_account * sharedInstance = nil;
 #endif //DEBUG_NETWORK_ACTIVITY
 		return line;
 	}
+
+	NSLog( @"Error in getLine: No newline!" );
 
 	return nil;
 }
@@ -442,63 +451,64 @@ static nntp_account * sharedInstance = nil;
  */
 - (NSData *) getGroupList: (bool) forceRefresh
 {
-	//TODO: once read file into memory... leave it there (and re-use it)?
-	NSString * groups_file = GROUPS_FILE;
-	NSMutableData * groups_array = nil;
-
-
-	if ( !forceRefresh )
-	{
-		if ( _groups ) return _groups;
-
-		if ( groups_file )
-		{
-			groups_array = [ NSMutableData dataWithContentsOfFile: groups_file ];
-		}
-
-		if ( groups_array != nil )
-		{
-			if ( _groups ) [ _groups release ];
-			_groups = groups_array;
-			return groups_array;
-		}
-	}
-
-	//if get here, either we were forced to refresh, or failed to read the cache...
-
-	[ self sendCommand: @"LIST" withArg: @"ACTIVE" ];
-	if ( [self isSuccessfulCommand: [ self getLine ] ] )
-	{
-		NSArray * lines = [ self getResponse ];
-		groups_array = [ [ NSMutableData alloc ] initWithLength: sizeof( NNTPGroup ) * [ lines count ] ];	
-		NNTPGroup * groups_data = (NNTPGroup *)[ groups_array bytes ];
-
-		NSEnumerator * enumer = [ lines objectEnumerator ];
-		NSString * line;
-
-		int i = 0;
-		while  ( line = [ enumer nextObject ] )
-		{
-			NNTPGroup group = [ self NNTPGroupFromNSString: line ];
-			group.hasUnread = false;//we don't keep track of this for unsubscribed groups
-			
-			groups_data[i++] = group;
-		}
-		
-		//write it back!
-		if ( groups_array )
-		{
-			[ groups_array writeToFile: groups_file atomically: YES ];	
-			NSLog( @"wrote groups to file" );
-		}
-
-		if ( _groups ) [ _groups release ];
-		_groups = groups_array;
-		return groups_array;
-	}
-
+///	//TODO: once read file into memory... leave it there (and re-use it)?
+///	NSString * groups_file = GROUPS_FILE;
+///	NSMutableData * groups_array = nil;
+///
+///
+///	if ( !forceRefresh )
+///	{
+///		if ( _groups ) return _groups;
+///
+///		if ( groups_file )
+///		{
+///			groups_array = [ NSMutableData dataWithContentsOfFile: groups_file ];
+///		}
+///
+///		if ( groups_array != nil )
+///		{
+///			if ( _groups ) [ _groups release ];
+///			_groups = groups_array;
+///			return groups_array;
+///		}
+///	}
+///
+///	//if get here, either we were forced to refresh, or failed to read the cache...
+///
+///	[ self sendCommand: @"LIST" withArg: @"ACTIVE" ];
+///	if ( [self isSuccessfulCommand: [ self getLine ] ] )
+///	{
+///		NSArray * lines = [ self getResponse ];
+///		groups_array = [ [ NSMutableData alloc ] initWithLength: sizeof( NNTPGroup ) * [ lines count ] ];	
+///		NNTPGroup * groups_data = (NNTPGroup *)[ groups_array bytes ];
+///
+///		NSEnumerator * enumer = [ lines objectEnumerator ];
+///		NSString * line;
+///
+///		int i = 0;
+///		while  ( line = [ enumer nextObject ] )
+///		{
+///			NNTPGroup group = [ self NNTPGroupFromNSString: line ];
+///			group.hasUnread = false;//we don't keep track of this for unsubscribed groups
+///		
+///			NSLog( @"Got group: %s", group.name  );
+///			groups_data[i++] = group;
+///		}
+///		
+///		//write it back!
+///		if ( groups_array )
+///		{
+///			[ groups_array writeToFile: groups_file atomically: YES ];	
+///			NSLog( @"wrote groups to file" );
+///		}
+///
+///		if ( _groups ) [ _groups release ];
+///		_groups = groups_array;
+///		return groups_array;
+///	}
+///
 	return nil;//:-(
-
+///
 }
 
 /* 
@@ -516,26 +526,26 @@ static nntp_account * sharedInstance = nil;
 	int i;
 	if ( !subscribed )
 	{
-		//fetch with "list subscriptions" ?
+		
 		[ self sendCommand: @"LIST" withArg: @"SUBSCRIPTIONS" ];
 		if ( [ self isSuccessfulCommand: [ self getLine ] ] )
 		{
-			NSArray * lines = [ self getResponse ];
-			subscribed = [ [ NSMutableData alloc ] initWithLength: sizeof( NNTPGroup ) * [ lines count ] ];
-			NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
-			NSLog ( @"%d", [ subscribed length ] / sizeof( NNTPGroup ) );
-		//	NSLog( @"line count: %d", [ lines count ] );
-			for ( i = 0; i < [ lines count ]; i++ )
-			{
-				strncpy( sub_arr[i].name, [ [ lines objectAtIndex: i ] UTF8String ], sizeof( sub_arr[i].name ) );;
-				sub_arr[i].hasUnread = true;//it /*could*/ be empty
-				sub_arr[i].low = 0;
-				sub_arr[i].high = 0;
-				sub_arr[i].count = 0;
-				NSLog( @"%s", sub_arr[i].name );
-			}
-			[ [ NSUserDefaults standardUserDefaults ] setObject: subscribed forKey: K_SUBSCRIBED ];
-
+///			NSArray * lines = [ self getResponse ];
+///			subscribed = [ [ NSMutableData alloc ] initWithLength: sizeof( NNTPGroup ) * [ lines count ] ];
+///			NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
+///			NSLog ( @"%d", [ subscribed length ] / sizeof( NNTPGroup ) );
+///		//	NSLog( @"line count: %d", [ lines count ] );
+///			for ( i = 0; i < [ lines count ]; i++ )
+///			{
+///				strncpy( sub_arr[i].name, [ [ lines objectAtIndex: i ] UTF8String ], sizeof( sub_arr[i].name ) );;
+///				sub_arr[i].hasUnread = true;//it /*could*/ be empty
+///				sub_arr[i].low = 0;
+///				sub_arr[i].high = 0;
+///				sub_arr[i].count = 0;
+///				NSLog( @"%s", sub_arr[i].name );
+///			}
+///			[ [ NSUserDefaults standardUserDefaults ] setObject: subscribed forKey: K_SUBSCRIBED ];
+///
 			return subscribed;
 		}
 		
@@ -544,12 +554,12 @@ static nntp_account * sharedInstance = nil;
 	}
 	else
 	{
-		NSLog( @"%d", [ subscribed length ]/sizeof( NNTPGroup ) );
-		NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
-		for ( i = 0; i < [ subscribed length ] / sizeof( NNTPGroup ); i++ )
-		{
-			NSLog( @"Subscribed to: %s", sub_arr[i].name );
-		}
+//		NSLog( @"%d", [ subscribed length ]/sizeof( NNTPGroup ) );
+//		NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
+//		for ( i = 0; i < [ subscribed length ] / sizeof( NNTPGroup ); i++ )
+//		{
+//			NSLog( @"Subscribed to: %s", sub_arr[i].name );
+//		}
 
 	}
 
@@ -572,45 +582,46 @@ static nntp_account * sharedInstance = nil;
 	 */
 	NSData * subscribed = [ self subscribedGroups ];
 
-	NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
-
-	int i =0;
-	int count = [ subscribed length ] / sizeof( NNTPGroup );
-
-	//send a group command for each group....
-	for ( ; i < count; i++ )
-	{
-		[ self sendCommand: @"GROUP" withArg: [ NSString stringWithCString: sub_arr[i].name ] ];
-	}
-	//now get the responses and parse
-	for ( i = 0; i < count; i++ )
-	{
-		NSString * response = [ self getLine ];
-		if ( [ self isSuccessfulCommand: response ] )
-		{
-			NSArray * parts = [ response componentsSeparatedByString: @" " ];
-			//should be:
-			//responsecode articlecount low high name
-			NNTPGroup old = sub_arr[i];
-			sub_arr[i].count = [ [ parts objectAtIndex: 1 ] intValue ];
-			sub_arr[i].low = [ [ parts objectAtIndex: 2 ] intValue ];
-			sub_arr[i].high = [ [ parts objectAtIndex: 3 ] intValue ];
-
-			if ( !sub_arr[i].hasUnread )
-			{
-				//if more articles have been posted... then we have something to read
-				sub_arr[i].hasUnread = ( sub_arr[i].high < old.high );
-			}
-
-		}
-		else
-		{
-			//keep going
-		}
-
-
-	}
-
+///	NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
+///
+///	int i =0;
+///	int count = [ subscribed length ] / sizeof( NNTPGroup );
+///
+///	//send a group command for each group....
+///	for ( ; i < count; i++ )
+///	{
+///		[ self sendCommand: @"GROUP" withArg: [ NSString stringWithCString: sub_arr[i].name ] ];
+///	}
+///	//now get the responses and parse
+///	for ( i = 0; i < count; i++ )
+///	{
+///		NSString * response = [ self getLine ];
+///		if ( [ self isSuccessfulCommand: response ] )
+///		{
+///			NSArray * parts = [ response componentsSeparatedByString: @" " ];
+///			//should be:
+///			//responsecode articlecount low high name
+///			NNTPGroup old = sub_arr[i];
+///			sub_arr[i].count = [ [ parts objectAtIndex: 1 ] intValue ];
+///			sub_arr[i].low = [ [ parts objectAtIndex: 2 ] intValue ];
+///			sub_arr[i].high = [ [ parts objectAtIndex: 3 ] intValue ];
+///
+///			//update unread...
+///			if ( !sub_arr[i].hasUnread )
+///			{
+///				//if more articles have been posted... then we have something to read
+///				sub_arr[i].hasUnread = ( sub_arr[i].high < old.high );
+///			}
+///
+///		}
+///		else
+///		{
+///			//keep going
+///		}
+///
+///
+///	}
+///
 
 }
 
@@ -670,20 +681,20 @@ static nntp_account * sharedInstance = nil;
 //TODO: clean up the bodies if we get a low-mem warning
 
 //does what you'd expect
-- (NNTPGroup) NNTPGroupFromNSString: (NSString *) string
-{
-	//groupname high low flags
-	//for our purposes we're ignoring flags
-	NSArray * parts = [ string componentsSeparatedByString: @" " ];
-	NNTPGroup group;
-	strncpy( group.name, [ [ parts objectAtIndex: 0 ] UTF8String ], sizeof( group.name ) );
-	group.high = [ [ parts objectAtIndex: 1 ] intValue ];
-	group.low = [ [ parts objectAtIndex: 2 ] intValue ];
-
-	group.hasUnread = false;//default, just initializing it
-
-	return group;
-}
+///- (NNTPGroup) NNTPGroupFromNSString: (NSString *) string
+///{
+///	//groupname high low flags
+///	//for our purposes we're ignoring flags
+///	NSArray * parts = [ string componentsSeparatedByString: @" " ];
+///	NNTPGroup group;
+///	strncpy( group.name, [ [ parts objectAtIndex: 0 ] UTF8String ], sizeof( group.name ) );
+///	group.high = [ [ parts objectAtIndex: 1 ] intValue ];
+///	group.low = [ [ parts objectAtIndex: 2 ] intValue ];
+///
+///	group.hasUnread = false;//default, just initializing it
+///
+///	return group;
+///}
 
 //TODO: POSTING SUPPORT!
 //TODO: THREADING!

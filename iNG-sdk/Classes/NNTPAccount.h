@@ -1,5 +1,5 @@
 //
-//  nntp_account.h
+//  NNTPAccount.h
 //  iNG
 //
 //  Created by Will Dietz on 3/17/08.
@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NNTPDataTypes.h"
 
+#import "NNTPTypes.h"
 
-@interface nntp_account : NSObject {
+@interface NNTPAccount : NSObject {
 
 	//run-time data
 	NSMutableArray * _arts;//		NNTPArticle's (containing the headers)
@@ -23,10 +23,10 @@
 
 }
 
-+ (nntp_account *) sharedInstance;
++ (NNTPAccount *) sharedInstance;
 
 //init constructor
-- (nntp_account *) init;
+- (NNTPAccount *) init;
 
 
 /*-----------------------------------------------------------------------------
@@ -71,12 +71,27 @@
 
 /* 
  * ===  FUNCTION  ======================================================================
+ *         Name:  sendCommand
+ *  Description:  sends a command to the nntp server, returns if send has an error (local)
+ * =====================================================================================
+ */
+- (bool) sendCommand: (NSString *) command withArg: (NSString *) arg;
+
+/*
+ * ===  FUNCTION  ======================================================================
  *         Name:  getLine
  *  Description:  reads a line from the network stream
  * =====================================================================================
  */
 - (NSString *) getLine;
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getResponse
+ *  Description:  gets the rest of the response
+ * =====================================================================================
+ */
+- (NSArray *) getResponse;
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -130,7 +145,7 @@
  * ===  FUNCTION  ======================================================================
  *         Name:  getArts
  *  Description:  returns pointer to internal array of the articles
- *                initially it's just the headers filled in by the initial XOVE
+ *                initially it's just the headers filled in by the initial XOVER
  *                body only guaranteed to be there for the last article that we got
  *                the body for (as memory allows)
  * =====================================================================================
@@ -159,7 +174,7 @@
 - (NNTPArticle *) getBodyForArticle: (int) artid;
 
 //does what you'd expect
-- (NNTPGroup) NNTPGroupFromNSString: (NSString *) string;
+//- (NNTPGroup) NNTPGroupFromNSString: (NSString *) string;
 
 //TODO: POSTING SUPPORT!
 //TODO: THREADING!
