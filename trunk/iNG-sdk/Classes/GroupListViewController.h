@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "nntp_account.h"
+
+#import "NNTPGroupBasic.h"
 
 @interface GroupListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 
-	NNTPGroup * _subs;
+	NNTPGroupBasic * _subs;
 	int _subs_count;//keeps track of length of above array
 }
 

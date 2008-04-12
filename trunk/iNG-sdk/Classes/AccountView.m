@@ -7,8 +7,8 @@
 //
 
 #import "AccountView.h"
-#import "nntp_account.h"
 
+#import "NNTPAccount.h"
 
 @implementation AccountView
 
@@ -106,9 +106,9 @@
 	[ _version_label setText: @"0.0.1" ];
 	[ _account_label setText: @"Active Account:" ];
 	_account_label.font = [ _account_label.font fontWithSize: 24 ];
-	if ( [ [ nntp_account sharedInstance ] isValid ] )
+	if ( [ [ NNTPAccount sharedInstance ] isValid ] )
 	{
-		[ _server_label setText: [ [ nntp_account sharedInstance ] getServer ] ];
+		[ _server_label setText: [ [ NNTPAccount sharedInstance ] getServer ] ];
 		_server_label.textColor = [ UIColor greenColor ];
 	}
 	else

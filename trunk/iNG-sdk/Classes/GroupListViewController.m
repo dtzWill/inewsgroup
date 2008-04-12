@@ -8,6 +8,8 @@
 
 #import "GroupListViewController.h"
 
+#import "NNTPAccount.h"
+
 
 @implementation GroupListViewController
 
@@ -17,6 +19,7 @@
 		// Initialize your view controller.
 		self.title = @"Groups";
 	}
+
 	return self;
 }
 
@@ -53,13 +56,13 @@
 
 - (void) reallyConnect: (NSTimer *) timer
 {
-	if ( [ [ nntp_account sharedInstance ] connect ] && [ [ nntp_account sharedInstance ] authenticate: NO ] )
+	if ( [ [ NNTPAccount sharedInstance ] connect ] && [ [ NNTPAccount sharedInstance ] authenticate: NO ] )
 	{
 		NSLog( @"Connected!!" );
-		[ [ nntp_account sharedInstance ] updateSubscribedGroups ];
-		NSData * subs = [ [ nntp_account sharedInstance ] subscribedGroups ];
-		_subs = (NNTPGroup *)[ subs bytes ];		
-		_subs_count = [ subs length ] / sizeof( NNTPGroup );
+		[ [ NNTPAccount sharedInstance ] updateSubscribedGroups ];
+//		NSData * subs = [ [ NNTPAccount sharedInstance ] subscribedGroups ];
+//		_subs = (NNTPGroup *)[ subs bytes ];		
+//		_subs_count = [ subs length ] / sizeof( NNTPGroup );
 		[ (UITableView *)self.view reloadData ];
 
 	}
@@ -124,9 +127,9 @@
 	}
 	cell.text = @"Account information goes here!";
 	// Set up the text for the cell
-	cell.text = [ NSString stringWithFormat: @"%s (%d)",
-					_subs[ [ indexPath row ] ].name,
-					_subs[ [ indexPath row ] ].high ];
+//	cell.text = [ NSString stringWithFormat: @"%s (%d)",
+//					_subs[ [ indexPath row ] ].name,
+//					_subs[ [ indexPath row ] ].high ];
 	return cell;
 }
 

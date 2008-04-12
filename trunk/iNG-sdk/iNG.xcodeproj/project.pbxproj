@@ -14,10 +14,13 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		BE88702F0DA9494400F372E6 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE88702E0DA9494400F372E6 /* AccountView.m */; };
 		BE8870D50DA9759C00F372E6 /* GroupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8870D40DA9759C00F372E6 /* GroupListViewController.m */; };
+		BE8C6FBE0DAB0E000000C41E /* NNTPGroupBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8C6FBD0DAB0E000000C41E /* NNTPGroupBasic.m */; };
 		BE9434B80DA1FAB700911EA8 /* Settings.bundle in Copy Settings.bundle */ = {isa = PBXBuildFile; fileRef = BE9434800DA1F43200911EA8 /* Settings.bundle */; };
 		BECCBF0F0D94B817001F2856 /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECCBF0E0D94B817001F2856 /* AccountViewController.m */; };
-		BED513B60D8ED96A003DC505 /* nntp_account.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513B50D8ED96A003DC505 /* nntp_account.m */; };
+		BED513B60D8ED96A003DC505 /* NNTPAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513B50D8ED96A003DC505 /* NNTPAccount.m */; };
 		BED513E20D8F3419003DC505 /* resolveHostname.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513E10D8F3419003DC505 /* resolveHostname.m */; };
+		BEDC6B860DB0216E00A3BF70 /* NNTPGroupFull.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */; };
+		BEDC6B9F0DB0249000A3BF70 /* NNTPArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDC6B9E0DB0249000A3BF70 /* NNTPArticle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,14 +51,20 @@
 		BE88702E0DA9494400F372E6 /* AccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
 		BE8870D30DA9759C00F372E6 /* GroupListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupListViewController.h; sourceTree = "<group>"; };
 		BE8870D40DA9759C00F372E6 /* GroupListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupListViewController.m; sourceTree = "<group>"; };
+		BE8C6FBC0DAB0E000000C41E /* NNTPGroupBasic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTPGroupBasic.h; sourceTree = "<group>"; };
+		BE8C6FBD0DAB0E000000C41E /* NNTPGroupBasic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTPGroupBasic.m; sourceTree = "<group>"; };
 		BE9434800DA1F43200911EA8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		BECCBF0D0D94B817001F2856 /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
 		BECCBF0E0D94B817001F2856 /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
-		BED513B40D8ED96A003DC505 /* nntp_account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nntp_account.h; sourceTree = "<group>"; };
-		BED513B50D8ED96A003DC505 /* nntp_account.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = nntp_account.m; sourceTree = "<group>"; };
-		BED513B90D8EEF38003DC505 /* NNTPDataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTPDataTypes.h; sourceTree = "<group>"; };
+		BED513B40D8ED96A003DC505 /* NNTPAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTPAccount.h; sourceTree = "<group>"; };
+		BED513B50D8ED96A003DC505 /* NNTPAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTPAccount.m; sourceTree = "<group>"; };
+		BED513B90D8EEF38003DC505 /* NNTPDataTypes_onlykeptforreference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTPDataTypes_onlykeptforreference.h; sourceTree = "<group>"; };
 		BED513BC0D8F2BCB003DC505 /* resolveHostname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resolveHostname.h; sourceTree = "<group>"; };
 		BED513E10D8F3419003DC505 /* resolveHostname.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = resolveHostname.m; sourceTree = "<group>"; };
+		BEDC6B840DB0216E00A3BF70 /* NNTPGroupFull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTPGroupFull.h; sourceTree = "<group>"; };
+		BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTPGroupFull.m; sourceTree = "<group>"; };
+		BEDC6B9D0DB0249000A3BF70 /* NNTPArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTPArticle.h; sourceTree = "<group>"; };
+		BEDC6B9E0DB0249000A3BF70 /* NNTPArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTPArticle.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +84,9 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				BED513BC0D8F2BCB003DC505 /* resolveHostname.h */,
+				BED513E10D8F3419003DC505 /* resolveHostname.m */,
+				BEDC6B880DB023B800A3BF70 /* Misc */,
 				BED513870D8DF9AC003DC505 /* Data */,
 				BED513860D8DF99B003DC505 /* UI */,
 			);
@@ -179,13 +191,24 @@
 		BED513870D8DF9AC003DC505 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				BED513B40D8ED96A003DC505 /* nntp_account.h */,
-				BED513B50D8ED96A003DC505 /* nntp_account.m */,
-				BED513B90D8EEF38003DC505 /* NNTPDataTypes.h */,
-				BED513BC0D8F2BCB003DC505 /* resolveHostname.h */,
-				BED513E10D8F3419003DC505 /* resolveHostname.m */,
+				BED513B40D8ED96A003DC505 /* NNTPAccount.h */,
+				BED513B50D8ED96A003DC505 /* NNTPAccount.m */,
+				BED513B90D8EEF38003DC505 /* NNTPDataTypes_onlykeptforreference.h */,
+				BE8C6FBC0DAB0E000000C41E /* NNTPGroupBasic.h */,
+				BE8C6FBD0DAB0E000000C41E /* NNTPGroupBasic.m */,
+				BEDC6B840DB0216E00A3BF70 /* NNTPGroupFull.h */,
+				BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */,
+				BEDC6B9D0DB0249000A3BF70 /* NNTPArticle.h */,
+				BEDC6B9E0DB0249000A3BF70 /* NNTPArticle.m */,
 			);
 			name = Data;
+			sourceTree = "<group>";
+		};
+		BEDC6B880DB023B800A3BF70 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Misc;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,11 +255,14 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* iNGAppDelegate.m in Sources */,
-				BED513B60D8ED96A003DC505 /* nntp_account.m in Sources */,
+				BED513B60D8ED96A003DC505 /* NNTPAccount.m in Sources */,
 				BED513E20D8F3419003DC505 /* resolveHostname.m in Sources */,
 				BECCBF0F0D94B817001F2856 /* AccountViewController.m in Sources */,
 				BE88702F0DA9494400F372E6 /* AccountView.m in Sources */,
 				BE8870D50DA9759C00F372E6 /* GroupListViewController.m in Sources */,
+				BE8C6FBE0DAB0E000000C41E /* NNTPGroupBasic.m in Sources */,
+				BEDC6B860DB0216E00A3BF70 /* NNTPGroupFull.m in Sources */,
+				BEDC6B9F0DB0249000A3BF70 /* NNTPArticle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
