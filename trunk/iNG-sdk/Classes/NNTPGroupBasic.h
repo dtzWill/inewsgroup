@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "NNTPGroupFull.h"
 
-@interface NNTPGroupBasic : NSObject {
+@interface NNTPGroupBasic : NSObject <NSCoding> {
 	NSString * _name;
 	long _high;
 	long _low;
@@ -27,14 +27,15 @@
 @property long low;
 @property long unreadCount;
 
-- (id) initWithActiveLine: (NSString *) line;
+//creates a basic group entry
+- (id) initWithName: (NSString *) name;
+- (id) initWithCoder: (NSCoder *) decoder;
+- (void) encodeWithCoder: (NSCoder *) coder;
 
 - (NNTPGroupFull *) enterGroup;
 
 - (void) leaveGroup;
 
 - (void) updateWithGroupLine: (NSString *) line;
-
-
 
 @end

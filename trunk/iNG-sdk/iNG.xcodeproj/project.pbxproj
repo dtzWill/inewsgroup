@@ -84,8 +84,6 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				BED513BC0D8F2BCB003DC505 /* resolveHostname.h */,
-				BED513E10D8F3419003DC505 /* resolveHostname.m */,
 				BEDC6B880DB023B800A3BF70 /* Misc */,
 				BED513870D8DF9AC003DC505 /* Data */,
 				BED513860D8DF99B003DC505 /* UI */,
@@ -207,6 +205,8 @@
 		BEDC6B880DB023B800A3BF70 /* Misc */ = {
 			isa = PBXGroup;
 			children = (
+				BED513BC0D8F2BCB003DC505 /* resolveHostname.h */,
+				BED513E10D8F3419003DC505 /* resolveHostname.m */,
 			);
 			name = Misc;
 			sourceTree = "<group>";

@@ -136,8 +136,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 229650174;
-			PBXWorkspaceStateSaveDate = 229650174;
+			PBXPerProjectTemplateStateSaveDate = 229666368;
+			PBXWorkspaceStateSaveDate = 229666368;
 		};
 		sourceControlManager = BED513490D8DF30D003DC505 /* Source Control */;
 		userBuildSettings = {
@@ -174,30 +174,30 @@
 	};
 	BE8870D40DA9759C00F372E6 /* GroupListViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {930, 1120}}";
-			sepNavSelRange = "{3540, 0}";
-			sepNavVisRange = "{3256, 284}";
+			sepNavIntBoundsRect = "{{0, 0}, {877, 1106}}";
+			sepNavSelRange = "{3874, 0}";
+			sepNavVisRange = "{3787, 87}";
 		};
 	};
 	BE8C6FBC0DAB0E000000C41E /* NNTPGroupBasic.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {877, 560}}";
-			sepNavSelRange = "{581, 0}";
-			sepNavVisRange = "{409, 172}";
+			sepNavIntBoundsRect = "{{0, 0}, {877, 574}}";
+			sepNavSelRange = "{651, 0}";
+			sepNavVisRange = "{492, 159}";
 		};
 	};
 	BE8C6FBD0DAB0E000000C41E /* NNTPGroupBasic.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {877, 966}}";
-			sepNavSelRange = "{1562, 0}";
-			sepNavVisRange = "{1050, 470}";
+			sepNavIntBoundsRect = "{{0, 0}, {877, 1162}}";
+			sepNavSelRange = "{2849, 0}";
+			sepNavVisRange = "{2175, 186}";
 		};
 	};
 	BECCBF0E0D94B817001F2856 /* AccountViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {948, 1526}}";
-			sepNavSelRange = "{4054, 0}";
-			sepNavVisRange = "{2721, 423}";
+			sepNavIntBoundsRect = "{{0, 0}, {877, 756}}";
+			sepNavSelRange = "{177, 36}";
+			sepNavVisRange = "{0, 258}";
 			sepNavWindowFrame = "{{15, 61}, {750, 685}}";
 		};
 	};
@@ -243,16 +243,16 @@
 	};
 	BED513B40D8ED96A003DC505 /* NNTPAccount.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {877, 1862}}";
-			sepNavSelRange = "{6490, 0}";
-			sepNavVisRange = "{1381, 546}";
+			sepNavIntBoundsRect = "{{0, 0}, {877, 1974}}";
+			sepNavSelRange = "{6516, 0}";
+			sepNavVisRange = "{883, 328}";
 		};
 	};
 	BED513B50D8ED96A003DC505 /* NNTPAccount.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {877, 5390}}";
-			sepNavSelRange = "{9127, 64}";
-			sepNavVisRange = "{8786, 446}";
+			sepNavIntBoundsRect = "{{0, 0}, {877, 5068}}";
+			sepNavSelRange = "{20208, 0}";
+			sepNavVisRange = "{19091, 362}";
 			sepNavWindowFrame = "{{341, 108}, {750, 558}}";
 		};
 	};

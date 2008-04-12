@@ -60,9 +60,15 @@
 	{
 		NSLog( @"Connected!!" );
 		[ [ NNTPAccount sharedInstance ] updateSubscribedGroups ];
-//		NSData * subs = [ [ NNTPAccount sharedInstance ] subscribedGroups ];
-//		_subs = (NNTPGroup *)[ subs bytes ];		
-//		_subs_count = [ subs length ] / sizeof( NNTPGroup );
+//		[ [ [ NNTPAccount sharedInstance ] subscribedGroups ];
+
+	//	NSEnumerator * enumer = [ subs objectEnumerator ];
+	//	NNTPGroupBasic * sub;
+	//	while ( sub = [ enumer nextObject ] )
+	//	{
+	//		NSLog( sub.name );
+	//	}
+
 		[ (UITableView *)self.view reloadData ];
 
 	}
@@ -104,33 +110,44 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return _subs_count;//we only have 1 row, the account name
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath withAvailableCell:(UITableViewCell *)availableCell
-{
-	// Create a cell if necessary
-	UISimpleTableViewCell * cell = nil;
-	if (availableCell != nil)
+	if ( [ [ NNTPAccount sharedInstance ] subscribedGroups ] )
 	{
-		cell = (UISimpleTableViewCell *)availableCell;
+		return [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] count ];
 	}
 	else
 	{
-		//CGRect frame = CGRectMake(0, 0, 300, 44);
+		return 0;
+	}
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+
+	// Create a cell if necessary
+	UITableViewCell * cell = [ (UITableView *)self.view dequeueReusableCellWithIdentifier: @"TableViewCell" ];
+	if ( cell == nil)
+	{
 		CGRect frame = CGRectMake( 0, 0, 0, 0 );
-		cell = [[[UISimpleTableViewCell alloc] initWithFrame:frame] autorelease];
+		cell = [[UITableViewCell alloc] initWithFrame:frame reuseIdentifier: @"TableViewCell" ];
 		[ cell setAutoresizingMask: UIViewAutoresizingFlexibleWidth ]; 
 
 		[ cell setAutoresizesSubviews: YES ];
 	}
-	cell.text = @"Account information goes here!";
 	// Set up the text for the cell
-//	cell.text = [ NSString stringWithFormat: @"%s (%d)",
-//					_subs[ [ indexPath row ] ].name,
-//					_subs[ [ indexPath row ] ].high ];
+	if ( [ indexPath row ] >= 0 && [ indexPath row ] < [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] count ] )
+	{
+		NNTPGroupBasic * sub = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ indexPath row ]  ];
+		NSLog( sub.name );
+		cell.text = [ NSString stringWithFormat: @"%@ (%d)",
+						sub.name,
+						sub.high ];
+	}
+	else
+	{
+		cell.text = @"Invalid row!";
+	}
 	return cell;
+
 }
 
 @end

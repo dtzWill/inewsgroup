@@ -13,7 +13,7 @@
 
 @implementation NNTPArticle
 
-- (NNTPAccount *) init
+- (NNTPArticle *) init
 {
 	if ( self = [ super init ] )
 	{
