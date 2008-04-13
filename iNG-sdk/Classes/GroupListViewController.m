@@ -24,18 +24,6 @@
 }
 
 
-- (void)loadView
-{
-	// Create a custom view hierarchy.
-	UITableView *view = [[UITableView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
-	view.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-	self.view = view;
-
-	[ view setDelegate: self ];
-	[ view setDataSource: self ];
-
-	[view release];
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -60,16 +48,9 @@
 	{
 		NSLog( @"Connected!!" );
 		[ [ NNTPAccount sharedInstance ] updateSubscribedGroups ];
-//		[ [ [ NNTPAccount sharedInstance ] subscribedGroups ];
+		
+		[ [ self tableView ] reloadData ];
 
-	//	NSEnumerator * enumer = [ subs objectEnumerator ];
-	//	NNTPGroupBasic * sub;
-	//	while ( sub = [ enumer nextObject ] )
-	//	{
-	//		NSLog( sub.name );
-	//	}
-
-		[ (UITableView *)self.view reloadData ];
 
 	}
 	else
@@ -79,23 +60,15 @@
 
 }
 
-//TODO: viewWillAppear?
-- (void)connect
+- (void)viewWillAppear: (bool) animated
 {
-	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.1 target: self selector: @selector(reallyConnect:) userInfo: nil repeats: NO ];
+	[ self connect ];
 }
 
-- (void) didRotateFromInterfaceOrientation: (UIInterfaceOrientation) orientation{
-	//NSLog( @"Rotated!" );
-	
-	/* if we have less rows than shown, I can't seem
-	 * to figure out how one is supposed to get the
-	 * non-content-containing cells to resize, since they
-	 * aren't created by us.
-	 * So here we reload the data, which has the desired effect.
-	 */
-	
-	[ (UITable *)self.view reloadData ];
+- (void)connect
+{
+	//ouch :(
+	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: self selector: @selector(reallyConnect:) userInfo: nil repeats: NO ];
 }
 
 /*-----------------------------------------------------------------------------
@@ -110,7 +83,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if ( [ [ NNTPAccount sharedInstance ] subscribedGroups ] )
+	if ( [ [ NNTPAccount sharedInstance ] isConnected ] &&
+		[ [ NNTPAccount sharedInstance ] subscribedGroups ] )
 	{
 		return [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] count ];
 	}
@@ -124,23 +98,19 @@
 {
 
 	// Create a cell if necessary
-	UITableViewCell * cell = [ (UITableView *)self.view dequeueReusableCellWithIdentifier: @"TableViewCell" ];
+	UITableViewCell * cell = [ self.tableView dequeueReusableCellWithIdentifier: @"GroupListViewCell" ];
 	if ( cell == nil)
 	{
-		CGRect frame = CGRectMake( 0, 0, 0, 0 );
-		cell = [[UITableViewCell alloc] initWithFrame:frame reuseIdentifier: @"TableViewCell" ];
-		[ cell setAutoresizingMask: UIViewAutoresizingFlexibleWidth ]; 
-
-		[ cell setAutoresizesSubviews: YES ];
+		cell = [ [ [UITableViewCell alloc] initWithFrame: CGRectZero reuseIdentifier: @"GroupListViewCell" ] autorelease ];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
 	// Set up the text for the cell
 	if ( [ indexPath row ] >= 0 && [ indexPath row ] < [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] count ] )
 	{
 		NNTPGroupBasic * sub = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ indexPath row ]  ];
 		NSLog( sub.name );
-		cell.text = [ NSString stringWithFormat: @"%@ (%d)",
-						sub.name,
-						sub.high ];
+		//XXX: Change this to show group and number of unread in parens (possibly gray text)
+		cell.text = sub.name;
 	}
 	else
 	{

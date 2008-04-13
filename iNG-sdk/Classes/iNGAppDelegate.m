@@ -8,6 +8,7 @@
 
 #import "iNGAppDelegate.h"
 #import "AccountViewController.h"
+#import "NNTPAccount.h"
 
 @implementation iNGAppDelegate
 
@@ -34,6 +35,7 @@
 
 - (void)dealloc
 {
+	[ [ NNTPAccount sharedInstance ] release ];//also closes any open connection
 	[ window release ];
 	[ super dealloc ];
 }

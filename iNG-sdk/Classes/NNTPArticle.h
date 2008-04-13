@@ -29,7 +29,7 @@
 
 }
 
-- (NNTPArticle *) init;
+- (NNTPArticle *) initWithResponse: (NSArray *) headers;
 
 - (void) getBodyIfNeeded;
 @end

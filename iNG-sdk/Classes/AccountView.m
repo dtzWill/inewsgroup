@@ -32,7 +32,6 @@
 		[ self addSubview: _connect ];
 		[ self addSubview: _offline ];
 		
-		
 		[ self setNeedsLayout ];//we're overriding layoutSubviews
     }
     return self;

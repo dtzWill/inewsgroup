@@ -10,7 +10,7 @@
 
 #import "NNTPGroupBasic.h"
 
-@interface GroupListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+@interface GroupListViewController : UITableViewController {
 
 }
 
