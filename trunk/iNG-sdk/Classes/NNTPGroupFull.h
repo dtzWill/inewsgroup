@@ -10,7 +10,7 @@
 
 
 @interface NNTPGroupFull : NSObject {
-	NSArray * _articles;//NNTPArticle's
+	NSMutableArray * _articles;//NNTPArticle's
 	NSDate * _lastUpdateTime;
 	id _delegate;
 	NSString * _name;

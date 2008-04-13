@@ -28,19 +28,12 @@
 		_high = _low = _count = _unreadCount = 0;
 		_fullGroup = nil;
 
-		//LIST ACTIVE parsing:
-		//groupname high low flags
-//		NSArray * parts = [ line componentsSeparatedByString: @" " ];
-//		_name = [ parts objectAtIndex: 0 ];
-//		_high = [ [ parts objectAtIndex: 1 ] intValue ];
-//		_low = [ [ parts objectAtIndex: 2 ] intValue ];
-//		_count = _high - _low; //ESTIMATE
-//		_unreadCount = _count;//all are unread at the get-go
-//		_fullGroup = nil;
 	}
 	return self;
 
 }
+
+//create an instance of this object from archived state information
 - (id) initWithCoder: (NSCoder *) decoder
 {
 	if ( self = [ super init ] )
@@ -55,6 +48,8 @@
 	return self;
 
 }
+
+//encode state of this object to the specified nscoder
 - (void) encodeWithCoder: (NSCoder *) coder
 {
 
@@ -74,6 +69,7 @@
 - (NNTPGroupFull *) enterGroup
 {
 	_fullGroup = [ [ NNTPGroupFull alloc ] initWithName: _name ];
+	[ _fullGroup setDelegate: self ];//inform us when it gets an update
 	return _fullGroup;
 }
 

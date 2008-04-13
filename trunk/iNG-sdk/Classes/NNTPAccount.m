@@ -470,7 +470,9 @@ static NNTPAccount * sharedInstance = nil;
 
 		if ( groups_array != nil )
 		{
-			if ( _groups ) [ _groups release ];
+			//if _groups were defined we would return already
+			//XXX: review this logic
+//			if ( _groups ) [ _groups release ];
 			_groups = groups_array;
 			return groups_array;
 		}
@@ -492,14 +494,11 @@ static NNTPAccount * sharedInstance = nil;
 		NSEnumerator * enumer = [ lines objectEnumerator ];
 		NSString * line;
 
-		//TODO: do we care/need 'i'?
-		int i = 0;
 		while  ( line = [ enumer nextObject ] )
 		{
 
 			NSArray * parts = [ line componentsSeparatedByString: @" " ];
 			[ groups_array addObject: [ parts objectAtIndex: 0 ] ]; 
-			i++;
 			[ parts release ];
 		}
 		
@@ -539,7 +538,7 @@ static NNTPAccount * sharedInstance = nil;
 	}
 
 	NSDictionary * rootObject = [ NSKeyedUnarchiver unarchiveObjectWithFile: F_SUBS ];
-	NSMutableArray * subscribed = [ rootObject valueForKey: @"subscribed" ];
+	NSMutableArray * subscribed = [ rootObject valueForKey: K_SUBSCRIBED ];
 
 	//loop var
 	int i;
@@ -563,7 +562,7 @@ static NNTPAccount * sharedInstance = nil;
 			{
 				NSMutableDictionary * rootObject;
 				rootObject = [ [ [ NSMutableDictionary alloc ] init ] autorelease ];
-				[ rootObject setValue: subscribed forKey:@"subscribed" ];
+				[ rootObject setValue: subscribed forKey: K_SUBSCRIBED ];
 				NSLog( @"save subscriptions: %d", [ NSKeyedArchiver archiveRootObject: rootObject toFile: F_SUBS ] );
 			}
 
@@ -603,47 +602,21 @@ static NNTPAccount * sharedInstance = nil;
 	 */
 	NSArray * subscribed = [ self subscribedGroups ];
 
-///	NNTPGroup * sub_arr = (NNTPGroup *)[ subscribed bytes ];
-///
-///	int i =0;
-///	int count = [ subscribed length ] / sizeof( NNTPGroup );
-///
-///	//send a group command for each group....
-///	for ( ; i < count; i++ )
-///	{
-///		[ self sendCommand: @"GROUP" withArg: [ NSString stringWithCString: sub_arr[i].name ] ];
-///	}
-///	//now get the responses and parse
-///	for ( i = 0; i < count; i++ )
-///	{
-///		NSString * response = [ self getLine ];
-///		if ( [ self isSuccessfulCommand: response ] )
-///		{
-///			NSArray * parts = [ response componentsSeparatedByString: @" " ];
-///			//should be:
-///			//responsecode articlecount low high name
-///			NNTPGroup old = sub_arr[i];
-///			sub_arr[i].count = [ [ parts objectAtIndex: 1 ] intValue ];
-///			sub_arr[i].low = [ [ parts objectAtIndex: 2 ] intValue ];
-///			sub_arr[i].high = [ [ parts objectAtIndex: 3 ] intValue ];
-///
-///			//update unread...
-///			if ( !sub_arr[i].hasUnread )
-///			{
-///				//if more articles have been posted... then we have something to read
-///				sub_arr[i].hasUnread = ( sub_arr[i].high < old.high );
-///			}
-///
-///		}
-///		else
-///		{
-///			//keep going
-///		}
-///
-///
-///	}
-///
+	//send a group command for each subscribed group
+	for ( int i = 0; i < [ subscribed count ]; i++ )
+	{
+		[ self sendCommand: @"GROUP" withArg: ( (NNTPGroupBasic *)[ subscribed objectAtIndex: i ] ).name ];
+	}
 
+	//now get responses
+	for ( int i = 0; i < [ subscribed count ]; i++ )
+	{
+		NSString * response = [ self getLine ];
+		if ( [ self isSuccessfulCommand: response ] )
+		{
+			[ (NNTPGroupBasic *)[ subscribed objectAtIndex: i ] updateWithGroupLine: response ];
+		}
+	}
 }
 
 
@@ -657,6 +630,10 @@ static NNTPAccount * sharedInstance = nil;
  */
 - (void) setGroupAndFetchHeaders: (NSString *) group
 {
+	NSArray * subscribed = [ self subscribedGroups ];
+	NNTPGroupBasic * groupbase = [ subscribed objectAtIndex: 0 ];
+	NNTPGroupFull * groupfull = [ groupbase enterGroup ];
+	[ groupfull refresh ];
 
 }
 
