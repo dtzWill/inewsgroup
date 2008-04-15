@@ -9,6 +9,7 @@
 #import "GroupListViewController.h"
 
 #import "NNTPAccount.h"
+#import "ArticleListViewController.h"
 
 
 @implementation GroupListViewController
@@ -18,6 +19,7 @@
 	if (self = [super init]) {
 		// Initialize your view controller.
 		self.title = @"Groups";
+		_hasInitialized = false;
 	}
 
 	return self;
@@ -62,7 +64,11 @@
 
 - (void)viewWillAppear: (bool) animated
 {
-	[ self connect ];
+	if ( !_hasInitialized )
+	{
+		_hasInitialized = true;
+		[ self connect ];
+	}
 }
 
 - (void)connect
@@ -108,7 +114,6 @@
 	if ( [ indexPath row ] >= 0 && [ indexPath row ] < [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] count ] )
 	{
 		NNTPGroupBasic * sub = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ indexPath row ]  ];
-		NSLog( sub.name );
 		//XXX: Change this to show group and number of unread in parens (possibly gray text)
 		cell.text = sub.name;
 	}
@@ -119,5 +124,15 @@
 	return cell;
 
 }
+
+- (void) tableView: (UITableView *) tableView selectionDidChangeToIndexPath: (NSIndexPath *) newIndexPath fromIndexPath: (NSIndexPath *) oldIndexPath
+{
+
+	ArticleListViewController * alvc = [ [ [ ArticleListViewController alloc ] init ] autorelease ];
+	[ (UINavigationController *)self.parentViewController pushViewController: alvc animated: YES ];
+	[ [ NNTPAccount sharedInstance ] setGroupAndFetchHeaders: nil ];
+
+}
+    
 
 @end

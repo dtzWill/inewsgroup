@@ -27,15 +27,57 @@
 @property long low;
 @property long unreadCount;
 
-//creates a basic group entry
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithName
+ *  Description:  creates a basic group entry
+ * =====================================================================================
+ */
 - (id) initWithName: (NSString *) name;
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithCoder
+ *  Description:  Creates an instance of an object from archived state information
+ * =====================================================================================
+ */
 - (id) initWithCoder: (NSCoder *) decoder;
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  encodeWithCoder
+ *  Description:  save state information of this object to the specified NSCoder
+ * =====================================================================================
+ */
 - (void) encodeWithCoder: (NSCoder *) coder;
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  enterGroup
+ *  Description:  create the corresponding NNTPGroupFull for this group and return it
+ * =====================================================================================
+ */
 - (NNTPGroupFull *) enterGroup;
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  leaveGroup
+ *  Description:  leave the NNTPGroupFull stored in _fullGroup if it exists
+ * =====================================================================================
+ */
 - (void) leaveGroup;
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  updateWithGroupLine
+ *  Description:  update state information using the data contained in the group line
+ * =====================================================================================
+ */
 - (void) updateWithGroupLine: (NSString *) line;
 
 @end

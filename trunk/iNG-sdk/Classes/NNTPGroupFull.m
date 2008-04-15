@@ -17,14 +17,20 @@
 
 @implementation NNTPGroupFull
 
-//load ourselves from the cache, else create blank information.
-- (id) initWithName: (NSString *) name
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithName
+ *  Description:  load ourselves from the cache, else create blank information
+ * =====================================================================================
+ */
+- (id) initWithName: (NSString *) name andBasic: (NNTPGroupBasic *) basicParent
 {
 	if ( self = [ super init ] )
 	{
 		NSString * groupfile = [ RESOURCEPATH stringByAppendingPathComponent: [ NSString stringWithFormat: @"%@.data", name ] ];
 		
 		_name = [ NSString stringWithString: name ];
+		_parent = basicParent;
 
 		if ( [ [ NSFileManager defaultManager ] fileExistsAtPath: groupfile ] )
 		{
@@ -34,24 +40,35 @@
 		}
 		else
 		{
-			_lastUpdateTime = nil;
 			_articles = nil;
-			_delegate = nil;
+			_lastUpdateTime = nil;
 		}
 	}
 	return self;
 }
 
-- (void) setDelegate: (id) delegate
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getParent
+ *  Description:  returns the basic corresponding to this group
+ * =====================================================================================
+ */
+- (NNTPGroupBasic *) getParent
 {
-	_delegate = delegate;
+	return _parent;
 }
 
-//use NNTPAccount to update our group information
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  refresh
+ *  Description:  get newest articles and update ourselves with it
+ * =====================================================================================
+ */
 - (void) refresh
 {
 
 	//TODO: coolness
+	int i;//iter var
 
 	if ( _lastUpdateTime )//if we've ever updated before
 	{
@@ -59,16 +76,22 @@
 		//[ [ NNTPAccount sharedInstance ] sendCommand: @"NEWNEWS" withArg: [ self newnewsArg ] ];
 		_lastUpdateTime = [ NSDate date ];//now 
 
+		//NEWNEWS the server, get list of articles
+		
+		//remove articles not in 'keeping' threshold (newest 100?)
+		
+		//set lastUpdateTime
+
 	}
 	else
 	{
 		[ [ NNTPAccount sharedInstance ] sendCommand: @"LISTGROUP" withArg: _name ]; 
 		if ( [ [ NNTPAccount sharedInstance ] isSuccessfulCommand: [ [ NNTPAccount sharedInstance ] getLine ] ] )
 		{
-			_lastUpdateTime = [ NSDate date ];//now
+			_lastUpdateTime = [ [ NSDate date ] retain ];//now
 			NSArray * lines = [ [ NNTPAccount sharedInstance ] getResponse ];
 
-			int MAXARTS = 100;//TODO make '100' a parameter/global
+			int MAXARTS = 10;//TODO make '10' a parameter/global
 			int begin = 0;	
 			if ( [ lines count ] > MAXARTS )
 			{
@@ -78,19 +101,19 @@
 			int end = begin + MAXARTS;
 			if ( end >= [ lines count ] )
 			{
-				end = [ lines count ] - 1;
+				end = [ lines count ];
 			}
 
 			//_articles is empty b/c lastUpdateTime wasn't set
 			_articles = [ NSMutableArray arrayWithCapacity: end- begin + 1 ];
 
 			//go through the response and get the headers for the articles mentioned
-			for ( int i = begin; i <= end; i++ )
+			for ( i = begin; i < end; i++ )
 			{
 				[ [ NNTPAccount sharedInstance ] sendCommand: @"HEAD" withArg: [ lines objectAtIndex: i ] ];
 			}
 
-			for ( int i = begin; i <= end; i++ )
+			for ( i = begin; i < end; i++ )
 			{
 				if ( [ [ NNTPAccount sharedInstance ] isSuccessfulCommand: [ [ NNTPAccount sharedInstance ] getLine ] ] )
 				{
@@ -107,28 +130,46 @@
 		}
 
 	}
+	
+	//we've made changes... store them!
+	[ self save ];
 
-	//NEWNEWS the server, get list of articles
-	
-	//remove articles not in 'keeping' threshold (newest 100?)
-	
-	//set lastUpdateTime
-	
 	//send update message to delegate
 	
 }
 
-//save state information of this object back to file.
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  save
+ *  Description:  save ourselves to file for use later
+ * =====================================================================================
+ */
 - (void) save
 {
-	//TODO: save!
+	NSString * groupfile = [ RESOURCEPATH stringByAppendingPathComponent: [ NSString stringWithFormat: @"%@.data", _name ] ];
+	NSLog( @"woo: %@, %@", _name, groupfile );
+
+	NSMutableDictionary * rootObject;
+	rootObject = [ [ [ NSMutableDictionary alloc ] init ] autorelease ];
+	NSLog( @"articles length: %d", [ _articles count ] );
+
+	if ( _articles )
+	{
+		[ rootObject setValue: _articles forKey: K_NNTPGROUPFULL_ARTS ];
+	}
+	if ( _lastUpdateTime )
+	{
+		[ rootObject setValue: _lastUpdateTime forKey: K_NNTPGROUPFULL_TIME ];
+	}
+	NSLog( @"save NNTPGroupFull %d", [ NSKeyedArchiver archiveRootObject: rootObject toFile: groupfile ] );
 
 }
 
 //clean up!
 - (void) dealloc
 {
-	[ self save ];
+	//XXX is this saving redundant?? (do we care?)
+	//[ self save ];
 	[ _articles release ];
 	[ _lastUpdateTime release ];
 	[ _name release ];

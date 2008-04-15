@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface NNTPArticle : NSObject {
+@interface NNTPArticle : NSObject <NSCoding> {
 
 	//header information
 	//			FIELD			MEANING/VALUE
@@ -29,7 +29,36 @@
 
 }
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithResponse
+ *  Description:  use 'HEAD id' response to create an instance of ourselves
+ * =====================================================================================
+ */
 - (NNTPArticle *) initWithResponse: (NSArray *) headers;
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithCoder
+ *  Description:  Creates an instance of an object from archived state information
+ * =====================================================================================
+ */
+- (id) initWithCoder: (NSCoder *) decoder;
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  encodeWithCoder
+ *  Description:  save state information of this object to the specified NSCoder
+ * =====================================================================================
+ */
+- (void) encodeWithCoder: (NSCoder *) coder;
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getBodyIfNeeded
+ *  Description:  fetch body contents if we don't already have them
+ * =====================================================================================
+ */
 - (void) getBodyIfNeeded;
 @end

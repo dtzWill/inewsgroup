@@ -8,20 +8,49 @@
 
 #import <UIKit/UIKit.h>
 
+@class NNTPGroupBasic;
 
 @interface NNTPGroupFull : NSObject {
 	NSMutableArray * _articles;//NNTPArticle's
 	NSDate * _lastUpdateTime;
-	id _delegate;
+	NNTPGroupBasic * _parent;
 	NSString * _name;
 }
 
-//load ourselves from the cache, else create blank information.
-- (id) initWithName: (NSString *) name;
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithName
+ *  Description:  load ourselves from the cache, else create blank information
+ * =====================================================================================
+ */
+- (id) initWithName: (NSString *) name andBasic: (NNTPGroupBasic *) basicParent;
 
-- (void) setDelegate: (id) delegate;
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getParent
+ *  Description:  returns the basic corresponding to this group
+ * =====================================================================================
+ */
+- (NNTPGroupBasic *) getParent;
+
+
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  refresh
+ *  Description:  get newest articles and update ourselves with it
+ * =====================================================================================
+ */
 - (void) refresh;
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  save
+ *  Description:  save ourselves to file for use later
+ * =====================================================================================
+ */
 - (void) save;
 @end

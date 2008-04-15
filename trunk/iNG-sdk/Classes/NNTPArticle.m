@@ -10,6 +10,7 @@
 
 #import "NNTPAccount.h"
 
+//for switching on the header type
 #define FROM 1
 #define SUBJECT 2
 #define NEWSGROUPS 3
@@ -17,11 +18,38 @@
 #define DATE 5
 #define MESSAGEID 6
 #define SENDER 7
+#define HEADERS_DICT [ [ NSDictionary alloc ] initWithObjectsAndKeys: \
+			[ NSNumber numberWithInt: FROM ], @"FROM", \
+			[ NSNumber numberWithInt: SUBJECT ], @"SUBJECT", \
+			[ NSNumber numberWithInt: NEWSGROUPS ], @"NEWSGROUPS", \
+			[ NSNumber numberWithInt: REFERENCES ], @"REFERENCES", \
+			[ NSNumber numberWithInt: DATE ], @"DATE", \
+			[ NSNumber numberWithInt: MESSAGEID ], @"MESSAGE-ID", \
+			[ NSNumber numberWithInt: SENDER ], @"SENDER", \
+			nil ];
+
+//NSCoder keys
+#define K_NNTPARTICLE_FROM @"NA_FROM"
+#define K_NNTPARTICLE_SUBJECT @"NA_SUBJECT"
+#define K_NNTPARTICLE_NEWSGROUPS @"NA_NEWSGROUPS"
+#define K_NNTPARTICLE_REFERENCES @"NA_REFERENCES"
+#define K_NNTPARTICLE_DATE @"NA_DATE"
+#define K_NNTPARTICLE_MESSAGEID @"NA_MESSAGEID"
+#define K_NNTPARTICLE_SENDER @"NA_SENDER"
+#define K_NNTPARTICLE_BODY @"NA_BODY"
+#define K_NNTPARTICLE_READ @"NA_READ"
 
 @implementation NNTPArticle
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithResponse
+ *  Description:  use 'HEAD id' response to create an instance of ourselves
+ * =====================================================================================
+ */
 - (NNTPArticle *) initWithResponse: (NSArray *) headers;
 {
+	int i;//iter var
 	if ( self = [ super init ] )
 	{
 		//unread
@@ -36,16 +64,7 @@
 		NSString * hdr;
 
 		//TODO: global?!
-		NSDictionary * headersDict = [ [ NSDictionary alloc ] initWithObjectsAndKeys:
-			//object, key
-			[ NSNumber numberWithInt: FROM ], @"FROM",
-			[ NSNumber numberWithInt: SUBJECT ], @"SUBJECT",
-			[ NSNumber numberWithInt: NEWSGROUPS ], @"NEWSGROUPS",
-			[ NSNumber numberWithInt: REFERENCES ], @"REFERENCES",
-			[ NSNumber numberWithInt: DATE ], @"DATE",
-			[ NSNumber numberWithInt: MESSAGEID ], @"MESSAGE-ID",
-			[ NSNumber numberWithInt: SENDER ], @"SENDER",
-			nil ];
+		NSDictionary * headersDict = HEADERS_DICT; 
 
 		while  ( hdr = [ enumer nextObject ] )
 		{
@@ -57,7 +76,7 @@
 
 			//combine the rest, just in case the contain ": "s
 			NSMutableString * value = [ NSMutableString stringWithString: [ parts objectAtIndex: 1 ] ];
-			for ( int i = 2; i < [ parts count ]; i++ )
+			for ( i = 2; i < [ parts count ]; i++ )
 			{
 				[ value appendString: @": " ];
 				[ value appendString: [ parts objectAtIndex: i ] ];
@@ -117,6 +136,82 @@
 
 }
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithCoder
+ *  Description:  Creates an instance of an object from archived state information
+ * =====================================================================================
+ */
+- (id) initWithCoder: (NSCoder *) decoder
+{
+	if ( self = [ super init ] )
+	{
+		_from = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_FROM ] retain ];
+		_subject = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_SUBJECT ] retain ];
+		_newsgroups = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_NEWSGROUPS ] retain ];
+		_references = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_REFERENCES ] retain ];
+		_date = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_DATE ] retain ];
+		_messageID = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_MESSAGEID ] retain ];
+		_sender = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_SENDER ] retain ];
+		_body = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_BODY ] retain ];
+		_read = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_READ ] boolValue ];
+	}
+
+	return self;
+}
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  encodeWithCoder
+ *  Description:  save state information of this object to the specified NSCoder
+ * =====================================================================================
+ */
+- (void) encodeWithCoder: (NSCoder *) coder
+{
+	NSLog( @"Encoding!" );
+	if ( _from )
+	{
+		NSLog( @"From: %@", _from );
+		[ coder encodeObject: _from forKey: K_NNTPARTICLE_FROM ];
+	}
+	if ( _subject )
+	{
+		[ coder encodeObject: _subject forKey: K_NNTPARTICLE_SUBJECT ];
+	}
+	if ( _newsgroups )
+	{
+		[ coder encodeObject: _newsgroups forKey: K_NNTPARTICLE_NEWSGROUPS ];
+	}
+	if ( _references )
+	{
+		[ coder encodeObject: _references forKey: K_NNTPARTICLE_REFERENCES ];
+	}
+	if ( _date )
+	{
+		[ coder encodeObject: _date forKey: K_NNTPARTICLE_DATE ];
+	}
+	if ( _messageID )
+	{
+		[ coder encodeObject: _messageID forKey: K_NNTPARTICLE_MESSAGEID ];
+	}
+	if ( _sender )
+	{
+		[ coder encodeObject: _sender forKey: K_NNTPARTICLE_SENDER ];
+	}
+	if ( _body )
+	{
+		[ coder encodeObject: _body forKey: K_NNTPARTICLE_BODY ];
+	}
+
+	[ coder encodeObject: [ NSNumber numberWithBool: _read ] forKey: K_NNTPARTICLE_READ ];
+}
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  getBodyIfNeeded
+ *  Description:  fetch body contents if we don't already have them
+ * =====================================================================================
+ */
 - (void) getBodyIfNeeded
 {
 	if ( !_body )
