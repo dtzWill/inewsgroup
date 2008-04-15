@@ -52,7 +52,6 @@
 {
 	GroupListViewController * glvc = [ [ [ GroupListViewController alloc ] init ] autorelease ];
 	[ (UINavigationController *)self.parentViewController pushViewController: glvc animated: YES ];
-//	[ glvc connect ];//try to connect
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

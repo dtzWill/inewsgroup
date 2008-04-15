@@ -23,7 +23,7 @@
 	AccountViewController * avc = [ [ [ AccountViewController alloc ] init ] autorelease ];
 	UINavigationController * nav = [ [ UINavigationController alloc ] initWithRootViewController: avc ];
 
-	contentView = [ nav view ];
+	contentView = (UIView *)[ nav view ];
 	
 	// Add ViewController as our primary content...
 	[ window addSubview: (UIView *)contentView ];

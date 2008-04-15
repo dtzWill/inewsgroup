@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "NNTPArticle.h"
+#import "NNTPGroupFull.h"
 
 @interface NNTPAccount : NSObject {
 
@@ -16,6 +17,7 @@
 	NSMutableArray * _arts;//		NNTPArticle's (containing the headers)
 	NSArray * _groups;//		NSString's containing list of group names
 	int _sockd;//fd for the socket connection
+	NNTPGroupFull * _currentGroup;//group we're in
 
 	//data to save (other than account information)
 	NSMutableArray * _subscribed;// strings of the subscribed groups.

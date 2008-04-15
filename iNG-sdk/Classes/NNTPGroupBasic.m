@@ -19,7 +19,12 @@
 //bind the properties to their respective memeber variables
 @synthesize name=_name, high=_high, low=_low, unreadCount=_unreadCount;
 
-//creates a basic group entry
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithName
+ *  Description:  creates a basic group entry
+ * =====================================================================================
+ */
 - initWithName: (NSString *) name
 {
 	if ( self = [ super init ] )
@@ -33,12 +38,16 @@
 
 }
 
-//create an instance of this object from archived state information
-- (id) initWithCoder: (NSCoder *) decoder
+-/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initWithCoder
+ *  Description:  Creates an instance of an object from archived state information
+ * =====================================================================================
+ */ (id) initWithCoder: (NSCoder *) decoder
 {
 	if ( self = [ super init ] )
 	{
-		_name = [ decoder decodeObjectForKey: K_NNTPGROUPBASIC_NAME ]; 
+		_name = [ [ decoder decodeObjectForKey: K_NNTPGROUPBASIC_NAME ] retain ]; 
 		_high = [ [ decoder decodeObjectForKey: K_NNTPGROUPBASIC_HIGH ] longValue ];
 		_low = [ [ decoder decodeObjectForKey: K_NNTPGROUPBASIC_LOW ] longValue ];
 		_count = [ [ decoder decodeObjectForKey: K_NNTPGROUPBASIC_COUNT ] longValue ];
@@ -49,7 +58,12 @@
 
 }
 
-//encode state of this object to the specified nscoder
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  encodeWithCoder
+ *  Description:  save state information of this object to the specified NSCoder
+ * =====================================================================================
+ */
 - (void) encodeWithCoder: (NSCoder *) coder
 {
 
@@ -66,20 +80,40 @@
 	
 }
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  enterGroup
+ *  Description:  create the corresponding NNTPGroupFull for this group and return it
+ * =====================================================================================
+ */
 - (NNTPGroupFull *) enterGroup
 {
-	_fullGroup = [ [ NNTPGroupFull alloc ] initWithName: _name ];
-	[ _fullGroup setDelegate: self ];//inform us when it gets an update
+	_fullGroup = [ [ NNTPGroupFull alloc ] initWithName: _name andBasic: self ];
 	return _fullGroup;
 }
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  leaveGroup
+ *  Description:  leave the NNTPGroupFull stored in _fullGroup if it exists
+ * =====================================================================================
+ */
 - (void) leaveGroup
 {
-	//TODO: [ fullGroup save ];
-	[ _fullGroup release ];
-	_fullGroup = nil;
+	if ( _fullGroup )
+	{
+		//[ _fullGroup save ];
+		//[ _fullGroup release ];
+		_fullGroup = nil;
+	}
 }
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  updateWithGroupLine
+ *  Description:  update state information using the data contained in the group line
+ * =====================================================================================
+ */
 - (void) updateWithGroupLine: (NSString *) line;
 {
 

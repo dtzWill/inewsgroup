@@ -12,6 +12,7 @@
 
 @interface GroupListViewController : UITableViewController {
 
+	bool _hasInitialized;
 }
 
 - (void) connect;

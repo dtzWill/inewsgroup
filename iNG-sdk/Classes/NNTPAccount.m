@@ -14,7 +14,7 @@
 #import <fcntl.h>
 
 //comment this out to hide the nslog'ing of network read/writes
-#define DEBUG_NETWORK_ACTIVITY 1
+//#define DEBUG_NETWORK_ACTIVITY 1
 
 //NOTE these *must* match the keys as defined in
 //Root.plist in Settings.bundle
@@ -601,15 +601,16 @@ static NNTPAccount * sharedInstance = nil;
 	 * just something to keep in mind
 	 */
 	NSArray * subscribed = [ self subscribedGroups ];
+	int i;//iter var
 
 	//send a group command for each subscribed group
-	for ( int i = 0; i < [ subscribed count ]; i++ )
+	for ( i = 0; i < [ subscribed count ]; i++ )
 	{
 		[ self sendCommand: @"GROUP" withArg: ( (NNTPGroupBasic *)[ subscribed objectAtIndex: i ] ).name ];
 	}
 
 	//now get responses
-	for ( int i = 0; i < [ subscribed count ]; i++ )
+	for ( i = 0; i < [ subscribed count ]; i++ )
 	{
 		NSString * response = [ self getLine ];
 		if ( [ self isSuccessfulCommand: response ] )
@@ -630,11 +631,18 @@ static NNTPAccount * sharedInstance = nil;
  */
 - (void) setGroupAndFetchHeaders: (NSString *) group
 {
+	//externalize this part?
+	if ( _currentGroup )
+	{
+		[ [ _currentGroup getParent ] leaveGroup ];
+		_currentGroup = nil;
+	}
+	//end externalize potential
+	
 	NSArray * subscribed = [ self subscribedGroups ];
 	NNTPGroupBasic * groupbase = [ subscribed objectAtIndex: 0 ];
-	NNTPGroupFull * groupfull = [ groupbase enterGroup ];
-	[ groupfull refresh ];
-
+	_currentGroup = [ groupbase enterGroup ];
+	[ _currentGroup refresh ];
 }
 
 
@@ -678,21 +686,6 @@ static NNTPAccount * sharedInstance = nil;
 }
 //TODO: clean up the bodies if we get a low-mem warning
 
-//does what you'd expect
-///- (NNTPGroup) NNTPGroupFromNSString: (NSString *) string
-///{
-///	//groupname high low flags
-///	//for our purposes we're ignoring flags
-///	NSArray * parts = [ string componentsSeparatedByString: @" " ];
-///	NNTPGroup group;
-///	strncpy( group.name, [ [ parts objectAtIndex: 0 ] UTF8String ], sizeof( group.name ) );
-///	group.high = [ [ parts objectAtIndex: 1 ] intValue ];
-///	group.low = [ [ parts objectAtIndex: 2 ] intValue ];
-///
-///	group.hasUnread = false;//default, just initializing it
-///
-///	return group;
-///}
 
 //TODO: POSTING SUPPORT!
 //TODO: THREADING!

@@ -8,14 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class MyView;
-
 @interface iNGAppDelegate : NSObject {
     UIWindow *window;
-    MyView *contentView;
+    UIView *contentView;
 }
 
 @property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, retain) MyView *contentView;
+@property (nonatomic, retain) UIView *contentView;
 
 @end
