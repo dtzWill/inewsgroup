@@ -41,6 +41,8 @@
 
 @implementation NNTPArticle
 
+@synthesize from=_from, subject=_subject, newsgroups=_newsgroups, references=_references, date=_date, messageID=_messageID, sender=_sender, body=_body;
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  initWithResponse
@@ -75,7 +77,7 @@
 			}
 
 			//combine the rest, just in case the contain ": "s
-			NSMutableString * value = [ NSMutableString stringWithString: [ parts objectAtIndex: 1 ] ];
+			NSMutableString * value = [ [ NSMutableString stringWithString: [ parts objectAtIndex: 1 ] ] retain ];
 			for ( i = 2; i < [ parts count ]; i++ )
 			{
 				[ value appendString: @": " ];

@@ -14,7 +14,7 @@
 #import <fcntl.h>
 
 //comment this out to hide the nslog'ing of network read/writes
-//#define DEBUG_NETWORK_ACTIVITY 1
+#define DEBUG_NETWORK_ACTIVITY 1
 
 //NOTE these *must* match the keys as defined in
 //Root.plist in Settings.bundle
@@ -275,7 +275,7 @@ static NNTPAccount * sharedInstance = nil;
 - (NSString *) getLine
 {
 	NSMutableString * ret = nil;
-	char buffer[160];
+	char buffer[360];
 	//TODO: non-blocking, and TIMEOUT.
 
 	NSUInteger newline_index = -1;
@@ -290,7 +290,22 @@ static NNTPAccount * sharedInstance = nil;
 		NSLog( @"Error in getLine", errno );
 		return nil;
 	}
+#ifdef DEBUG_NETWORK_ACTIVITY
+	NSLog( @"RAW RECV: %@,response: %d", ret, res );
+#endif
 
+	//dos-style line breaks...
+	if ( ( newline_index = [ ret rangeOfString: @"\r\n" ].location ) != NSNotFound )
+	{
+		NSString * line = [ ret substringToIndex: newline_index ];
+		//actually read it.. but only up to the newline
+		read( _sockd, buffer, newline_index + 2 );
+#ifdef DEBUG_NETWORK_ACTIVITY		
+		NSLog( @"recv'd: %d, %@", newline_index, line );
+#endif //DEBUG_NETWORK_ACTIVITY
+		return [ line retain ];
+	}
+	//unix line-break
 	if ( ( newline_index = [ ret rangeOfString: @"\n" ].location ) != NSNotFound )
 	{
 		NSString * line = [ ret substringToIndex: newline_index ];
@@ -299,7 +314,7 @@ static NNTPAccount * sharedInstance = nil;
 #ifdef DEBUG_NETWORK_ACTIVITY		
 		NSLog( @"recv'd: %d, %@", newline_index, line );
 #endif //DEBUG_NETWORK_ACTIVITY
-		return line;
+		return [ line retain ];
 	}
 
 	NSLog( @"Error in getLine: No newline!" );
@@ -372,6 +387,11 @@ static NNTPAccount * sharedInstance = nil;
 	while ( !done )
 	{
 		NSString * line = [ self getLine ];
+		//XXX: BETTER HANDLING OF THIS!
+		if ( !line )//if we had a network problem...
+		{
+			break;
+		}
 		done = ( [ line characterAtIndex: 0 ] == '.' );//keep going until see '.' by itself
 		
 		if ( !done )
@@ -631,18 +651,28 @@ static NNTPAccount * sharedInstance = nil;
  */
 - (void) setGroupAndFetchHeaders: (NSString *) group
 {
-	//externalize this part?
+	NNTPGroupBasic * newGroup = nil;
+	for( NNTPGroupBasic * basic in [ self subscribedGroups ] )	
+	{
+		if ( [ basic.name isEqualToString: group ] )
+		{
+			newGroup = basic;	
+			break;
+		}
+	}
+	//XXX: what if _currentGroup is what we want already?
+
 	if ( _currentGroup )
 	{
 		[ [ _currentGroup getParent ] leaveGroup ];
 		_currentGroup = nil;
 	}
-	//end externalize potential
-	
-	NSArray * subscribed = [ self subscribedGroups ];
-	NNTPGroupBasic * groupbase = [ subscribed objectAtIndex: 0 ];
-	_currentGroup = [ groupbase enterGroup ];
-	[ _currentGroup refresh ];
+
+	if ( newGroup )
+	{
+		_currentGroup = [ newGroup enterGroup ];
+		[ _currentGroup refresh ];
+	}
 }
 
 
@@ -658,6 +688,13 @@ static NNTPAccount * sharedInstance = nil;
 - (NSArray *) getArts
 {
 
+	if ( _currentGroup )
+	{
+		//XXX: Why is this 'retain' needed?
+		return [ _currentGroup.articles retain ];
+	}
+	//else	
+	
 	return nil;
 }
 

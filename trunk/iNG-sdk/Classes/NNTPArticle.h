@@ -29,6 +29,14 @@
 
 }
 
+@property (readonly) NSString * from;
+@property (readonly) NSString * subject;
+@property (readonly) NSString * newsgroups;
+@property (readonly) NSString * references;
+@property (readonly) NSString * date;
+@property (readonly) NSString * messageID;
+@property (readonly) NSString * sender;
+@property (readonly) NSString * body;
 
 /* 
  * ===  FUNCTION  ======================================================================

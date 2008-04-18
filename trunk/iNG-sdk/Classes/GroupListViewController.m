@@ -128,9 +128,9 @@
 - (void) tableView: (UITableView *) tableView selectionDidChangeToIndexPath: (NSIndexPath *) newIndexPath fromIndexPath: (NSIndexPath *) oldIndexPath
 {
 
-	ArticleListViewController * alvc = [ [ [ ArticleListViewController alloc ] init ] autorelease ];
+	NNTPGroupBasic * sel = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ newIndexPath row ]  ];
+	ArticleListViewController * alvc = [ [ [ ArticleListViewController alloc ] initWithGroupNamed: sel.name ] autorelease ];
 	[ (UINavigationController *)self.parentViewController pushViewController: alvc animated: YES ];
-	[ [ NNTPAccount sharedInstance ] setGroupAndFetchHeaders: nil ];
 
 }
     

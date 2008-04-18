@@ -29,7 +29,10 @@
 - (void) loadView
 {
 	NSLog( @"loading view" );
-	//TEMP UNTIL NSUSERDEFAULTS RESOLVED!
+	//XXX
+	//Remove this before any real build--this is so I don't have to set these
+	//values by hand every time I wanna debug
+	//XXX
 	[ [ NNTPAccount sharedInstance ] setServer: @"news.cs.uiuc.edu" ];
 	[ [ NNTPAccount sharedInstance ] setPort: 119 ];
 	[ [ NNTPAccount sharedInstance ] setUser: @"wdietz2" ];

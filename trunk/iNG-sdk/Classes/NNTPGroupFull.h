@@ -17,6 +17,8 @@
 	NSString * _name;
 }
 
+@property (readonly) NSArray * articles;
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  initWithName
