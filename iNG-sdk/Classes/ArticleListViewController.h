@@ -10,7 +10,19 @@
 
 
 @interface ArticleListViewController : UITableViewController {
+	NSString * _groupname;
 
 }
+
+- (ArticleListViewController *) initWithGroupNamed: (NSString *) groupname;
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  refresh
+ *  Description:  Gets the headers (launches a new thread to handle it)
+ * =====================================================================================
+ */
+- (void) refresh;
 
 @end

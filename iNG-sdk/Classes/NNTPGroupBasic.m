@@ -100,10 +100,10 @@
  */
 - (void) leaveGroup
 {
+	//XXX: as this function is now, it's completely worthless.
 	if ( _fullGroup )
 	{
-		//[ _fullGroup save ];
-		//[ _fullGroup release ];
+		[ _fullGroup release ];
 		_fullGroup = nil;
 	}
 }

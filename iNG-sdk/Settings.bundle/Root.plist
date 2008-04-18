@@ -22,9 +22,12 @@
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 		</dict>
+		<!-- Numbers seem broken in beta3, or at least what used to work
+			no longer works.  Disabling port selection for now -->
+		<!--
 		<dict>
 			<key>DefaultValue</key>
-			<string>119</string>
+			<string>"119"</string>
 			<key>Key</key>
 			<string>PORT</string>
 			<key>Keyboard</key>
@@ -33,7 +36,7 @@
 			<string>Port</string>
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
-		</dict>
+		</dict> -->
 		<dict>
 			<key>DefaultValue</key>
 			<string></string>

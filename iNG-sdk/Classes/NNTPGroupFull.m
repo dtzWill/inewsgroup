@@ -17,6 +17,8 @@
 
 @implementation NNTPGroupFull
 
+@synthesize articles = _articles;
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  initWithName
@@ -35,8 +37,8 @@
 		if ( [ [ NSFileManager defaultManager ] fileExistsAtPath: groupfile ] )
 		{
 			NSDictionary * rootObject = [ NSKeyedUnarchiver unarchiveObjectWithFile: groupfile ];
-			_articles = [ rootObject valueForKey: K_NNTPGROUPFULL_ARTS ];
-			_lastUpdateTime = [ rootObject valueForKey: K_NNTPGROUPFULL_TIME ];
+			_articles = [ [ rootObject valueForKey: K_NNTPGROUPFULL_ARTS ] retain ];
+			_lastUpdateTime = [ [ rootObject valueForKey: K_NNTPGROUPFULL_TIME ] retain ];
 		}
 		else
 		{
@@ -105,7 +107,7 @@
 			}
 
 			//_articles is empty b/c lastUpdateTime wasn't set
-			_articles = [ NSMutableArray arrayWithCapacity: end- begin + 1 ];
+			_articles = [ NSMutableArray arrayWithCapacity: end - begin + 1 ];
 
 			//go through the response and get the headers for the articles mentioned
 			for ( i = begin; i < end; i++ )
@@ -155,10 +157,12 @@
 
 	if ( _articles )
 	{
+		[ _articles retain ];
 		[ rootObject setValue: _articles forKey: K_NNTPGROUPFULL_ARTS ];
 	}
 	if ( _lastUpdateTime )
 	{
+		[ _lastUpdateTime retain ];
 		[ rootObject setValue: _lastUpdateTime forKey: K_NNTPGROUPFULL_TIME ];
 	}
 	NSLog( @"save NNTPGroupFull %d", [ NSKeyedArchiver archiveRootObject: rootObject toFile: groupfile ] );
@@ -168,13 +172,13 @@
 //clean up!
 - (void) dealloc
 {
-	//XXX is this saving redundant?? (do we care?)
-	//[ self save ];
+	[ self save ];
+	
+	[ super dealloc ];
+
 	[ _articles release ];
 	[ _lastUpdateTime release ];
 	[ _name release ];
-	
-	[ super dealloc ];
 }
 
 @end
