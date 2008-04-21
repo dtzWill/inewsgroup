@@ -15,10 +15,10 @@
 		);
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeArchitecture = armv6;
+		activeArchitecture = i386;
 		activeBuildConfigurationName = Debug;
 		activeExecutable = BED513450D8DF301003DC505 /* iNG */;
-		activeSDKForArchive = iphoneos2.0;
+		activeSDKForArchive = iphonesimulator2.0;
 		activeTarget = 1D6058900D05DD3D006BFB54 /* iNG */;
 		addToTargets = (
 			1D6058900D05DD3D006BFB54 /* iNG */,
@@ -57,7 +57,7 @@
 			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = 1;
-				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Errors_ColumnID;
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
 					394,
@@ -139,26 +139,14 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 230429761;
-			PBXWorkspaceStateSaveDate = 230429761;
+			PBXPerProjectTemplateStateSaveDate = 230461188;
+			PBXWorkspaceStateSaveDate = 230461188;
 		};
 		perUserProjectItems = {
-			BEB0F64D0DBBFCED003658BD = BEB0F64D0DBBFCED003658BD /* PBXTextBookmark */;
-			BEB0F64E0DBBFCED003658BD = BEB0F64E0DBBFCED003658BD /* PBXTextBookmark */;
-			BEB0F6550DBBFD6E003658BD = BEB0F6550DBBFD6E003658BD /* PBXBookmark */;
-			BEB0F6560DBBFD6E003658BD = BEB0F6560DBBFD6E003658BD /* PBXTextBookmark */;
-			BEB0F65D0DBBFFB1003658BD = BEB0F65D0DBBFFB1003658BD /* PBXTextBookmark */;
-			BEB0F65E0DBBFFB1003658BD = BEB0F65E0DBBFFB1003658BD /* PBXTextBookmark */;
-			BEB0F6640DBC0256003658BD = BEB0F6640DBC0256003658BD /* PBXTextBookmark */;
-			BEB0F6660DBC0269003658BD = BEB0F6660DBC0269003658BD /* PBXTextBookmark */;
-			BEB0F6690DBC07D4003658BD = BEB0F6690DBC07D4003658BD /* PBXTextBookmark */;
-			BEB0F66E0DBC09AC003658BD = BEB0F66E0DBC09AC003658BD /* PBXTextBookmark */;
-			BEB0F6710DBC09EA003658BD = BEB0F6710DBC09EA003658BD /* PBXTextBookmark */;
-			BEB0F6760DBC0A1D003658BD = BEB0F6760DBC0A1D003658BD /* PBXTextBookmark */;
-			BEB0F6780DBC0A29003658BD = BEB0F6780DBC0A29003658BD /* PBXTextBookmark */;
-			BEB0F67A0DBC0A79003658BD = BEB0F67A0DBC0A79003658BD /* PBXTextBookmark */;
-			BEB0F67C0DBC0AC9003658BD = BEB0F67C0DBC0AC9003658BD /* PBXTextBookmark */;
-			BED48C5E0DBC144800029340 /* PBXTextBookmark */ = BED48C5E0DBC144800029340 /* PBXTextBookmark */;
+			BE8291820DBC8549000E412F = BE8291820DBC8549000E412F /* PBXTextBookmark */;
+			BE8291830DBC8549000E412F = BE8291830DBC8549000E412F /* PBXTextBookmark */;
+			BEB83A850DBC949200C55EB7 /* PBXTextBookmark */ = BEB83A850DBC949200C55EB7 /* PBXTextBookmark */;
+			BEB83A860DBC949200C55EB7 /* PBXTextBookmark */ = BEB83A860DBC949200C55EB7 /* PBXTextBookmark */;
 		};
 		sourceControlManager = BED513490D8DF30D003DC505 /* Source Control */;
 		userBuildSettings = {
@@ -179,6 +167,24 @@
 			sepNavVisRange = "{0, 759}";
 			sepNavWindowFrame = "{{15, 215}, {750, 558}}";
 		};
+	};
+	BE8291820DBC8549000E412F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: 'NNTPAccount' may not respond to '-saveSubscribedGroups'";
+		fRef = BED513B50D8ED96A003DC505 /* NNTPAccount.m */;
+		rLen = 1;
+		rLoc = 587;
+		rType = 1;
+	};
+	BE8291830DBC8549000E412F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = BED513B50D8ED96A003DC505 /* NNTPAccount.m */;
+		name = "NNTPAccount.m: 832";
+		rLen = 0;
+		rLoc = 22004;
+		rType = 0;
+		vrLen = 336;
+		vrLoc = 17563;
 	};
 	BE88702D0DA9494400F372E6 /* AccountView.h */ = {
 		uiCtxt = {
@@ -203,9 +209,9 @@
 	};
 	BE8870D40DA9759C00F372E6 /* GroupListViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {906, 1946}}";
-			sepNavSelRange = "{3021, 0}";
-			sepNavVisRange = "{2140, 1403}";
+			sepNavIntBoundsRect = "{{0, 0}, {906, 1176}}";
+			sepNavSelRange = "{4424, 0}";
+			sepNavVisRange = "{3920, 504}";
 			sepNavWindowFrame = "{{15, 56}, {750, 685}}";
 		};
 	};
@@ -226,28 +232,17 @@
 	};
 	BE93589E0DB1CB7500D1DAAF /* ArticleListViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {876, 1624}}";
-			sepNavSelRange = "{991, 0}";
-			sepNavVisRange = "{871, 249}";
+			sepNavIntBoundsRect = "{{0, 0}, {906, 1176}}";
+			sepNavSelRange = "{3465, 0}";
+			sepNavVisRange = "{2941, 519}";
 		};
 	};
-	BEB0F64D0DBBFCED003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "error: 'lines' undeclared (first use in this function)";
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		rLen = 1;
-		rLoc = 114;
-		rType = 1;
-	};
-	BEB0F64E0DBBFCED003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 216";
-		rLen = 0;
-		rLoc = 6236;
-		rType = 0;
-		vrLen = 335;
-		vrLoc = 5048;
+	BE9358A20DB1CBC100D1DAAF /* ArticleCell.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {877, 1050}}";
+			sepNavSelRange = "{2062, 0}";
+			sepNavVisRange = "{1366, 218}";
+		};
 	};
 	BEB0F6520DBBFD63003658BD /* NNTPGroupFull.m:80 */ = {
 		isa = PBXFileBreakpoint;
@@ -263,129 +258,26 @@
 		ignoreCount = 0;
 		lineNumber = 80;
 		location = iNG;
-		modificationTime = 230427822.794014;
+		modificationTime = 230464670.758084;
 		state = 1;
 	};
-	BEB0F6550DBBFD6E003658BD /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-	};
-	BEB0F6560DBBFD6E003658BD /* PBXTextBookmark */ = {
+	BEB83A850DBC949200C55EB7 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 80";
-		rLen = 0;
-		rLoc = 2548;
-		rType = 0;
-		vrLen = 1496;
-		vrLoc = 2003;
-	};
-	BEB0F65D0DBBFFB1003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		rLen = 0;
-		rLoc = 81;
+		comments = "warning: 'NNTPAccount' may not respond to '-unsubscribeFrom:'";
+		fRef = BED48C620DBC158A00029340 /* SubscriptionManagerViewController.m */;
+		rLen = 1;
+		rLoc = 101;
 		rType = 1;
 	};
-	BEB0F65E0DBBFFB1003658BD /* PBXTextBookmark */ = {
+	BEB83A860DBC949200C55EB7 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 217";
-		rLen = 0;
-		rLoc = 6257;
+		fRef = BED48C620DBC158A00029340 /* SubscriptionManagerViewController.m */;
+		name = "SubscriptionManagerViewController.m: 102";
+		rLen = 61;
+		rLoc = 2712;
 		rType = 0;
-		vrLen = 960;
-		vrLoc = 5297;
-	};
-	BEB0F6640DBC0256003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 221";
-		rLen = 0;
-		rLoc = 6325;
-		rType = 0;
-		vrLen = 960;
-		vrLoc = 5365;
-	};
-	BEB0F6660DBC0269003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 221";
-		rLen = 0;
-		rLoc = 6325;
-		rType = 0;
-		vrLen = 1087;
-		vrLoc = 4367;
-	};
-	BEB0F6690DBC07D4003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 223";
-		rLen = 0;
-		rLoc = 6337;
-		rType = 0;
-		vrLen = 938;
-		vrLoc = 5399;
-	};
-	BEB0F66E0DBC09AC003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 222";
-		rLen = 0;
-		rLoc = 6337;
-		rType = 0;
-		vrLen = 894;
-		vrLoc = 5443;
-	};
-	BEB0F6710DBC09EA003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 222";
-		rLen = 0;
-		rLoc = 6337;
-		rType = 0;
-		vrLen = 878;
-		vrLoc = 5459;
-	};
-	BEB0F6760DBC0A1D003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 222";
-		rLen = 0;
-		rLoc = 6337;
-		rType = 0;
-		vrLen = 1052;
-		vrLoc = 5285;
-	};
-	BEB0F6780DBC0A29003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 222";
-		rLen = 0;
-		rLoc = 6337;
-		rType = 0;
-		vrLen = 1095;
-		vrLoc = 4790;
-	};
-	BEB0F67A0DBC0A79003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 222";
-		rLen = 0;
-		rLoc = 6337;
-		rType = 0;
-		vrLen = 892;
-		vrLoc = 5445;
-	};
-	BEB0F67C0DBC0AC9003658BD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 222";
-		rLen = 0;
-		rLoc = 6337;
-		rType = 0;
-		vrLen = 892;
-		vrLoc = 5445;
+		vrLen = 350;
+		vrLoc = 2528;
 	};
 	BECCBF0E0D94B817001F2856 /* AccountViewController.m */ = {
 		uiCtxt = {
@@ -395,15 +287,12 @@
 			sepNavWindowFrame = "{{15, 61}, {750, 685}}";
 		};
 	};
-	BED48C5E0DBC144800029340 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */;
-		name = "NNTPGroupFull.m: 222";
-		rLen = 0;
-		rLoc = 6337;
-		rType = 0;
-		vrLen = 1015;
-		vrLoc = 5322;
+	BED48C620DBC158A00029340 /* SubscriptionManagerViewController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {906, 1400}}";
+			sepNavSelRange = "{2712, 61}";
+			sepNavVisRange = "{2528, 317}";
+		};
 	};
 	BED513450D8DF301003DC505 /* iNG */ = {
 		isa = PBXExecutable;
@@ -454,9 +343,9 @@
 	};
 	BED513B50D8ED96A003DC505 /* NNTPAccount.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {654, 5964}}";
-			sepNavSelRange = "{17825, 0}";
-			sepNavVisRange = "{17730, 270}";
+			sepNavIntBoundsRect = "{{0, 0}, {1344, 5376}}";
+			sepNavSelRange = "{22004, 0}";
+			sepNavVisRange = "{17563, 336}";
 			sepNavWindowFrame = "{{3, 166}, {750, 558}}";
 		};
 	};
@@ -484,10 +373,10 @@
 	};
 	BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {834, 3108}}";
-			sepNavSelRange = "{6337, 0}";
-			sepNavVisRange = "{5322, 1015}";
-			sepNavWindowFrame = "{{15, 56}, {750, 685}}";
+			sepNavIntBoundsRect = "{{0, 0}, {834, 2576}}";
+			sepNavSelRange = "{2315, 0}";
+			sepNavVisRange = "{2167, 528}";
+			sepNavWindowFrame = "{{15, 61}, {750, 685}}";
 		};
 	};
 	BEDC6B9D0DB0249000A3BF70 /* NNTPArticle.h */ = {
