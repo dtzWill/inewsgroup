@@ -29,7 +29,7 @@
 {
 	if ( self = [ super init ] )
 	{
-		_name = [ NSString stringWithString: name ];
+		_name = [ [ NSString alloc ] initWithString: name ];
 		_high = _low = _count = _unreadCount = 0;
 		_fullGroup = nil;
 
@@ -52,6 +52,7 @@
 		_low = [ [ decoder decodeObjectForKey: K_NNTPGROUPBASIC_LOW ] longValue ];
 		_count = [ [ decoder decodeObjectForKey: K_NNTPGROUPBASIC_COUNT ] longValue ];
 		_unreadCount = [ [ decoder decodeObjectForKey: K_NNTPGROUPBASIC_UNREAD ] longValue ];
+		_fullGroup = nil;
 	}
 
 	return self;

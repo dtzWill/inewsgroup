@@ -39,9 +39,9 @@
 #define CONNECT_TIMEOUT 10
 #define COMMAND_TIMEOUT 10
 
-#define RESOURCEPATH [ [ NSBundle mainBundle ] resourcePath ]
-#define F_SUBS [ RESOURCEPATH stringByAppendingPathComponent: @"subs.data" ]
-#define F_GROUPS [ RESOURCEPATH stringByAppendingPathComponent: @"groups.data" ]
+#define RESOURCEPATH [ NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex: 0 ]
+#define F_SUBS [ RESOURCEPATH stringByAppendingPathComponent: @"iNG.subs.data" ]
+#define F_GROUPS [ RESOURCEPATH stringByAppendingPathComponent: @"iNG.groups.data" ]
 
 static NNTPAccount * sharedInstance = nil;
 
@@ -61,10 +61,12 @@ static NNTPAccount * sharedInstance = nil;
 	if ( self = [ super init ] )
 	{
 		_sockd = 0;
+		_networkStream = 0;
 		_arts = nil;
 		_groups = nil;
 		_subscribed = nil;
 		_canPost = false;
+		_currentGroup = nil;
 	}
 
 	return self;
@@ -260,6 +262,7 @@ static NNTPAccount * sharedInstance = nil;
 		_sockd = 0;
 		return NO;
 	}
+	_networkStream = fdopen( _sockd, "rw" );
 
 	return [ self getLine ] != nil;
 
@@ -274,52 +277,47 @@ static NNTPAccount * sharedInstance = nil;
  */
 - (NSString *) getLine
 {
-	NSMutableString * ret = nil;
+	NSString * ret = nil;
 	char buffer[360];
 	//TODO: non-blocking, and TIMEOUT.
 
-	NSUInteger newline_index = -1;
-	int res = recv( _sockd, buffer, sizeof( buffer ) - 1, MSG_PEEK );
-	if ( res != -1 )
+	int size;
+	char * res = fgets( buffer, sizeof( buffer ) - 1, _networkStream );
+	if ( res )
 	{
-		buffer[res]='\0';
-		ret = [ NSMutableString stringWithCString: buffer ];
+		//remove newlines as appropriate
+		size = strlen( buffer );
+		//if last character is \n... remove it!
+		if ( size > 1 )
+		{
+			if ( buffer[ size - 1 ] == '\n' )
+			{
+				buffer[ size - 1 ] = '\0';
+			}
+			//could've been a dos-style newline
+			if ( size > 2 )
+			{
+				if ( buffer[ size - 2 ] == '\r' )
+				{
+
+					buffer[ size - 2 ] = '\0';
+				}
+			}
+		}
+
+		ret = [ [ NSString alloc ] initWithCString: buffer ];
 	}
 	else
 	{
 		NSLog( @"Error in getLine", errno );
 		return nil;
 	}
+
 #ifdef DEBUG_NETWORK_ACTIVITY
-	NSLog( @"RAW RECV: %@,response: %d", ret, res );
+	NSLog( @"RECV: %@,response: %d", ret, res );
 #endif
-
-	//dos-style line breaks...
-	if ( ( newline_index = [ ret rangeOfString: @"\r\n" ].location ) != NSNotFound )
-	{
-		NSString * line = [ ret substringToIndex: newline_index ];
-		//actually read it.. but only up to the newline
-		read( _sockd, buffer, newline_index + 2 );
-#ifdef DEBUG_NETWORK_ACTIVITY		
-		NSLog( @"recv'd: %d, %@", newline_index, line );
-#endif //DEBUG_NETWORK_ACTIVITY
-		return [ line retain ];
-	}
-	//unix line-break
-	if ( ( newline_index = [ ret rangeOfString: @"\n" ].location ) != NSNotFound )
-	{
-		NSString * line = [ ret substringToIndex: newline_index ];
-		//actually read it.. but only up to the newline
-		read( _sockd, buffer, newline_index + 1 );
-#ifdef DEBUG_NETWORK_ACTIVITY		
-		NSLog( @"recv'd: %d, %@", newline_index, line );
-#endif //DEBUG_NETWORK_ACTIVITY
-		return [ line retain ];
-	}
-
-	NSLog( @"Error in getLine: No newline!" );
-
-	return nil;
+	
+	return ret;
 }
 
 
@@ -552,10 +550,10 @@ static NNTPAccount * sharedInstance = nil;
 	//load from file if we can
 
 	//create file if it doesn't exist
-	if ( ![ [ NSFileManager defaultManager ] fileExistsAtPath: F_SUBS ] )
-	{
-		[ [ NSFileManager defaultManager ] createFileAtPath: F_SUBS contents: nil attributes: nil ];
-	}
+//	if ( ![ [ NSFileManager defaultManager ] fileExistsAtPath: F_SUBS ] )
+//	{
+//		[ [ NSFileManager defaultManager ] createFileAtPath: F_SUBS contents: nil attributes: nil ];
+//	}
 
 	NSDictionary * rootObject = [ NSKeyedUnarchiver unarchiveObjectWithFile: F_SUBS ];
 	NSMutableArray * subscribed = [ rootObject valueForKey: K_SUBSCRIBED ];
@@ -577,6 +575,8 @@ static NNTPAccount * sharedInstance = nil;
 				[ subscribed addObject: subscribedGroup ];
 			}
 
+			[ subscribed retain ];
+
 			//write it back!
 			if ( subscribed )
 			{
@@ -587,7 +587,6 @@ static NNTPAccount * sharedInstance = nil;
 			}
 
 			_subscribed = subscribed;
-			[ _subscribed retain ];
 
 			return subscribed;
 		}
@@ -599,7 +598,7 @@ static NNTPAccount * sharedInstance = nil;
 	{
 		//print out subscriptions for debug's sake?
 		NSLog( @"already had subscription list!" );
-		_subscribed = subscribed;
+		_subscribed = [ subscribed retain ];
 
 	}
 
@@ -661,12 +660,7 @@ static NNTPAccount * sharedInstance = nil;
 		}
 	}
 	//XXX: what if _currentGroup is what we want already?
-
-	if ( _currentGroup )
-	{
-		[ [ _currentGroup getParent ] leaveGroup ];
-		_currentGroup = nil;
-	}
+	[ self leaveGroup ];
 
 	if ( newGroup )
 	{
@@ -675,6 +669,20 @@ static NNTPAccount * sharedInstance = nil;
 	}
 }
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  leaveGroup
+ *  Description:  leaves group we're currently in
+ * =====================================================================================
+ */
+- (void) leaveGroup
+{
+	if ( _currentGroup )
+	{
+		[ [ _currentGroup getParent ] leaveGroup ];
+		_currentGroup = nil;
+	}
+}
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -733,10 +741,10 @@ static NNTPAccount * sharedInstance = nil;
 	[ _arts release ];
 	[ _groups release ];
 	[ _subscribed release ];
-	if ( _sockd )
+	if ( _networkStream )
 	{
-		close( _sockd );
-		_sockd = 0;
+		fclose( _networkStream );
+		_networkStream = 0;	
 	}
 
 	if ( self == sharedInstance ) //it BETTER!

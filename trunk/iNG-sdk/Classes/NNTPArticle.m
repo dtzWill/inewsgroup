@@ -10,6 +10,9 @@
 
 #import "NNTPAccount.h"
 
+//for debugging header parsing (when adding support for more of them later)
+//#define DEBUG_HEADERS
+
 //for switching on the header type
 #define FROM 1
 #define SUBJECT 2
@@ -108,8 +111,11 @@
 					_sender = value;
 					break;
 				default:
+#ifdef DEBUG_HEADERS
 					NSLog( @"Unknown header: %@", hdr ); 
+#endif
 					//[ value release ];
+					break;
 			}
 
 			//[ parts release ];
@@ -118,6 +124,7 @@
 		}
 	}
 
+#ifdef DEBUG_HEADERS
 	if ( _from )
 		NSLog( @"From: %@", _from );
 	if ( _subject)
@@ -132,6 +139,8 @@
 		NSLog( @"Message-ID: %@", _messageID );
 	if ( _sender )
 		NSLog( @"Sender: %@", _sender );
+#endif
+
 
 
 	return self;

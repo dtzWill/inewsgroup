@@ -10,10 +10,12 @@
 
 #import "NNTPAccount.h"
 
-#define RESOURCEPATH [ [ NSBundle mainBundle ] resourcePath ]
+#define RESOURCEPATH [ NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex: 0 ]
 
 #define K_NNTPGROUPFULL_ARTS @"GF_ARTS"
 #define K_NNTPGROUPFULL_TIME @"GF_TIME"
+
+#define MAX_ARTS 50
 
 @implementation NNTPGroupFull
 
@@ -29,7 +31,7 @@
 {
 	if ( self = [ super init ] )
 	{
-		NSString * groupfile = [ RESOURCEPATH stringByAppendingPathComponent: [ NSString stringWithFormat: @"%@.data", name ] ];
+		NSString * groupfile = [ RESOURCEPATH stringByAppendingPathComponent: [ NSString stringWithFormat: @"iNG.%@.data", name ] ];
 		
 		_name = [ NSString stringWithString: name ];
 		_parent = basicParent;
@@ -68,21 +70,55 @@
  */
 - (void) refresh
 {
+	//XXX Move to initialization
 
-	//TODO: coolness
 	int i;//iter var
 
 	if ( _lastUpdateTime )//if we've ever updated before
 	{
-		//XXX: coolness
-		//[ [ NNTPAccount sharedInstance ] sendCommand: @"NEWNEWS" withArg: [ self newnewsArg ] ];
-		_lastUpdateTime = [ NSDate date ];//now 
+		NSDateFormatter * dateFormatter = [ [ NSDateFormatter alloc ] init ];
+		[ dateFormatter setDateFormat: @"yyMMdd HHmmss" ];
+		NSDate * gmtDate = [ _lastUpdateTime addTimeInterval: -[ [ NSTimeZone localTimeZone ] secondsFromGMTForDate: _lastUpdateTime ] ];
+		NSString * arg = [ NSString stringWithFormat: @"%@ %@ GMT", _name, [ dateFormatter stringFromDate: gmtDate ] ];
+		[ [ NNTPAccount sharedInstance ] sendCommand: @"NEWNEWS" withArg: arg ];
+		
+		
+		if ( [ [ NNTPAccount sharedInstance ] isSuccessfulCommand: [ [ NNTPAccount sharedInstance ] getLine ] ] )
+		{
+			NSLog( @"NEWNEWS UPDATE!" );
+			[ _lastUpdateTime release ];
+			_lastUpdateTime = [ NSDate date ];
+			[ _lastUpdateTime retain ];
 
-		//NEWNEWS the server, get list of articles
-		
-		//remove articles not in 'keeping' threshold (newest 100?)
-		
-		//set lastUpdateTime
+			NSArray * lines = [ [ NNTPAccount sharedInstance ] getResponse ];
+			
+			//lines should be an array of messageid's of new news in this group
+
+			//send a 'head' command for each msgid we get
+			for( NSString * msgid in lines )
+			{
+				[ [ NNTPAccount sharedInstance ] sendCommand: @"HEAD" withArg: msgid ];
+			}
+
+			for ( i = 0; i < [ lines count ]; i++ )
+			{
+				if ( [ [ NNTPAccount sharedInstance ] isSuccessfulCommand: [ [ NNTPAccount sharedInstance ] getLine ] ] )
+				{
+					NSArray * headers = [ [ NNTPAccount sharedInstance ] getResponse ];
+					NNTPArticle * art = [ [ NNTPArticle alloc ] initWithResponse: headers ];
+					[ _articles addObject: art ];
+				}
+			}
+
+			//trim article array
+			if ( [ _articles count ] > MAX_ARTS )
+			{
+				[ _articles removeObjectsInRange: NSMakeRange( 0, [ _articles count ] - MAX_ARTS ) ];
+			}
+
+			[ lines release ];
+
+		}
 
 	}
 	else
@@ -90,17 +126,17 @@
 		[ [ NNTPAccount sharedInstance ] sendCommand: @"LISTGROUP" withArg: _name ]; 
 		if ( [ [ NNTPAccount sharedInstance ] isSuccessfulCommand: [ [ NNTPAccount sharedInstance ] getLine ] ] )
 		{
-			_lastUpdateTime = [ [ NSDate date ] retain ];//now
+			_lastUpdateTime = [ NSDate date ];//now
+			[ _lastUpdateTime retain ];
 			NSArray * lines = [ [ NNTPAccount sharedInstance ] getResponse ];
 
-			int MAXARTS = 10;//TODO make '10' a parameter/global
 			int begin = 0;	
-			if ( [ lines count ] > MAXARTS )
+			if ( [ lines count ] > MAX_ARTS )
 			{
-				begin = [ lines count ] - ( MAXARTS + 1 );
+				begin = [ lines count ] - ( MAX_ARTS + 1 );
 			}
 
-			int end = begin + MAXARTS;
+			int end = begin + MAX_ARTS;
 			if ( end >= [ lines count ] )
 			{
 				end = [ lines count ];
@@ -148,7 +184,7 @@
  */
 - (void) save
 {
-	NSString * groupfile = [ RESOURCEPATH stringByAppendingPathComponent: [ NSString stringWithFormat: @"%@.data", _name ] ];
+	NSString * groupfile = [ RESOURCEPATH stringByAppendingPathComponent: [ NSString stringWithFormat: @"iNG.%@.data", _name ] ];
 	NSLog( @"woo: %@, %@", _name, groupfile );
 
 	NSMutableDictionary * rootObject;
@@ -172,7 +208,8 @@
 //clean up!
 - (void) dealloc
 {
-	[ self save ];
+	//XXX
+	//[ self save ];
 	
 	[ super dealloc ];
 
