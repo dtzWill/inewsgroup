@@ -10,6 +10,7 @@
 
 #import "NNTPAccount.h"
 #import "NNTPArticle.h"
+#import "ArticleCell.h"
 
 @implementation ArticleListViewController
 
@@ -89,16 +90,17 @@
 {
 
 	// Create a cell if necessary
-	UITableViewCell * cell = [ self.tableView dequeueReusableCellWithIdentifier: @"ArticleListViewCell" ];
+	ArticleCell * cell = (ArticleCell *)[ self.tableView dequeueReusableCellWithIdentifier: @"ArticleCell" ];
 	if ( cell == nil)
 	{
-		cell = [ [ [UITableViewCell alloc] initWithFrame: CGRectZero reuseIdentifier: @"ArticleListViewCell" ] autorelease ];
+		cell = [ [ [ ArticleCell alloc] initWithFrame: CGRectZero reuseIdentifier: @"ArticleCell" ] autorelease ];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
 	// Set up the text for the cell
 //	if ( [ indexPath row ] >= 0 && [ indexPath row ] < [ [ [ NNTPAccount sharedInstance ] getArts ] count ] )
 	{
 		NNTPArticle * art = [ [ [ NNTPAccount sharedInstance ] getArts ] objectAtIndex: [ indexPath row ] ]; 
+	//	[ cell useArticle: art ];
 		cell.text = art.subject;
 	}
 //	else

@@ -135,4 +135,16 @@
 
 }
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  compareGroupName
+ *  Description:  compares two groups by their name 
+ * =====================================================================================
+ */
+- (NSComparisonResult) compareGroupName: (NNTPGroupBasic *) basic
+{
+	return [ _name compare: basic.name ];
+
+}
+
 @end

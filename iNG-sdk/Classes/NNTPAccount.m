@@ -314,7 +314,7 @@ static NNTPAccount * sharedInstance = nil;
 	}
 
 #ifdef DEBUG_NETWORK_ACTIVITY
-	NSLog( @"RECV: %@,response: %d", ret, res );
+	NSLog( @"RECV: %@", ret );
 #endif
 	
 	return ret;
@@ -474,25 +474,21 @@ static NNTPAccount * sharedInstance = nil;
 	//TODO: once read file into memory... leave it there (and re-use it)?
 	NSMutableArray * groups_array = nil;
 
-	//create file if it doesn't exist
-	if ( ![ [ NSFileManager defaultManager ] fileExistsAtPath: F_GROUPS ] )
-	{
-		[ [ NSFileManager defaultManager ] createFileAtPath: F_GROUPS contents: nil attributes: nil ];
-	}
-
 	if ( !forceRefresh )
 	{
-		if ( _groups ) return _groups;
+		if ( _groups ) return [ _groups retain ];//XXX uh...?!?!
+	//	XXX DONT LEAK LIKE A BUCKET WITH HOLES XXX
 
-		groups_array = [ NSMutableData dataWithContentsOfFile: F_GROUPS ];
+		NSDictionary * rootObject = [ NSKeyedUnarchiver unarchiveObjectWithFile: F_GROUPS ];
+		groups_array = [ rootObject valueForKey: K_GROUPS ];
 
 		if ( groups_array != nil )
 		{
 			//if _groups were defined we would return already
 			//XXX: review this logic
-//			if ( _groups ) [ _groups release ];
+			NSLog( @"groups from file! count: %d", [ groups_array count ] );
 			_groups = groups_array;
-			return groups_array;
+			return _groups;
 		}
 	}
 
@@ -507,33 +503,56 @@ static NNTPAccount * sharedInstance = nil;
 		//all the unneeded data.  we don't track high/low/anything
 		//for non-subscribed groups, only we want a list
 		//of what exists
-		groups_array = [ NSMutableArray arrayWithCapacity: [ lines count ] ];	
+		groups_array = [ [ NSMutableArray arrayWithCapacity: [ lines count ] ] retain ];	
 
-		NSEnumerator * enumer = [ lines objectEnumerator ];
-		NSString * line;
-
-		while  ( line = [ enumer nextObject ] )
+		for ( NSString * line in lines )
 		{
 
 			NSArray * parts = [ line componentsSeparatedByString: @" " ];
-			[ groups_array addObject: [ parts objectAtIndex: 0 ] ]; 
-			[ parts release ];
+			[ groups_array addObject: [ [ parts objectAtIndex: 0 ] retain ] ]; 
+			//[ parts release ];
 		}
 		
+		[ groups_array sortUsingSelector: @selector(compare:) ];
+
+		[ groups_array retain ];
+
 		//write it back!
 		if ( groups_array )
 		{
-			[ groups_array writeToFile: F_GROUPS atomically: YES ];	
-			NSLog( @"wrote groups to file" );
+			NSMutableDictionary * rootObject;
+			rootObject = [ [ [ NSMutableDictionary alloc ] init ] autorelease ];
+			[ rootObject setValue: groups_array forKey: K_GROUPS ];
+			NSLog( @"save grouplist: %d", [ NSKeyedArchiver archiveRootObject: rootObject toFile: F_GROUPS ] );
+
 		}
 
 		if ( _groups ) [ _groups release ];
 		_groups = groups_array;
-		return groups_array;
+		return _groups;
 	}
 
 	return nil;//:-(
 
+}
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  saveSubscribedGroups
+ *  Description:  saves _subscribed to disk
+ * =====================================================================================
+ */
+- (void) saveSubscribedGroups
+{
+	//write it back!
+	if ( _subscribed )
+	{
+		[ _subscribed sortUsingSelector: @selector(compareGroupName:) ];
+		NSMutableDictionary * rootObject;
+		rootObject = [ [ [ NSMutableDictionary alloc ] init ] autorelease ];
+		[ rootObject setValue: _subscribed forKey: K_SUBSCRIBED ];
+		NSLog( @"save subscriptions: %d", [ NSKeyedArchiver archiveRootObject: rootObject toFile: F_SUBS ] );
+	}
 }
 
 /* 
@@ -548,12 +567,6 @@ static NNTPAccount * sharedInstance = nil;
 	if ( _subscribed ) return _subscribed;
 
 	//load from file if we can
-
-	//create file if it doesn't exist
-//	if ( ![ [ NSFileManager defaultManager ] fileExistsAtPath: F_SUBS ] )
-//	{
-//		[ [ NSFileManager defaultManager ] createFileAtPath: F_SUBS contents: nil attributes: nil ];
-//	}
 
 	NSDictionary * rootObject = [ NSKeyedUnarchiver unarchiveObjectWithFile: F_SUBS ];
 	NSMutableArray * subscribed = [ rootObject valueForKey: K_SUBSCRIBED ];
@@ -577,16 +590,9 @@ static NNTPAccount * sharedInstance = nil;
 
 			[ subscribed retain ];
 
-			//write it back!
-			if ( subscribed )
-			{
-				NSMutableDictionary * rootObject;
-				rootObject = [ [ [ NSMutableDictionary alloc ] init ] autorelease ];
-				[ rootObject setValue: subscribed forKey: K_SUBSCRIBED ];
-				NSLog( @"save subscriptions: %d", [ NSKeyedArchiver archiveRootObject: rootObject toFile: F_SUBS ] );
-			}
-
 			_subscribed = subscribed;
+
+			[ self saveSubscribedGroups ];
 
 			return subscribed;
 		}
@@ -753,6 +759,73 @@ static NNTPAccount * sharedInstance = nil;
 	}
 
 	[ super dealloc ];
+}
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  isSubscribedTo
+ *  Description:  returns if we're subscribed to the group specified.
+ * =====================================================================================
+ */
+- (bool) isSubscribedTo: (NSString *) group
+{
+	for( NNTPGroupBasic * basic in [ self subscribedGroups ] )	
+	{
+		if ( [ basic.name isEqualToString: group ] )
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  subscribeTo
+ *  Description:  subscribe to the group specified if we're not already
+ * =====================================================================================
+ */
+- (void) subscribeTo: (NSString *) group
+{
+	if ( ![ self isSubscribedTo: group ] )
+	{
+		NNTPGroupBasic * basic = [ [ NNTPGroupBasic alloc ] initWithName: group ];
+
+		[ _subscribed addObject: basic ];
+
+		[ self saveSubscribedGroups ];
+
+	}
+
+}
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  unsubscribeFrom
+ *  Description:  unsubscribe from the group specified
+ * =====================================================================================
+ */
+- (void) unsubscribeFrom: (NSString *) group
+{
+	[ self subscribedGroups ];
+
+	int i = 0;
+	for ( NNTPGroupBasic * basic in _subscribed )
+	{
+		if ( [ basic.name isEqualToString: group ] )
+		{
+			break;
+		}
+		i++;
+	}
+
+	if ( i < [ _subscribed count ] )//if we found it
+	{
+		[ _subscribed removeObjectAtIndex: i ] ;
+	}
 }
 
 

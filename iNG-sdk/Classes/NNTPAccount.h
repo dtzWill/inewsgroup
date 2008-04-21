@@ -185,10 +185,48 @@
  */
 - (NNTPArticle *) getBodyForArticle: (int) artid;
 
-//does what you'd expect
-//- (NNTPGroup) NNTPGroupFromNSString: (NSString *) string;
+
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  isSubscribedTo
+ *  Description:  returns if we're subscribed to the group specified.
+ * =====================================================================================
+ */
+- (bool) isSubscribedTo: (NSString *) group;
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  subscribeTo
+ *  Description:  subscribe to the group specified if we're not already
+ * =====================================================================================
+ */
+- (void) subscribeTo: (NSString *) group;
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  unsubscribeFrom
+ *  Description:  unsubscribe from the group specified
+ * =====================================================================================
+ */
+- (void) unsubscribeFrom: (NSString *) group;
+
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  saveSubscribedGroups
+ *  Description:  saves _subscribed to disk
+ * =====================================================================================
+ */
+- (void) saveSubscribedGroups;
 
 //TODO: POSTING SUPPORT!
 //TODO: THREADING!
+
+
 
 @end
