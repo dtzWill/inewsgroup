@@ -80,4 +80,12 @@
  */
 - (void) updateWithGroupLine: (NSString *) line;
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  compareGroupName
+ *  Description:  compares two groups by their name 
+ * =====================================================================================
+ */
+- (NSComparisonResult) compareGroupName: (NNTPGroupBasic *) basic;
 @end

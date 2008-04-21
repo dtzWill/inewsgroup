@@ -17,4 +17,13 @@
 
 - (void) connect;
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  showSubManager
+ *  Description:  transitation to the subscription manager view
+ * =====================================================================================
+ */
+- (void) showSubManager;
+
 @end

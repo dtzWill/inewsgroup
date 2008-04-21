@@ -10,6 +10,7 @@
 
 #import "NNTPAccount.h"
 #import "ArticleListViewController.h"
+#import "SubscriptionManagerViewController.h"
 
 
 @implementation GroupListViewController
@@ -20,6 +21,10 @@
 		// Initialize your view controller.
 		self.title = @"Groups";
 		_hasInitialized = false;
+		UIButton * subButton = [ UIButton buttonWithType: UIButtonTypeNavigation ];
+		[ subButton setTitle: @"Manage" forStates: UIControlStateNormal ];
+		[ subButton addTarget: self action: @selector(showSubManager) forControlEvents: UIControlEventTouchUpInside ];
+		self.navigationItem.customRightView = subButton;
 	}
 
 	return self;
@@ -69,12 +74,26 @@
 		_hasInitialized = true;
 		[ self connect ];
 	}
+	[ self.tableView reloadData ];
 }
 
 - (void)connect
 {
 	//ouch :(
 	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: self selector: @selector(reallyConnect:) userInfo: nil repeats: NO ];
+}
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  showSubManager
+ *  Description:  transitation to the subscription manager view
+ * =====================================================================================
+ */
+- (void) showSubManager
+{
+	SubscriptionManagerViewController * smvc = [ [ [ SubscriptionManagerViewController alloc ] init ] autorelease ];
+	[ (UINavigationController *)self.parentViewController pushViewController: smvc animated: YES ];
+
 }
 
 /*-----------------------------------------------------------------------------

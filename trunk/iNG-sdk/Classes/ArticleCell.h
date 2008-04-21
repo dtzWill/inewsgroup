@@ -8,9 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+#import "NNTPArticle.h"
 
 @interface ArticleCell : UITableViewCell {
-
+	UILabel * _subject;
+	UILabel * _date;
+	UILabel * _author;
 }
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  useArticle
+ *  Description:  Uses the specified NNTPArticle to set the cell's attributes
+ * =====================================================================================
+ */
+- (void) useArticle: (NNTPArticle *) art;
 
 @end
