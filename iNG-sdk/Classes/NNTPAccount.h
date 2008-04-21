@@ -17,6 +17,7 @@
 	NSMutableArray * _arts;//		NNTPArticle's (containing the headers)
 	NSArray * _groups;//		NSString's containing list of group names
 	int _sockd;//fd for the socket connection
+	FILE * _networkStream;//in a more convenient format
 	NNTPGroupFull * _currentGroup;//group we're in
 
 	//data to save (other than account information)
@@ -142,6 +143,15 @@
  */
 - (void) setGroupAndFetchHeaders: (NSString *) group;
 
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  leaveGroup
+ *  Description:  leaves group we're currently in
+ * =====================================================================================
+ */
+- (void) leaveGroup;
 
 /* 
  * ===  FUNCTION  ======================================================================

@@ -56,6 +56,8 @@
 - (void) refresh
 {
 	//ouch :(
+	[ [ NNTPAccount sharedInstance ] leaveGroup ];
+	[ self.tableView reloadData ];
 	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: self selector: @selector(reallyRefresh:) userInfo: nil repeats: NO ];
 }
 
