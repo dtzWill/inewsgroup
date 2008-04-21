@@ -12,6 +12,8 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		BE8291750DBC7ECB000E412F /* ArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8291740DBC7ECB000E412F /* ArticleViewController.m */; };
+		BE8291780DBC7ED6000E412F /* ArticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8291770DBC7ED6000E412F /* ArticleView.m */; };
 		BE88702F0DA9494400F372E6 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE88702E0DA9494400F372E6 /* AccountView.m */; };
 		BE8870D50DA9759C00F372E6 /* GroupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8870D40DA9759C00F372E6 /* GroupListViewController.m */; };
 		BE8C6FBE0DAB0E000000C41E /* NNTPGroupBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8C6FBD0DAB0E000000C41E /* NNTPGroupBasic.m */; };
@@ -19,6 +21,8 @@
 		BE9358A30DB1CBC100D1DAAF /* ArticleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9358A20DB1CBC100D1DAAF /* ArticleCell.m */; };
 		BE9434B80DA1FAB700911EA8 /* Settings.bundle in Copy Settings.bundle */ = {isa = PBXBuildFile; fileRef = BE9434800DA1F43200911EA8 /* Settings.bundle */; };
 		BECCBF0F0D94B817001F2856 /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECCBF0E0D94B817001F2856 /* AccountViewController.m */; };
+		BED48C630DBC158A00029340 /* SubscriptionManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BED48C620DBC158A00029340 /* SubscriptionManagerViewController.m */; };
+		BED48C660DBC159F00029340 /* SubscriptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BED48C650DBC159F00029340 /* SubscriptionCell.m */; };
 		BED513B60D8ED96A003DC505 /* NNTPAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513B50D8ED96A003DC505 /* NNTPAccount.m */; };
 		BED513E20D8F3419003DC505 /* resolveHostname.m in Sources */ = {isa = PBXBuildFile; fileRef = BED513E10D8F3419003DC505 /* resolveHostname.m */; };
 		BEDC6B860DB0216E00A3BF70 /* NNTPGroupFull.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */; };
@@ -49,6 +53,10 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* iNG_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iNG_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE8291730DBC7ECB000E412F /* ArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleViewController.h; sourceTree = "<group>"; };
+		BE8291740DBC7ECB000E412F /* ArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleViewController.m; sourceTree = "<group>"; };
+		BE8291760DBC7ED6000E412F /* ArticleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleView.h; sourceTree = "<group>"; };
+		BE8291770DBC7ED6000E412F /* ArticleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleView.m; sourceTree = "<group>"; };
 		BE88702D0DA9494400F372E6 /* AccountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
 		BE88702E0DA9494400F372E6 /* AccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
 		BE8870D30DA9759C00F372E6 /* GroupListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupListViewController.h; sourceTree = "<group>"; };
@@ -62,6 +70,10 @@
 		BE9434800DA1F43200911EA8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		BECCBF0D0D94B817001F2856 /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
 		BECCBF0E0D94B817001F2856 /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
+		BED48C610DBC158A00029340 /* SubscriptionManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscriptionManagerViewController.h; sourceTree = "<group>"; };
+		BED48C620DBC158A00029340 /* SubscriptionManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscriptionManagerViewController.m; sourceTree = "<group>"; };
+		BED48C640DBC159F00029340 /* SubscriptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscriptionCell.h; sourceTree = "<group>"; };
+		BED48C650DBC159F00029340 /* SubscriptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscriptionCell.m; sourceTree = "<group>"; };
 		BED513B40D8ED96A003DC505 /* NNTPAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTPAccount.h; sourceTree = "<group>"; };
 		BED513B50D8ED96A003DC505 /* NNTPAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTPAccount.m; sourceTree = "<group>"; };
 		BED513BC0D8F2BCB003DC505 /* resolveHostname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resolveHostname.h; sourceTree = "<group>"; };
@@ -160,6 +172,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		BE8291720DBC7EB0000E412F /* ArticleView */ = {
+			isa = PBXGroup;
+			children = (
+				BE8291730DBC7ECB000E412F /* ArticleViewController.h */,
+				BE8291740DBC7ECB000E412F /* ArticleViewController.m */,
+				BE8291760DBC7ED6000E412F /* ArticleView.h */,
+				BE8291770DBC7ED6000E412F /* ArticleView.m */,
+			);
+			name = ArticleView;
+			sourceTree = "<group>";
+		};
 		BE8870D20DA9756000F372E6 /* AccountView */ = {
 			isa = PBXGroup;
 			children = (
@@ -191,14 +214,27 @@
 			name = "Article List";
 			sourceTree = "<group>";
 		};
+		BED48C5F0DBC156100029340 /* Subscription Manager */ = {
+			isa = PBXGroup;
+			children = (
+				BED48C610DBC158A00029340 /* SubscriptionManagerViewController.h */,
+				BED48C620DBC158A00029340 /* SubscriptionManagerViewController.m */,
+				BED48C640DBC159F00029340 /* SubscriptionCell.h */,
+				BED48C650DBC159F00029340 /* SubscriptionCell.m */,
+			);
+			name = "Subscription Manager";
+			sourceTree = "<group>";
+		};
 		BED513860D8DF99B003DC505 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				BE8870D20DA9756000F372E6 /* AccountView */,
 				BE9358A00DB1CBA200D1DAAF /* Article List */,
+				BE8291720DBC7EB0000E412F /* ArticleView */,
+				BE8870D60DA975A400F372E6 /* Group List */,
+				BED48C5F0DBC156100029340 /* Subscription Manager */,
 				1D3623240D0F684500981E51 /* iNGAppDelegate.h */,
 				1D3623250D0F684500981E51 /* iNGAppDelegate.m */,
-				BE8870D20DA9756000F372E6 /* AccountView */,
-				BE8870D60DA975A400F372E6 /* Group List */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -281,6 +317,10 @@
 				BEDC6B9F0DB0249000A3BF70 /* NNTPArticle.m in Sources */,
 				BE93589F0DB1CB7500D1DAAF /* ArticleListViewController.m in Sources */,
 				BE9358A30DB1CBC100D1DAAF /* ArticleCell.m in Sources */,
+				BED48C630DBC158A00029340 /* SubscriptionManagerViewController.m in Sources */,
+				BED48C660DBC159F00029340 /* SubscriptionCell.m in Sources */,
+				BE8291750DBC7ECB000E412F /* ArticleViewController.m in Sources */,
+				BE8291780DBC7ED6000E412F /* ArticleView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
