@@ -12,6 +12,8 @@
 #import "NNTPArticle.h"
 #import "ArticleCell.h"
 
+#import "ArticleViewController.h"
+
 @implementation ArticleListViewController
 
 - (ArticleListViewController *)initWithGroupNamed: (NSString *) groupname;
@@ -20,6 +22,7 @@
 		// Initialize your view controller.
 		_groupname = [ [ NSString stringWithString: groupname ] retain ];
 		self.title = [ _groupname retain ];//XXX???
+		_hasInitialized = false;
 	}
 	return self;
 }
@@ -38,7 +41,12 @@
 
 - (void)viewWillAppear: (bool) animated
 {
-	[ self refresh ];
+	if ( !_hasInitialized )
+	{
+		_hasInitialized = true;
+		[ self refresh ];
+	}
+	[ self.tableView reloadData ];
 }
 
 - (void) reallyRefresh: (NSTimer *) timer
@@ -114,9 +122,9 @@
 - (void) tableView: (UITableView *) tableView selectionDidChangeToIndexPath: (NSIndexPath *) newIndexPath fromIndexPath: (NSIndexPath *) oldIndexPath
 {
 
-//	NNTPGroupBasic * sel = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ newIndexPath row ]  ];
-//	ArticleListViewController * alvc = [ [ [ ArticleListViewController alloc ] initWithGroupNamed: sel.name ] autorelease ];
-//	[ (UINavigationController *)self.parentViewController pushViewController: alvc animated: YES ];
-//
+	NNTPArticle * art = [ [ [ NNTPAccount sharedInstance ] getArts ] objectAtIndex: [ newIndexPath row ]  ];
+	ArticleViewController * alvc = [ [ [ ArticleViewController alloc ] initWithArt: [ art retain ] ] autorelease ];
+	[ (UINavigationController *)self.parentViewController pushViewController: alvc animated: YES ];
+
 }
 @end

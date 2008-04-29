@@ -21,7 +21,7 @@
 //preferences
 #define K_SERVER @"SERVER"
 #define K_PORT @"PORT"
-#define K_USER @"USER"
+#define K_USER @"USERNAME"
 #define K_PASSWORD @"PASSWORD"
 #define K_MAX_ART_CACHE @"MAXARTCACHE"
 #define K_SUBSCRIBED @"SUBSCRIBED"
@@ -90,7 +90,13 @@ static NNTPAccount * sharedInstance = nil;
 }
 - (int) getPort
 {
-	return  [ [ NSUserDefaults standardUserDefaults ] integerForKey: K_PORT ];
+	int port = [ [ NSUserDefaults standardUserDefaults ] integerForKey: K_PORT ];
+	if ( !port )
+	{
+		port = 119;//default NNTP port
+	}
+
+	return port;
 }
 - (bool) isConnected;
 {

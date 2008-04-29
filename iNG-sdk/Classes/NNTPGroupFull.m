@@ -208,8 +208,8 @@
 //clean up!
 - (void) dealloc
 {
-	//XXX
-	//[ self save ];
+	//XXX this causes segfaults?
+	[ self save ];
 	
 	[ super dealloc ];
 

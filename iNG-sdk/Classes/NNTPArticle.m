@@ -234,13 +234,11 @@
 		{
 			_body = [ [ NSMutableString alloc ] init ];
 			NSArray * lines = [ account getResponse ];	
-			NSEnumerator * enumer = [ lines objectEnumerator ];
-			NSString * line;
 
 			//combine array of lines to one long body string
-			while  ( line = [ enumer nextObject ] )
+			for( NSString * line in lines )
 			{
-				[ _body appendFormat: @"%s\n", line ];
+				[ _body appendFormat: @"%@\n", line ];
 			}
 
 			[ lines release ];

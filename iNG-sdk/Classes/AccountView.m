@@ -116,9 +116,9 @@
 		_server_label.textColor = [ UIColor redColor ];
 	}
 
-	[ _offline setTitle: @"Offline" forStates: UIControlStateNormal ];
+	[ _offline setTitle: @"Offline" forState: UIControlStateNormal ];
 
-	[ _connect setTitle: @"Connect" forStates: UIControlStateNormal ];
+	[ _connect setTitle: @"Connect" forState: UIControlStateNormal ];
 }
 
 - (void)layoutSubviews

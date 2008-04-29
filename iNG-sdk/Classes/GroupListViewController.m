@@ -22,7 +22,7 @@
 		self.title = @"Groups";
 		_hasInitialized = false;
 		UIButton * subButton = [ UIButton buttonWithType: UIButtonTypeNavigation ];
-		[ subButton setTitle: @"Manage" forStates: UIControlStateNormal ];
+		[ subButton setTitle: @"Manage" forState: UIControlStateNormal ];
 		[ subButton addTarget: self action: @selector(showSubManager) forControlEvents: UIControlEventTouchUpInside ];
 		self.navigationItem.customRightView = subButton;
 	}
