@@ -11,6 +11,7 @@
 
 @interface ArticleListViewController : UITableViewController {
 	NSString * _groupname;
+	bool _hasInitialized;
 
 }
 
