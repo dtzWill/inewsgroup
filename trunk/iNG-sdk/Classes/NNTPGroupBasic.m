@@ -125,10 +125,13 @@
 	long low = [ [ parts objectAtIndex: 2 ] intValue ];
 	//TODO: count??!
 
+	NSLog( @"Unread before: %d", _unreadCount );
 	if ( high > _high )	
 	{
 		_unreadCount += ( high - _high );//at this level, really lame estimate, but not much better we can do
 	}
+
+	NSLog( @"Unread after: %d", _unreadCount );
 
 	_high = high;
 	_low = low;

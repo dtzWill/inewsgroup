@@ -44,7 +44,7 @@
 
 @implementation NNTPArticle
 
-@synthesize from=_from, subject=_subject, newsgroups=_newsgroups, references=_references, date=_date, messageID=_messageID, sender=_sender, body=_body;
+@synthesize from=_from, subject=_subject, newsgroups=_newsgroups, references=_references, date=_date, messageID=_messageID, sender=_sender, body=_body, read=_read;
 
 /* 
  * ===  FUNCTION  ======================================================================

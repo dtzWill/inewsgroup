@@ -47,6 +47,7 @@
 		[ self refresh ];
 	}
 	[ self.tableView reloadData ];
+	[ [ NNTPAccount sharedInstance ] updateGroupUnread ];
 }
 
 - (void) reallyRefresh: (NSTimer *) timer
@@ -109,7 +110,7 @@
 	{
 		NNTPArticle * art = [ [ [ NNTPAccount sharedInstance ] getArts ] objectAtIndex: [ indexPath row ] ]; 
 	//	[ cell useArticle: art ];
-		cell.text = art.subject;
+		cell.text = [ NSString stringWithFormat: @"%d %@", art.read, art.subject];
 	}
 //	else
 //	{
