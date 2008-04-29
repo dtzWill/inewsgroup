@@ -14,7 +14,7 @@
 #import <fcntl.h>
 
 //comment this out to hide the nslog'ing of network read/writes
-#define DEBUG_NETWORK_ACTIVITY 1
+//#define DEBUG_NETWORK_ACTIVITY 1
 
 //NOTE these *must* match the keys as defined in
 //Root.plist in Settings.bundle
@@ -617,6 +617,19 @@ static NNTPAccount * sharedInstance = nil;
 	return subscribed;
 }
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  updateGroupUnread
+ *  Description:  updates unread data
+ * =====================================================================================
+ */
+- (void) updateGroupUnread
+{
+	if ( _currentGroup )
+	{
+		[ _currentGroup updateUnreadCount ];
+	}
+}
 
 /* 
  * ===  FUNCTION  ======================================================================

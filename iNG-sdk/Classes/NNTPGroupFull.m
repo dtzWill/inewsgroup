@@ -8,6 +8,7 @@
 
 #import "NNTPGroupFull.h"
 
+#import "NNTPGroupBasic.h"
 #import "NNTPAccount.h"
 
 #define RESOURCEPATH [ NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex: 0 ]
@@ -172,8 +173,32 @@
 	//we've made changes... store them!
 	[ self save ];
 
-	//send update message to delegate
+	[ self updateUnreadCount ];
 	
+}
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  updateUnreadCount
+ *  Description:  upates the count of unread articles and notifies the parent NNTPGroupBasic
+ * =====================================================================================
+ */
+- (void) updateUnreadCount
+{
+	int unread = 0;
+	for ( NNTPArticle * art in _articles )
+	{
+		if ( !art.read )
+		{
+			unread++;
+		}
+
+	}
+
+	_parent.unreadCount = unread;
+	[ [ NNTPAccount sharedInstance ] saveSubscribedGroups ];
+
 }
 
 /* 

@@ -55,6 +55,7 @@
 	{
 		NSLog( @"Connected!!" );
 		[ [ NNTPAccount sharedInstance ] updateSubscribedGroups ];
+		[ [ NNTPAccount sharedInstance ] saveSubscribedGroups ];
 		
 		[ [ self tableView ] reloadData ];
 
@@ -134,7 +135,7 @@
 	{
 		NNTPGroupBasic * sub = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ indexPath row ]  ];
 		//XXX: Change this to show group and number of unread in parens (possibly gray text)
-		cell.text = sub.name;
+		cell.text = [ NSString stringWithFormat: @"%d %@", sub.unreadCount, sub.name ];
 	}
 	else
 	{

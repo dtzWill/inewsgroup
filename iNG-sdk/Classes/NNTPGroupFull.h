@@ -10,6 +10,7 @@
 
 @class NNTPGroupBasic;
 
+
 @interface NNTPGroupFull : NSObject {
 	NSMutableArray * _articles;//NNTPArticle's
 	NSDate * _lastUpdateTime;
@@ -55,4 +56,13 @@
  * =====================================================================================
  */
 - (void) save;
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  updateUnreadCount
+ *  Description:  upates the count of unread articles and notifies the parent NNTPGroupBasic
+ * =====================================================================================
+ */
+- (void) updateUnreadCount;
+
 @end

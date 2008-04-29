@@ -37,6 +37,7 @@
 @property (readonly) NSString * messageID;
 @property (readonly) NSString * sender;
 @property (readonly) NSString * body;
+@property bool read;
 
 /* 
  * ===  FUNCTION  ======================================================================
