@@ -12,6 +12,8 @@
 
 //for debugging header parsing (when adding support for more of them later)
 //#define DEBUG_HEADERS
+//for debugging encoding/saving
+//#define DEBUG_ENCODING
 
 //for switching on the header type
 #define FROM 1
@@ -179,10 +181,14 @@
  */
 - (void) encodeWithCoder: (NSCoder *) coder
 {
+#ifdef DEBUG_ENCODING	
 	NSLog( @"Encoding!" );
+#endif
 	if ( _from )
 	{
+#ifdef DEBUG_ENCODING
 		NSLog( @"From: %@", _from );
+#endif
 		[ coder encodeObject: _from forKey: K_NNTPARTICLE_FROM ];
 	}
 	if ( _subject )

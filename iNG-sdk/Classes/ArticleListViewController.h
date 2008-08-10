@@ -7,16 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NNTPArticle.h"
 
 
 @interface ArticleListViewController : UITableViewController {
 	NSString * _groupname;
 	bool _hasInitialized;
+	UIImage * _unreadImage;
+	UIImage * _readImage;
 
 }
 
 - (ArticleListViewController *) initWithGroupNamed: (NSString *) groupname;
 
+- (NNTPArticle *) getArtForIndexPath: ( NSIndexPath * ) indexPath;
 
 /* 
  * ===  FUNCTION  ======================================================================

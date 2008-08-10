@@ -8,6 +8,8 @@
 
 #import "NNTPGroupBasic.h"
 
+#import "NNTPAccount.h"
+
 #define K_NNTPGROUPBASIC_HIGH @"GB_HIGH"
 #define K_NNTPGROUPBASIC_LOW @"GB_LOW"
 #define K_NNTPGROUPBASIC_COUNT @"GB_COUNT"
@@ -129,6 +131,12 @@
 	if ( high > _high )	
 	{
 		_unreadCount += ( high - _high );//at this level, really lame estimate, but not much better we can do
+	}
+
+	//if more than max, limit at max
+	if ( _unreadCount > [ [ NNTPAccount sharedInstance ] getMaxArtCache ] )
+	{
+		_unreadCount = [ [ NNTPAccount sharedInstance ] getMaxArtCache ];
 	}
 
 	NSLog( @"Unread after: %d", _unreadCount );

@@ -12,6 +12,9 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		BE71503A0DC7D14C005F98A0 /* ReadIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = BE71500D0DC7CD00005F98A0 /* ReadIndicator.png */; };
+		BE71503B0DC7D14F005F98A0 /* UnreadIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = BE714FF50DC7CC3E005F98A0 /* UnreadIndicator.png */; };
+		BE7FB0920E467F2500BA1364 /* GroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7FB0910E467F2500BA1364 /* GroupCell.m */; };
 		BE8291750DBC7ECB000E412F /* ArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8291740DBC7ECB000E412F /* ArticleViewController.m */; };
 		BE8291780DBC7ED6000E412F /* ArticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8291770DBC7ED6000E412F /* ArticleView.m */; };
 		BE88702F0DA9494400F372E6 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE88702E0DA9494400F372E6 /* AccountView.m */; };
@@ -53,6 +56,10 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* iNG_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iNG_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE714FF50DC7CC3E005F98A0 /* UnreadIndicator.png */ = {isa = PBXFileReference; explicitFileType = image.png; name = UnreadIndicator.png; path = ../UnreadIndicator.png; sourceTree = SOURCE_ROOT; };
+		BE71500D0DC7CD00005F98A0 /* ReadIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ReadIndicator.png; path = ../ReadIndicator.png; sourceTree = SOURCE_ROOT; };
+		BE7FB0900E467F2500BA1364 /* GroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupCell.h; sourceTree = "<group>"; };
+		BE7FB0910E467F2500BA1364 /* GroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupCell.m; sourceTree = "<group>"; };
 		BE8291730DBC7ECB000E412F /* ArticleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleViewController.h; sourceTree = "<group>"; };
 		BE8291740DBC7ECB000E412F /* ArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleViewController.m; sourceTree = "<group>"; };
 		BE8291760DBC7ED6000E412F /* ArticleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleView.h; sourceTree = "<group>"; };
@@ -157,6 +164,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				BE71500D0DC7CD00005F98A0 /* ReadIndicator.png */,
+				BE714FF50DC7CC3E005F98A0 /* UnreadIndicator.png */,
 				BE9434800DA1F43200911EA8 /* Settings.bundle */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
@@ -186,10 +195,10 @@
 		BE8870D20DA9756000F372E6 /* AccountView */ = {
 			isa = PBXGroup;
 			children = (
-				BECCBF0D0D94B817001F2856 /* AccountViewController.h */,
 				BECCBF0E0D94B817001F2856 /* AccountViewController.m */,
 				BE88702D0DA9494400F372E6 /* AccountView.h */,
 				BE88702E0DA9494400F372E6 /* AccountView.m */,
+				BECCBF0D0D94B817001F2856 /* AccountViewController.h */,
 			);
 			name = AccountView;
 			sourceTree = "<group>";
@@ -199,6 +208,8 @@
 			children = (
 				BE8870D30DA9759C00F372E6 /* GroupListViewController.h */,
 				BE8870D40DA9759C00F372E6 /* GroupListViewController.m */,
+				BE7FB0900E467F2500BA1364 /* GroupCell.h */,
+				BE7FB0910E467F2500BA1364 /* GroupCell.m */,
 			);
 			name = "Group List";
 			sourceTree = "<group>";
@@ -273,6 +284,7 @@
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
 				BE9434BA0DA1FABB00911EA8 /* Copy Settings.bundle */,
+				BE7150370DC7D103005F98A0 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -300,6 +312,18 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		BE7150370DC7D103005F98A0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE71503B0DC7D14F005F98A0 /* UnreadIndicator.png in Resources */,
+				BE71503A0DC7D14C005F98A0 /* ReadIndicator.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1D60588E0D05DD3D006BFB54 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -321,6 +345,7 @@
 				BED48C660DBC159F00029340 /* SubscriptionCell.m in Sources */,
 				BE8291750DBC7ECB000E412F /* ArticleViewController.m in Sources */,
 				BE8291780DBC7ED6000E412F /* ArticleView.m in Sources */,
+				BE7FB0920E467F2500BA1364 /* GroupCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

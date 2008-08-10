@@ -13,29 +13,47 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        // Initialization code here.
-		_subject = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
-		_date = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
-		_author = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
-
-	//	[ self addSubview: _subject ];
-	//	[ self addSubview: _date ];
-	//	[ self addSubview: _author ];
+		[ self initializeComponents ];
     }
     return self;
 }
 
 - (id)initWithFrame:(CGRect)frame reuseIdentifier: (NSString *) ident {
 	if ( self = [super initWithFrame:frame reuseIdentifier: ident ] ) {
-		_subject = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
-		_date = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
-		_author = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
-
-	//	[ self addSubview: _subject ];
-	//	[ self addSubview: _date ];
-	//	[ self addSubview: _author ];
+		[ self initializeComponents ];
     }
     return self;
+}
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  initializeComponents
+ *  Description:  Creates the ui components of this cell
+ * =====================================================================================
+ */
+- (void) initializeComponents
+{
+	_subject = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
+	_date = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
+	_author = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
+
+	_subject.numberOfLines = 2;
+
+
+	UIFont * font = [ UIFont systemFontOfSize: 12 ];
+	_author.font = font;
+	_date.font = font;
+
+	_date.textColor = [ UIColor blueColor ];
+
+	_author.lineBreakMode = UILineBreakModeClip;
+	_date.lineBreakMode = UILineBreakModeClip;
+
+
+	[ self addSubview: _subject ];
+	[ self addSubview: _date ];
+	[ self addSubview: _author ];
 }
 
 - (void)dealloc
@@ -55,10 +73,8 @@
 - (void) useArticle: (NNTPArticle *) art
 {
 	_subject.text = art.subject;
-//	_date.text = @"";
+	_date.text = art.date;
 	_author.text = art.from;
-
-
 
 }
 
@@ -66,15 +82,31 @@
 {
 	[ super layoutSubviews ];
 
-	CGRect rect = CGRectMake( 32.0f, 0.0f, 185.0f, 16.0f * 4 );//XXX '4' == numLines
-	//center it vertically
-	rect.origin.y = ( (64.0f - 16.0f * 4)/ 2.0f  );	//XXX '4' == numLines
- 
-	[ _subject setFrame: rect ];
+	//TODO externalize these values
+	const CGFloat DATE_AUTHOR_WIDTH = 100.0f;
+	const CGFloat DATE_AUTHOR_HEIGHT = 25.0f;
+	const CGFloat ACCESSORY_WIDTH = 30.0f;
+	const CGFloat SPACING = 20.f;
+	const int num_lines = 4;
 
-	[ _date setFrame: CGRectMake( 210.0f, 10.0f, 65.0f, 30.0f ) ];
+	//x,y,width,height
+	CGRect subjectRect = CGRectMake( 32.0f,
+			( (64.0f - 16.0f * num_lines )/ 2.0f  ),
+			self.bounds.size.width - DATE_AUTHOR_WIDTH - ACCESSORY_WIDTH - SPACING,
+			16.0f * num_lines );
 
-	[ _author setFrame: CGRectMake(210.0f, 40.0f, 65.0f, 25.0f ) ];
+	[ _subject setFrame: subjectRect ];
+
+	CGRect dateRect = CGRectMake( self.bounds.size.width - DATE_AUTHOR_WIDTH - ACCESSORY_WIDTH,
+			10.0f,
+			DATE_AUTHOR_WIDTH,
+			DATE_AUTHOR_HEIGHT );
+
+	[ _date setFrame: dateRect ]; 
+
+	CGRect authorRect = dateRect;//copy?
+	authorRect.origin.y += 30.0f;
+	[ _author setFrame: authorRect ]; 
 
 }
 
