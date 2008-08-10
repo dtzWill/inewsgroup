@@ -16,8 +16,6 @@
 #define K_NNTPGROUPFULL_ARTS @"GF_ARTS"
 #define K_NNTPGROUPFULL_TIME @"GF_TIME"
 
-#define MAX_ARTS 50
-
 @implementation NNTPGroupFull
 
 @synthesize articles = _articles;
@@ -112,9 +110,9 @@
 			}
 
 			//trim article array
-			if ( [ _articles count ] > MAX_ARTS )
+			if ( [ _articles count ] > [ [ NNTPAccount sharedInstance ] getMaxArtCache ] )
 			{
-				[ _articles removeObjectsInRange: NSMakeRange( 0, [ _articles count ] - MAX_ARTS ) ];
+				[ _articles removeObjectsInRange: NSMakeRange( 0, [ _articles count ] - [ [ NNTPAccount sharedInstance ] getMaxArtCache ] ) ];
 			}
 
 			[ lines release ];
@@ -132,12 +130,12 @@
 			NSArray * lines = [ [ NNTPAccount sharedInstance ] getResponse ];
 
 			int begin = 0;	
-			if ( [ lines count ] > MAX_ARTS )
+			if ( [ lines count ] > [ [ NNTPAccount sharedInstance ] getMaxArtCache ] )
 			{
-				begin = [ lines count ] - ( MAX_ARTS + 1 );
+				begin = [ lines count ] - ( [ [ NNTPAccount sharedInstance ] getMaxArtCache ] + 1 );
 			}
 
-			int end = begin + MAX_ARTS;
+			int end = begin + [ [ NNTPAccount sharedInstance ] getMaxArtCache ];
 			if ( end >= [ lines count ] )
 			{
 				end = [ lines count ];

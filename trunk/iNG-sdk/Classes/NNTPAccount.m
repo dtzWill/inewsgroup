@@ -14,7 +14,7 @@
 #import <fcntl.h>
 
 //comment this out to hide the nslog'ing of network read/writes
-//#define DEBUG_NETWORK_ACTIVITY 1
+#define DEBUG_NETWORK_ACTIVITY 1
 
 //NOTE these *must* match the keys as defined in
 //Root.plist in Settings.bundle
@@ -88,6 +88,18 @@ static NNTPAccount * sharedInstance = nil;
 {
 	return [ [ NSUserDefaults standardUserDefaults ] stringForKey: K_SERVER ];
 }
+
+- (int) getMaxArtCache
+{
+	int max = [ [ NSUserDefaults standardUserDefaults ] integerForKey: K_MAX_ART_CACHE ];
+	if ( !max )
+	{
+		max = 100;
+	}
+	return max;
+}
+
+
 - (int) getPort
 {
 	int port = [ [ NSUserDefaults standardUserDefaults ] integerForKey: K_PORT ];
@@ -494,7 +506,7 @@ static NNTPAccount * sharedInstance = nil;
 			//XXX: review this logic
 			NSLog( @"groups from file! count: %d", [ groups_array count ] );
 			_groups = groups_array;
-			return _groups;
+			return [ _groups retain ];
 		}
 	}
 

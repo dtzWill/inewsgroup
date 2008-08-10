@@ -41,6 +41,7 @@
 - (int) getPort;
 - (bool) isConnected;
 - (bool) canPost;
+- (int) getMaxArtCache;
 
 - (void) setUser: (NSString *) user;
 - (void) setPassword: (NSString *) password;

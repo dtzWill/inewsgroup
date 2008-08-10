@@ -23,6 +23,11 @@
 		_groupname = [ [ NSString stringWithString: groupname ] retain ];
 		self.title = [ _groupname retain ];//XXX???
 		_hasInitialized = false;
+		_unreadImage = [ [ UIImage alloc ] initWithContentsOfFile: [ [ NSBundle mainBundle ] pathForResource: @"UnreadIndicator" ofType: @"png" ] ];
+		NSString * readPath = [ [ NSBundle mainBundle ] pathForResource: @"ReadIndicator" ofType: @"png" ];
+		NSLog( @"Read path: %@", readPath );
+		_readImage = [ [ UIImage alloc ] initWithContentsOfFile: readPath ];
+
 	}
 	return self;
 }
@@ -37,6 +42,8 @@
 {
 	[super dealloc];
 	[ _groupname release ];
+	[ _unreadImage release ];
+	[ _readImage release ];
 }
 
 - (void)viewWillAppear: (bool) animated
@@ -71,6 +78,12 @@
 	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: self selector: @selector(reallyRefresh:) userInfo: nil repeats: NO ];
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	// Return YES for supported orientations.
+//	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	return YES;
+}
 
 /*-----------------------------------------------------------------------------
  *  Table delegate methods: (data source and delegate )
@@ -95,6 +108,13 @@
 
 }
 
+- (NNTPArticle *) getArtForIndexPath: ( NSIndexPath * ) indexPath
+{
+	//TODO change this logic based on a setting
+	NSArray * arts = [ [ NNTPAccount sharedInstance ] getArts ];
+	return [ arts objectAtIndex: ( [ arts count ] - [ indexPath row ] -1 ) ];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
@@ -108,9 +128,10 @@
 	// Set up the text for the cell
 //	if ( [ indexPath row ] >= 0 && [ indexPath row ] < [ [ [ NNTPAccount sharedInstance ] getArts ] count ] )
 	{
-		NNTPArticle * art = [ [ [ NNTPAccount sharedInstance ] getArts ] objectAtIndex: [ indexPath row ] ]; 
-	//	[ cell useArticle: art ];
-		cell.text = [ NSString stringWithFormat: @"%d %@", art.read, art.subject];
+		NNTPArticle * art = [ self getArtForIndexPath: indexPath ];
+		[ cell useArticle: art ];
+	//	cell.text = art.subject;
+		cell.image = art.read ? _readImage : _unreadImage; 
 	}
 //	else
 //	{
@@ -120,12 +141,18 @@
 
 }
 
-- (void) tableView: (UITableView *) tableView selectionDidChangeToIndexPath: (NSIndexPath *) newIndexPath fromIndexPath: (NSIndexPath *) oldIndexPath
+- (void) tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath
 {
 
-	NNTPArticle * art = [ [ [ NNTPAccount sharedInstance ] getArts ] objectAtIndex: [ newIndexPath row ]  ];
+	NNTPArticle * art = [ self getArtForIndexPath: indexPath ];
 	ArticleViewController * alvc = [ [ [ ArticleViewController alloc ] initWithArt: [ art retain ] ] autorelease ];
 	[ (UINavigationController *)self.parentViewController pushViewController: alvc animated: YES ];
 
 }
+
+- (CGFloat) tableView: (UITableView *) tableView heightForRowAtIndexPath: (NSIndexPath *) indexPath
+{
+	return 70;
+}
+
 @end

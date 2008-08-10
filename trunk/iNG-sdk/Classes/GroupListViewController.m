@@ -12,19 +12,23 @@
 #import "ArticleListViewController.h"
 #import "SubscriptionManagerViewController.h"
 
-
 @implementation GroupListViewController
 
 - (id)init
 {
-	if (self = [super init]) {
+	if (self = [super init])
+	{
 		// Initialize your view controller.
 		self.title = @"Groups";
 		_hasInitialized = false;
-		UIButton * subButton = [ UIButton buttonWithType: UIButtonTypeNavigation ];
-		[ subButton setTitle: @"Manage" forState: UIControlStateNormal ];
-		[ subButton addTarget: self action: @selector(showSubManager) forControlEvents: UIControlEventTouchUpInside ];
-		self.navigationItem.customRightView = subButton;
+		
+		UIBarButtonItem * subButton = [ [ UIBarButtonItem alloc ]
+			initWithTitle: @"Manage"
+					style: UIBarButtonItemStylePlain
+				   target: self
+				   action: @selector(showSubManager)];
+		self.navigationItem.rightBarButtonItem = subButton;
+		 
 	}
 
 	return self;
@@ -35,7 +39,8 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
 	// Return YES for supported orientations.
-	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+//	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	return YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -74,6 +79,10 @@
 	{
 		_hasInitialized = true;
 		[ self connect ];
+	}
+	else
+	{
+		[ [ NNTPAccount sharedInstance ] leaveGroup ];
 	}
 	[ self.tableView reloadData ];
 }
@@ -145,10 +154,10 @@
 
 }
 
-- (void) tableView: (UITableView *) tableView selectionDidChangeToIndexPath: (NSIndexPath *) newIndexPath fromIndexPath: (NSIndexPath *) oldIndexPath
+- (void) tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath
 {
 
-	NNTPGroupBasic * sel = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ newIndexPath row ]  ];
+	NNTPGroupBasic * sel = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ indexPath row ]  ];
 	ArticleListViewController * alvc = [ [ [ ArticleListViewController alloc ] initWithGroupNamed: sel.name ] autorelease ];
 	[ (UINavigationController *)self.parentViewController pushViewController: alvc animated: YES ];
 
