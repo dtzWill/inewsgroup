@@ -65,4 +65,6 @@
  */
 - (void) updateUnreadCount;
 
+//clean up!
+- (void) dealloc;
 @end

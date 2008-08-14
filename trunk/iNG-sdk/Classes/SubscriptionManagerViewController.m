@@ -32,7 +32,7 @@
 		self.navigationItem.rightBarButtonItem = searchButton;
 		
 		int height = 43;
-		_search = [ [ UISearchBar alloc ] initWithFrame:CGRectMake(0.0, 0.0, 320.0, height ) ];
+		_search = [ [ UISearchBar alloc ] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, height ) ];
 		_search.delegate = self;
 		_search.showsCancelButton = YES;
 	}

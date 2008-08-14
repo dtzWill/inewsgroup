@@ -57,7 +57,7 @@
 	[ [ NNTPAccount sharedInstance ] updateGroupUnread ];
 }
 
-- (void) reallyRefresh: (NSTimer *) timer
+- (void) reallyRefresh
 {
 	[ [ NNTPAccount sharedInstance ] setGroupAndFetchHeaders: _groupname ];
 	[ self.tableView reloadData ];
@@ -75,7 +75,7 @@
 	//ouch :(
 	[ [ NNTPAccount sharedInstance ] leaveGroup ];
 	[ self.tableView reloadData ];
-	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: self selector: @selector(reallyRefresh:) userInfo: nil repeats: NO ];
+	[ NSThread detachNewThreadSelector: @selector(reallyRefresh) toTarget: self withObject: nil ];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -145,7 +145,7 @@
 {
 
 	NNTPArticle * art = [ self getArtForIndexPath: indexPath ];
-	ArticleViewController * alvc = [ [ [ ArticleViewController alloc ] initWithArt: [ art retain ] ] autorelease ];
+	ArticleViewController * alvc = [ [ [ ArticleViewController alloc ] initWithArt: art  ] autorelease ];
 	[ (UINavigationController *)self.parentViewController pushViewController: alvc animated: YES ];
 
 }

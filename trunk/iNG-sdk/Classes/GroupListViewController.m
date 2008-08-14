@@ -28,7 +28,16 @@
 				   target: self
 				   action: @selector(showSubManager)];
 		self.navigationItem.rightBarButtonItem = subButton;
-		 
+		self.navigationItem.hidesBackButton = YES;
+
+		_toolbar = [ [ UIToolbar alloc ] init ];
+		_toolbar.barStyle = UIBarStyleDefault;
+		[ _toolbar sizeToFit ];
+		CGFloat toolbarHeight = 40.0f;
+		[ _toolbar setFrame: CGRectMake( CGRectGetMinX( self.tableView.bounds ),
+		 CGRectGetMinY( self.tableView.bounds ) + CGRectGetHeight( self.tableView.bounds ) - toolbarHeight,
+		 CGRectGetWidth( self.tableView.bounds ), toolbarHeight )];
+		[ self.parentViewController.view addSubview: _toolbar ];
 	}
 
 	return self;
@@ -54,23 +63,31 @@
 	[super dealloc];
 }
 
-- (void) reallyConnect: (NSTimer *) timer
+- (void) reallyConnect
 {
-	if ( [ [ NNTPAccount sharedInstance ] connect ] && [ [ NNTPAccount sharedInstance ] authenticate: NO ] )
+	if ( [ [ NNTPAccount sharedInstance ] connect ] )
 	{
-		NSLog( @"Connected!!" );
-		[ [ NNTPAccount sharedInstance ] updateSubscribedGroups ];
-		[ [ NNTPAccount sharedInstance ] saveSubscribedGroups ];
-		
-		[ [ self tableView ] reloadData ];
+		//connected!
+		NSLog( @"Connected! Now trying to auth..." );
+		//now try to auth...
+		if ( [ [ NNTPAccount sharedInstance ] authenticate: NO ] )
+		{
+			NSLog( @"Connected and Auth'd!!" );
+			[ [ NNTPAccount sharedInstance ] updateSubscribedGroups ];
+			[ [ NNTPAccount sharedInstance ] saveSubscribedGroups ];
+			
+			[ [ self tableView ] reloadData ];
 
-
+		}
+		else
+		{
+			NSLog( @"Auth failed!" );
+		}
 	}
 	else
 	{
-		NSLog( @"error connecting or auth!" );
+		NSLog( @"Failed to connect!" );
 	}
-
 }
 
 - (void)viewWillAppear: (bool) animated
@@ -89,8 +106,7 @@
 
 - (void)connect
 {
-	//ouch :(
-	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: self selector: @selector(reallyConnect:) userInfo: nil repeats: NO ];
+	[ NSThread detachNewThreadSelector: @selector(reallyConnect) toTarget: self withObjects: nil ];
 }
 
 /* 

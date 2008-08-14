@@ -27,5 +27,4 @@
  */
 - (id) initWithArt: (NNTPArticle *) art;
 
-
 @end

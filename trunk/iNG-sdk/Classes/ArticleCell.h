@@ -32,4 +32,13 @@
  */
 - (void) useArticle: (NNTPArticle *) art;
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  setSelected
+ *  Description:  Changes UI to reflect selected state
+ * =====================================================================================
+ */
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated;
+
 @end

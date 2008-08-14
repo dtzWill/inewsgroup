@@ -30,7 +30,7 @@
 		[ self addSubview: _account_label ];
 		[ self addSubview: _server_label ];
 		[ self addSubview: _connect ];
-		[ self addSubview: _offline ];
+//`		[ self addSubview: _offline ];
 		
 		[ self setNeedsLayout ];//we're overriding layoutSubviews
     }
@@ -57,8 +57,8 @@
 	_connect = [ UIButton buttonWithType: UIButtonTypeRoundedRect ];
 	[ _connect addTarget: self action: @selector(connectPressed) forControlEvents: UIControlEventTouchDown ];
 
-	_offline = [ UIButton buttonWithType: UIButtonTypeRoundedRect ]; 
-	[ _offline addTarget: self action: @selector(offlinePressed) forControlEvents: UIControlEventTouchDown ];
+	//_offline = [ UIButton buttonWithType: UIButtonTypeRoundedRect ]; 
+	//[ _offline addTarget: self action: @selector(offlinePressed) forControlEvents: UIControlEventTouchDown ];
 
 	_offline.enabled = NO;//we don't support this yet!
 }
@@ -87,10 +87,13 @@
 	buttonFrame.size.height = 40;
 	buttonFrame.origin.y = 300;
 
-	buttonFrame.origin.x = frame.size.width/9;
-	[ _offline setFrame: buttonFrame ];
+//	buttonFrame.origin.x = frame.size.width/9;
+//	[ _offline setFrame: buttonFrame ];
+//
+//	buttonFrame.origin.x = frame.size.width*5/9;
+//	[ _connect setFrame: buttonFrame ];
 
-	buttonFrame.origin.x = frame.size.width*5/9;
+	buttonFrame.origin.x = frame.size.width/3;
 	[ _connect setFrame: buttonFrame ];
 
 }
@@ -116,7 +119,7 @@
 		_server_label.textColor = [ UIColor redColor ];
 	}
 
-	[ _offline setTitle: @"Offline" forState: UIControlStateNormal ];
+	//[ _offline setTitle: @"Offline" forState: UIControlStateNormal ];
 
 	[ _connect setTitle: @"Connect" forState: UIControlStateNormal ];
 }
@@ -140,7 +143,7 @@
 	[ _account_label release ];
 	[ _server_label release ];
 	[ _connect release ];
-	[ _offline release ];
+	//[ _offline release ];
 	
 	[super dealloc];
 

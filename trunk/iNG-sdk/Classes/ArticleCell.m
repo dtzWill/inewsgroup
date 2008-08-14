@@ -115,4 +115,33 @@
 //	
 //}
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  setSelected
+ *  Description:  Changes UI to reflect selected state
+ * =====================================================================================
+ */
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+
+	[super setSelected:selected animated:animated];
+
+	// Configure the view for the selected state
+	if ( selected )
+	{
+		//make all fonts to light
+		_subject.textColor = [ UIColor lightTextColor ];
+		_date.textColor = [ UIColor lightTextColor ];
+		_author.textColor = [ UIColor lightTextColor ];
+	}
+	else
+	{
+		//use normal font colors
+		_date.textColor = [ UIColor blueColor ];
+
+		_subject.textColor = [ UIColor darkTextColor ];
+		_author.textColor = [ UIColor darkTextColor ];
+	}
+}
+
 @end

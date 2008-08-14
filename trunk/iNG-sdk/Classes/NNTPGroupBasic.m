@@ -91,6 +91,10 @@
  */
 - (NNTPGroupFull *) enterGroup
 {
+	if ( _fullGroup )
+	{
+		[ self leaveGroup ];
+	}
 	_fullGroup = [ [ NNTPGroupFull alloc ] initWithName: _name andBasic: self ];
 	return _fullGroup;
 }
@@ -103,7 +107,6 @@
  */
 - (void) leaveGroup
 {
-	//XXX: as this function is now, it's completely worthless.
 	if ( _fullGroup )
 	{
 		[ _fullGroup release ];
@@ -156,6 +159,20 @@
 {
 	return [ _name compare: basic.name ];
 
+}
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dealloc
+ *  Description:  Clean up memory
+ * =====================================================================================
+ */
+- (void) dealloc
+{
+	[ _name release ];
+	[ _fullGroup release ];
+	[ super dealloc ];
 }
 
 @end

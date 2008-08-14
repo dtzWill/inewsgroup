@@ -14,7 +14,7 @@
 	long _high;
 	long _low;
 	long _count;
-	long _unreadCount;//can only ever be an estimate
+	unsigned long _unreadCount;//can only ever be an estimate
 
 	NNTPGroupFull * _fullGroup;
 
@@ -25,7 +25,7 @@
 @property (readonly) NSString * name;
 @property long high;
 @property long low;
-@property long unreadCount;
+@property unsigned long unreadCount;
 
 /* 
  * ===  FUNCTION  ======================================================================
