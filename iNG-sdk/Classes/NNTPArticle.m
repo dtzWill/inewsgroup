@@ -56,7 +56,7 @@
  */
 - (NNTPArticle *) initWithResponse: (NSArray *) headers;
 {
-	int i;//iter var
+	unsigned int i;//iter var
 	if ( self = [ super init ] )
 	{
 		//unread
@@ -254,4 +254,19 @@
 	}
 }
 
+- (void) dealloc
+{
+	[ _from release ];
+	[ _subject release ];
+	[ _newsgroups release ];
+	[ _references release ];
+	[ _date release ];
+	[ _messageID release ];
+	[ _sender release ];
+	
+	[ _body release ];
+	
+	[ super dealloc ];
+
+}
 @end

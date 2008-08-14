@@ -71,7 +71,7 @@
 {
 	//XXX Move to initialization
 
-	int i;//iter var
+	unsigned int i;//iter var
 
 	if ( _lastUpdateTime )//if we've ever updated before
 	{
@@ -106,6 +106,7 @@
 					NSArray * headers = [ [ NNTPAccount sharedInstance ] getResponse ];
 					NNTPArticle * art = [ [ NNTPArticle alloc ] initWithResponse: headers ];
 					[ _articles addObject: art ];
+					[ art release ];
 				}
 			}
 
@@ -129,13 +130,13 @@
 			[ _lastUpdateTime retain ];
 			NSArray * lines = [ [ NNTPAccount sharedInstance ] getResponse ];
 
-			int begin = 0;	
+			unsigned int begin = 0;	
 			if ( [ lines count ] > [ [ NNTPAccount sharedInstance ] getMaxArtCache ] )
 			{
 				begin = [ lines count ] - ( [ [ NNTPAccount sharedInstance ] getMaxArtCache ] + 1 );
 			}
 
-			int end = begin + [ [ NNTPAccount sharedInstance ] getMaxArtCache ];
+			unsigned int end = begin + [ [ NNTPAccount sharedInstance ] getMaxArtCache ];
 			if ( end >= [ lines count ] )
 			{
 				end = [ lines count ];
@@ -157,10 +158,10 @@
 					NSArray * headers = [ [ NNTPAccount sharedInstance ] getResponse ];
 					NNTPArticle * art = [ [ NNTPArticle alloc ] initWithResponse: headers ];
 					[ _articles addObject: art ];
+					[ art release ];
 				}
 
 			}
-
 
 			[ lines release ];
 
@@ -216,12 +217,10 @@
 
 	if ( _articles )
 	{
-		[ _articles retain ];
 		[ rootObject setValue: _articles forKey: K_NNTPGROUPFULL_ARTS ];
 	}
 	if ( _lastUpdateTime )
 	{
-		[ _lastUpdateTime retain ];
 		[ rootObject setValue: _lastUpdateTime forKey: K_NNTPGROUPFULL_TIME ];
 	}
 	NSLog( @"save NNTPGroupFull %d", [ NSKeyedArchiver archiveRootObject: rootObject toFile: groupfile ] );
@@ -231,9 +230,8 @@
 //clean up!
 - (void) dealloc
 {
-	//XXX this causes segfaults?
 	[ self save ];
-	
+
 	[ super dealloc ];
 
 	[ _articles release ];

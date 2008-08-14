@@ -14,7 +14,7 @@
 #import <fcntl.h>
 
 //comment this out to hide the nslog'ing of network read/writes
-#define DEBUG_NETWORK_ACTIVITY 1
+//#define DEBUG_NETWORK_ACTIVITY 1
 
 //NOTE these *must* match the keys as defined in
 //Root.plist in Settings.bundle
@@ -27,14 +27,6 @@
 #define K_SUBSCRIBED @"SUBSCRIBED"
 //group cache
 #define K_GROUPS @"ACTIVE_GROUPS"
-
-
-//these go in the Settings.bundle now
-//#define DEFAULT_SERVER @"news.yourservergoeshere.com"
-//#define DEFAULT_PORT 119
-//#define DEFAULT_USER @""
-//#define DEFAULT_PASSWORD @""
-//#define DEFAULT_MAX_ART_CACHE 100
 
 #define CONNECT_TIMEOUT 10
 #define COMMAND_TIMEOUT 10
@@ -89,12 +81,12 @@ static NNTPAccount * sharedInstance = nil;
 	return [ [ NSUserDefaults standardUserDefaults ] stringForKey: K_SERVER ];
 }
 
-- (int) getMaxArtCache
+- (unsigned int) getMaxArtCache
 {
-	int max = [ [ NSUserDefaults standardUserDefaults ] integerForKey: K_MAX_ART_CACHE ];
+	unsigned int max = [ [ NSUserDefaults standardUserDefaults ] integerForKey: K_MAX_ART_CACHE ];
 	if ( !max )
 	{
-		max = 100;
+		max = 50;
 	}
 	return max;
 }
@@ -194,6 +186,7 @@ static NNTPAccount * sharedInstance = nil;
 	//make it non-blocking
 	if ( ( arg = fcntl( _sockd, F_GETFL, NULL ) ) < 0 )
 	{
+		NSLog( @"Failed to get socket options" );
 		close( _sockd );
 		_sockd = 0;
 		return NO;
@@ -203,6 +196,7 @@ static NNTPAccount * sharedInstance = nil;
 	
 	if( fcntl( _sockd, F_SETFL, arg ) < 0 )
 	{
+		NSLog( @"Failed to set nonblocking option" );
 		close( _sockd );
 		_sockd = 0;
 		return NO;
@@ -226,12 +220,14 @@ static NNTPAccount * sharedInstance = nil;
 
 			if ( res < 0 && errno != EINTR )
 			{
+				NSLog( @"Error in connect attempt" );
 				close( _sockd );
 				_sockd = 0;
 				return NO;//error connecting
 			}
 			else if ( res == 0 )
 			{
+				NSLog( @"Connect timed out" );
 				close( _sockd );
 				_sockd = 0;
 				return NO;//timeout :(
@@ -242,6 +238,7 @@ static NNTPAccount * sharedInstance = nil;
 
 			if ( getsockopt( _sockd, SOL_SOCKET, SO_ERROR, (void*)(&optval), &optlen ) < 0 ) 
 			{
+				NSLog( @"Error in getsockopt" );
 				close( _sockd );
 				_sockd = 0;
 				return NO;//error in getsockopt, treat as connect error
@@ -257,6 +254,7 @@ static NNTPAccount * sharedInstance = nil;
 		}
 		else
 		{
+			NSLog( @"Not error expected, connect failed" );
 			//not the errorcode we expected..so error
 			close( _sockd );
 			_sockd = 0;
@@ -267,6 +265,7 @@ static NNTPAccount * sharedInstance = nil;
 	//back to blocking since that's what we want
 	if ( ( arg = fcntl( _sockd, F_GETFL, NULL ) ) < 0 )
 	{
+		NSLog( @"Failed to get socket options" );
 		close( _sockd );
 		_sockd = 0;
 		return NO;
@@ -276,13 +275,19 @@ static NNTPAccount * sharedInstance = nil;
 
 	if ( fcntl( _sockd, F_SETFL, arg ) < 0 )
 	{
+		NSLog( @"Failed to set blocking option" );
 		close( _sockd );
 		_sockd = 0;
 		return NO;
 	}
 	_networkStream = fdopen( _sockd, "rw" );
 
-	return [ self getLine ] != nil;
+	bool worked = [ self getLine ] != nil;
+	if ( !worked )
+	{
+		NSLog( @"Error in getting first response line" );
+	}
+	return worked;
 
 }
 
@@ -440,7 +445,7 @@ static NNTPAccount * sharedInstance = nil;
 		if ( [ [ self getPassword ] compare: @"" ] )
 		{//if password exists...
 			[ self sendCommand: @"AUTHINFO PASS" withArg: [ self getPassword ] ];
-			response = [ self getLine ];
+			[ self getLine ];
 		}
 		response = [self getLine ];
 
@@ -494,8 +499,7 @@ static NNTPAccount * sharedInstance = nil;
 
 	if ( !forceRefresh )
 	{
-		if ( _groups ) return [ _groups retain ];//XXX uh...?!?!
-	//	XXX DONT LEAK LIKE A BUCKET WITH HOLES XXX
+		if ( _groups ) return [ _groups retain ];
 
 		NSDictionary * rootObject = [ NSKeyedUnarchiver unarchiveObjectWithFile: F_GROUPS ];
 		groups_array = [ rootObject valueForKey: K_GROUPS ];
@@ -521,19 +525,18 @@ static NNTPAccount * sharedInstance = nil;
 		//all the unneeded data.  we don't track high/low/anything
 		//for non-subscribed groups, only we want a list
 		//of what exists
-		groups_array = [ [ NSMutableArray arrayWithCapacity: [ lines count ] ] retain ];	
+		groups_array = [ NSMutableArray arrayWithCapacity: [ lines count ] ];	
 
 		for ( NSString * line in lines )
 		{
 
 			NSArray * parts = [ line componentsSeparatedByString: @" " ];
 			[ groups_array addObject: [ [ parts objectAtIndex: 0 ] retain ] ]; 
-			//[ parts release ];
+			[ parts release ];
 		}
 		
 		[ groups_array sortUsingSelector: @selector(compare:) ];
 
-		[ groups_array retain ];
 
 		//write it back!
 		if ( groups_array )
@@ -590,7 +593,7 @@ static NNTPAccount * sharedInstance = nil;
 	NSMutableArray * subscribed = [ rootObject valueForKey: K_SUBSCRIBED ];
 
 	//loop var
-	int i;
+	unsigned int i;
 	if ( !subscribed )
 	{
 		
@@ -604,6 +607,7 @@ static NNTPAccount * sharedInstance = nil;
 			{
 				NNTPGroupBasic * subscribedGroup = [ [ NNTPGroupBasic alloc ] initWithName: [ lines objectAtIndex: i ] ];
 				[ subscribed addObject: subscribedGroup ];
+				[ subscribedGroup release ];
 			}
 
 			[ subscribed retain ];
@@ -657,7 +661,7 @@ static NNTPAccount * sharedInstance = nil;
 	 * just something to keep in mind
 	 */
 	NSArray * subscribed = [ self subscribedGroups ];
-	int i;//iter var
+	unsigned int i;//iter var
 
 	//send a group command for each subscribed group
 	for ( i = 0; i < [ subscribed count ]; i++ )
@@ -735,8 +739,7 @@ static NNTPAccount * sharedInstance = nil;
 
 	if ( _currentGroup )
 	{
-		//XXX: Why is this 'retain' needed?
-		return [ _currentGroup.articles retain ];
+		return _currentGroup.articles;
 	}
 	//else	
 	
@@ -753,20 +756,6 @@ static NNTPAccount * sharedInstance = nil;
  * =====================================================================================
  */
 //- (void) updateAllSubcribedAndHeaders;
-
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  getBodyForArticle
- *  Description:  Returns pointer to the article requested, optionally fetching body
- *                Primary purpose is to fetch the body
- * =====================================================================================
- */
-- (NNTPArticle *) getBodyForArticle: (int) artid
-{
-
-	return nil;
-}
-//TODO: clean up the bodies if we get a low-mem warning
 
 
 //TODO: POSTING SUPPORT!
@@ -826,6 +815,7 @@ static NNTPAccount * sharedInstance = nil;
 		NNTPGroupBasic * basic = [ [ NNTPGroupBasic alloc ] initWithName: group ];
 
 		[ _subscribed addObject: basic ];
+		[ basic release ];
 
 		[ self saveSubscribedGroups ];
 
@@ -843,7 +833,7 @@ static NNTPAccount * sharedInstance = nil;
 {
 	[ self subscribedGroups ];
 
-	int i = 0;
+	unsigned int i = 0;
 	for ( NNTPGroupBasic * basic in _subscribed )
 	{
 		if ( [ basic.name isEqualToString: group ] )

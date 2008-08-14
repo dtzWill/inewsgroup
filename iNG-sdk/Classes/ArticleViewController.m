@@ -24,7 +24,7 @@
 		_article = art;
 		self.title = art.subject; 
 
-		_articleView = [ [ ArticleView alloc] initWithFrame: CGRectMake(0.0, 0.0, 1.0, 1.0) andArt: [ _article retain ] ];
+		_articleView = [ [ ArticleView alloc] initWithFrame: CGRectMake(0.0f, 0.0f, 1.0f, 1.0f) andArt: [ _article retain ] ];
 		_articleView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		_articleView.autoresizesSubviews = YES;
 	}
@@ -48,8 +48,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	// Return YES for supported orientations.
-	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	return YES;
 }
 
 - (void)didReceiveMemoryWarning

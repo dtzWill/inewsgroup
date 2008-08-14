@@ -41,7 +41,7 @@
 - (int) getPort;
 - (bool) isConnected;
 - (bool) canPost;
-- (int) getMaxArtCache;
+- (unsigned int) getMaxArtCache;
 
 - (void) setUser: (NSString *) user;
 - (void) setPassword: (NSString *) password;
@@ -49,6 +49,14 @@
 - (void) setPort: (int) port;
 
 - (bool) isValid;
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dealloc
+ *  Description:  Clean up memory
+ * =====================================================================================
+ */
+- (void) dealloc;
 
 /*-----------------------------------------------------------------------------
  *  NNTP methods
@@ -183,18 +191,6 @@
  * =====================================================================================
  */
 //- (void) updateAllSubcribedAndHeaders;
-
-
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  getBodyForArticle
- *  Description:  Returns pointer to the article requested, optionally fetching body
- *                Primary purpose is to fetch the body
- * =====================================================================================
- */
-- (NNTPArticle *) getBodyForArticle: (int) artid;
-
-
 
 
 /* 

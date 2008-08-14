@@ -14,7 +14,7 @@
 - (id)initWithFrame:(CGRect)frame andArt: (NNTPArticle *) art {
     if (self = [super initWithFrame:frame]) {
         // Initialization code here.
-		_article = art;
+		_article = [art retain ];
 
 		_scroller = nil;
 		_contentView = nil;
@@ -24,7 +24,7 @@
 		_body = [ [ UITextView alloc ] initWithFrame: frame ];
 		_body.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		_body.editable = NO;
-		_body.font = [ UIFont systemFontOfSize: 14.0 ];
+		_body.font = [ UIFont systemFontOfSize: 14.0f ];
 		_body.autoresizesSubviews = YES;
 
 		[ self addSubview: _body ];
@@ -39,6 +39,7 @@
 {
 	[super dealloc];
 
+	[ _article release ];
 	[ _scroller release ];
 	[ _contentView release ];
 	[ _subject release ];

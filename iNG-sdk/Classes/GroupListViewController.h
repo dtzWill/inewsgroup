@@ -13,6 +13,8 @@
 @interface GroupListViewController : UITableViewController {
 
 	bool _hasInitialized;
+	UIToolbar * _toolbar;
+	UIProgressView * _progress;
 }
 
 - (void) connect;
