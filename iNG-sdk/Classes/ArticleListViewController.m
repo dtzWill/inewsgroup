@@ -57,7 +57,7 @@
 	[ [ NNTPAccount sharedInstance ] updateGroupUnread ];
 }
 
-- (void) reallyRefresh
+- (void) reallyRefresh: (NSTimer *) timer
 {
 	[ [ NNTPAccount sharedInstance ] setGroupAndFetchHeaders: _groupname ];
 	[ self.tableView reloadData ];
@@ -75,7 +75,7 @@
 	//ouch :(
 	[ [ NNTPAccount sharedInstance ] leaveGroup ];
 	[ self.tableView reloadData ];
-	[ NSThread detachNewThreadSelector: @selector(reallyRefresh) toTarget: self withObject: nil ];
+	[ NSThread detachNewThreadSelector: @selector(reallyRefresh:) toTarget: self withObject: nil ];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

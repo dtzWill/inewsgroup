@@ -63,7 +63,7 @@
 	[super dealloc];
 }
 
-- (void) reallyConnect
+- (void) reallyConnect: (NSTimer *) timer
 {
 	if ( [ [ NNTPAccount sharedInstance ] connect ] )
 	{
@@ -106,7 +106,7 @@
 
 - (void)connect
 {
-	[ NSThread detachNewThreadSelector: @selector(reallyConnect) toTarget: self withObjects: nil ];
+	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: self selector: @selector(reallyConnect:) userInfo: nil repeats: NO ];
 }
 
 /* 
