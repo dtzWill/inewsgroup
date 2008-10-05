@@ -56,6 +56,7 @@
 
 	_connect = [ UIButton buttonWithType: UIButtonTypeRoundedRect ];
 	[ _connect addTarget: self action: @selector(connectPressed) forControlEvents: UIControlEventTouchDown ];
+	_connect.enabled = [ [ NNTPAccount sharedInstance ] isValid ];
 
 	//_offline = [ UIButton buttonWithType: UIButtonTypeRoundedRect ]; 
 	//[ _offline addTarget: self action: @selector(offlinePressed) forControlEvents: UIControlEventTouchDown ];

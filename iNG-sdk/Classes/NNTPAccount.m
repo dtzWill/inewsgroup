@@ -335,7 +335,7 @@ static NNTPAccount * sharedInstance = nil;
 		return nil;
 	}
 
-#ifdef DEBUG_NETWORK_ACTIVITY
+#if DEBUG_NETWORK_ACTIVITY
 	NSLog( @"RECV: %@", ret );
 #endif
 	
@@ -377,7 +377,7 @@ static NNTPAccount * sharedInstance = nil;
 	//and make use of COMMAND_TIMEOUT... like in the
 	//connect code
 	NSString * fullcmd = [ NSString stringWithFormat: @"%@ %@\n", command, arg ];
-#ifdef DEBUG_NETWORK_ACTIVITY
+#if DEBUG_NETWORK_ACTIVITY
 	NSLog( @"Sending command: %@", fullcmd );
 #endif //DEBUG_NETWORK_ACTIVITY
 

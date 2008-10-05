@@ -15,6 +15,7 @@
 	bool _hasInitialized;
 	UIImage * _unreadImage;
 	UIImage * _readImage;
+	UIAlertView * _alert;
 
 }
 

@@ -77,7 +77,7 @@
 	{
 		NSDateFormatter * dateFormatter = [ [ NSDateFormatter alloc ] init ];
 		[ dateFormatter setDateFormat: @"yyMMdd HHmmss" ];
-		NSDate * gmtDate = [ _lastUpdateTime addTimeInterval: -[ [ NSTimeZone localTimeZone ] secondsFromGMTForDate: _lastUpdateTime ] ];
+		NSDate * gmtDate = [ _lastUpdateTime dateWithCalendarFormat: nil timeZone: [ NSTimeZone timeZoneWithAbbreviation: @"GMT" ] ];
 		NSString * arg = [ NSString stringWithFormat: @"%@ %@ GMT", _name, [ dateFormatter stringFromDate: gmtDate ] ];
 		[ [ NNTPAccount sharedInstance ] sendCommand: @"NEWNEWS" withArg: arg ];
 		
@@ -86,6 +86,7 @@
 		{
 			NSLog( @"NEWNEWS UPDATE!" );
 			[ _lastUpdateTime release ];
+			//XXX: get date from server!!! The following causes problems!
 			_lastUpdateTime = [ NSDate date ];
 			[ _lastUpdateTime retain ];
 

@@ -28,6 +28,18 @@
 		NSLog( @"Read path: %@", readPath );
 		_readImage = [ [ UIImage alloc ] initWithContentsOfFile: readPath ];
 
+		_alert = [[UIAlertView alloc] initWithTitle: @"Loading..."
+												   message: @"Please wait..."
+												  delegate: nil
+										 cancelButtonTitle: nil
+										 otherButtonTitles: nil];
+		
+		UIActivityIndicatorView * activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+		activityView.frame = CGRectMake(139.0f-18.0f, 80.0f, 37.0f, 37.0f);
+		[ _alert addSubview:activityView];
+		//XXX: does the following have a bad effect?
+		[activityView startAnimating];
+
 	}
 	return self;
 }
@@ -44,6 +56,7 @@
 	[ _groupname release ];
 	[ _unreadImage release ];
 	[ _readImage release ];
+	[ _alert release ];
 }
 
 - (void)viewWillAppear: (bool) animated
@@ -61,6 +74,7 @@
 {
 	[ [ NNTPAccount sharedInstance ] setGroupAndFetchHeaders: _groupname ];
 	[ self.tableView reloadData ];
+	[ _alert dismiss ];
 
 }
 
@@ -72,8 +86,7 @@
  */
 - (void) refresh
 {
-	//ouch :(
-	//[ [ NNTPAccount sharedInstance ] leaveGroup ];
+	[ _alert show ];
 	[ self.tableView reloadData ];
 	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: self selector: @selector( reallyRefresh: ) userInfo: nil repeats: NO ];
 }
