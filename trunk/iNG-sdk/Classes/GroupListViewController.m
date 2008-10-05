@@ -38,6 +38,20 @@
 		 CGRectGetMinY( self.tableView.bounds ) + CGRectGetHeight( self.tableView.bounds ) - toolbarHeight,
 		 CGRectGetWidth( self.tableView.bounds ), toolbarHeight )];
 		[ self.parentViewController.view addSubview: _toolbar ];
+
+
+		_alert = [[UIAlertView alloc] initWithTitle: @"Connecting..."
+												   message: @"Please wait..."
+												  delegate: nil
+										 cancelButtonTitle: nil
+										 otherButtonTitles: nil];
+		
+		UIActivityIndicatorView * activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+		activityView.frame = CGRectMake(139.0f-18.0f, 80.0f, 37.0f, 37.0f);
+		[ _alert addSubview:activityView];
+		//XXX: does the following have a bad effect?
+		[activityView startAnimating];
+
 	}
 
 	return self;
@@ -61,7 +75,9 @@
 - (void)dealloc
 {
 	[super dealloc];
+	[ _alert release ];
 }
+
 
 - (void) reallyConnect: (NSTimer *) timer
 {
@@ -88,18 +104,22 @@
 	{
 		NSLog( @"Failed to connect!" );
 	}
+	[ _alert dismissWithClickedButtonIndex: 0 animated: YES ];
 }
 
 - (void)viewWillAppear: (bool) animated
 {
+//	[ _alert show ];
 	if ( !_hasInitialized )
 	{
+		[ _alert show ];
 		_hasInitialized = true;
 		[ self connect ];
 	}
 	else
 	{
 		[ [ NNTPAccount sharedInstance ] leaveGroup ];
+//		[ _alert dismissWithClickedButtonIndex: 0 animated: YES ];
 	}
 	[ self.tableView reloadData ];
 }

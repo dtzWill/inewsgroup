@@ -54,7 +54,6 @@ static NNTPAccount * sharedInstance = nil;
 	{
 		_sockd = 0;
 		_networkStream = 0;
-		_arts = nil;
 		_groups = nil;
 		_subscribed = nil;
 		_canPost = false;
@@ -532,7 +531,6 @@ static NNTPAccount * sharedInstance = nil;
 
 			NSArray * parts = [ line componentsSeparatedByString: @" " ];
 			[ groups_array addObject: [ [ parts objectAtIndex: 0 ] retain ] ]; 
-			[ parts release ];
 		}
 		
 		[ groups_array sortUsingSelector: @selector(compare:) ];
@@ -764,7 +762,6 @@ static NNTPAccount * sharedInstance = nil;
 
 - (void) dealloc
 {
-	[ _arts release ];
 	[ _groups release ];
 	[ _subscribed release ];
 	if ( _networkStream )

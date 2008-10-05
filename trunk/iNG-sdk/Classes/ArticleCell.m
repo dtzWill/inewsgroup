@@ -58,10 +58,10 @@
 
 - (void)dealloc
 {
-    [super dealloc];
 	[ _subject release ];
 	[ _date release ];
 	[ _author release ];
+    [super dealloc];
 }
 
 /* 
@@ -72,9 +72,11 @@
  */
 - (void) useArticle: (NNTPArticle *) art
 {
-	_subject.text = art.subject;
-	_date.text = art.date;
-	_author.text = art.from;
+	
+	//leakage?? :(
+	_subject.text = [ art.subject retain ];
+	_date.text = [ art.date retain ];
+	_author.text = [ art.from retain ];
 
 }
 

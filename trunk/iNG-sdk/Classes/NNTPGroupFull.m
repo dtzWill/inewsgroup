@@ -144,6 +144,7 @@
 
 			//_articles is empty b/c lastUpdateTime wasn't set
 			_articles = [ NSMutableArray arrayWithCapacity: end - begin + 1 ];
+			[ _articles retain ];
 
 			//go through the response and get the headers for the articles mentioned
 			for ( i = begin; i < end; i++ )
@@ -235,6 +236,7 @@
 	[ super dealloc ];
 
 	[ _articles release ];
+	//[ _articles release ];
 	[ _lastUpdateTime release ];
 	[ _name release ];
 }
