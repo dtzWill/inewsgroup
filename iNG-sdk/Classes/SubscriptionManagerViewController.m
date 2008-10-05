@@ -173,9 +173,6 @@
 	}
 
 	[ self.tableView reloadData ];
-//	NNTPGroupBasic * sel = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ indexPath row ]  ];
-//	ArticleListViewController * alvc = [ [ [ ArticleListViewController alloc ] initWithGroupNamed: sel.name ] autorelease ];
-//	[ (UINavigationController *)self.parentViewController pushViewController: alvc animated: YES ];
 
 }
 

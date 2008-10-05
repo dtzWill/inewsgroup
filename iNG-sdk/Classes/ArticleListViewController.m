@@ -73,9 +73,9 @@
 - (void) refresh
 {
 	//ouch :(
-	[ [ NNTPAccount sharedInstance ] leaveGroup ];
+	//[ [ NNTPAccount sharedInstance ] leaveGroup ];
 	[ self.tableView reloadData ];
-	[ NSThread detachNewThreadSelector: @selector(reallyRefresh:) toTarget: self withObject: nil ];
+	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: self selector: @selector( reallyRefresh: ) userInfo: nil repeats: NO ];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -112,7 +112,12 @@
 {
 	//TODO change this logic based on a setting
 	NSArray * arts = [ [ NNTPAccount sharedInstance ] getArts ];
-	return [ arts objectAtIndex: ( [ arts count ] - [ indexPath row ] -1 ) ];
+	if ( arts )
+	{
+		return [ arts objectAtIndex: ( [ arts count ] - [ indexPath row ] -1 ) ];
+	}
+	//else
+	return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -126,7 +131,7 @@
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
 	// Set up the text for the cell
-//	if ( [ indexPath row ] >= 0 && [ indexPath row ] < [ [ [ NNTPAccount sharedInstance ] getArts ] count ] )
+	// if (  [ [ NNTPAccount sharedInstance ] getArts ] && [ indexPath row ] >= 0 && [ indexPath row ] < [ [ [ NNTPAccount sharedInstance ] getArts ] count ] )
 	{
 		NNTPArticle * art = [ self getArtForIndexPath: indexPath ];
 		[ cell useArticle: art ];

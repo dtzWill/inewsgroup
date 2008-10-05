@@ -14,7 +14,8 @@
 
 	bool _hasInitialized;
 	UIToolbar * _toolbar;
-	UIProgressView * _progress;
+
+	UIAlertView * _alert;
 }
 
 - (void) connect;
