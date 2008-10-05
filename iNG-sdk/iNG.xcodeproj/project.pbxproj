@@ -198,8 +198,8 @@
 		BE8870D20DA9756000F372E6 /* AccountView */ = {
 			isa = PBXGroup;
 			children = (
-				BECCBF0E0D94B817001F2856 /* AccountViewController.m */,
 				BE88702D0DA9494400F372E6 /* AccountView.h */,
+				BECCBF0E0D94B817001F2856 /* AccountViewController.m */,
 				BE88702E0DA9494400F372E6 /* AccountView.m */,
 				BECCBF0D0D94B817001F2856 /* AccountViewController.h */,
 			);
