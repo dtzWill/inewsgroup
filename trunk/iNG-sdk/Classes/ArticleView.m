@@ -57,7 +57,14 @@
 {
 	[ _article getBodyIfNeeded ];
 
-	_body.text = [ [ NSString alloc ] initWithString: _article.body ];
+	if ( _article.body )
+	{
+		_body.text = [ [ NSString alloc ] initWithString: _article.body ];
+	}
+	else
+	{
+		_body.text = @"Error loading article!  If this persists, contact developer! (inewsgroupdev@gmail.com).";
+	}
 
 }
 
