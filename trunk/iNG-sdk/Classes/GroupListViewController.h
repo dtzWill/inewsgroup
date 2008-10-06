@@ -10,12 +10,13 @@
 
 #import "NNTPGroupBasic.h"
 
-@interface GroupListViewController : UITableViewController {
+@interface GroupListViewController : UITableViewController<UIAlertViewDelegate> {
 
 	bool _hasInitialized;
 	UIToolbar * _toolbar;
 
 	UIAlertView * _alert;
+	UIAlertView * _errorAlert;
 }
 
 - (void) connect;

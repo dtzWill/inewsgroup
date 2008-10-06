@@ -21,6 +21,12 @@
 	if ( self = [ super init ] )
 	{
 		self.title = @"iNG";
+
+		_authAlert = [[UIAlertView alloc] initWithTitle: @"Authentication Error!"
+												message: nil
+											   delegate: self
+									  cancelButtonTitle: @"Okay"
+									  otherButtonTitles: nil];
 	}
 	return self;
 }
@@ -37,6 +43,7 @@
 //	[ [ NNTPAccount sharedInstance ] setPort: 119 ];
 //	[ [ NNTPAccount sharedInstance ] setUser: @"wdietz2" ];
 //	[ [ NNTPAccount sharedInstance ] setPassword: MY_PASS ];//would rather not check my pass into svn :)
+	[ [ NNTPAccount sharedInstance ] setAuthFailDelegate: self ];
 
 	AccountView *view = [ [ AccountView alloc ] initWithFrame:[ UIScreen mainScreen ].applicationFrame ];
 	self.view = view;
@@ -72,6 +79,14 @@
 - (void)dealloc
 {
 	[super dealloc];
+	[ _authAlert release ];
 }
 
+
+
+- (void) authFail: (NSString *) response
+{
+	NSLog( @"Auth failed! %@", response );
+	[ _authAlert show ];
+}
 @end
