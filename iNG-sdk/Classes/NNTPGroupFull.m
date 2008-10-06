@@ -109,6 +109,10 @@
 					[ _articles addObject: art ];
 					[ art release ];
 				}
+				else
+				{
+					NSLog( @"ERROR in NNTPGroupFull reading articles.. not sure how to proceed!" );
+				}
 			}
 
 			//trim article array

@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface AccountViewController : UIViewController {
-	//\o/ nothing
-
+	UIAlertView * _authAlert;
 }
 
 @end

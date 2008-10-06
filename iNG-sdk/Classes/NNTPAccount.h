@@ -24,6 +24,7 @@
 	NSMutableArray * _subscribed;// strings of the subscribed groups.
 	bool _canPost;
 
+	id _authFailDelegate;
 }
 
 + (NNTPAccount *) sharedInstance;
@@ -49,6 +50,8 @@
 - (void) setPort: (int) port;
 
 - (bool) isValid;
+
+- (void) setAuthFailDelegate: (id) delegate;
 
 /* 
  * ===  FUNCTION  ======================================================================

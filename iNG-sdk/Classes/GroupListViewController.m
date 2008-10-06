@@ -45,6 +45,11 @@
 												  delegate: nil
 										 cancelButtonTitle: nil
 										 otherButtonTitles: nil];
+		_errorAlert = [[UIAlertView alloc] initWithTitle: @"Error connecting!"
+												 message: @"Check settings in settings.app"
+												 delegate: self
+										cancelButtonTitle: @"Okay"
+										otherButtonTitles: nil];
 		
 		UIActivityIndicatorView * activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
 		activityView.frame = CGRectMake(139.0f-18.0f, 80.0f, 37.0f, 37.0f);
@@ -97,11 +102,13 @@
 		}
 		else
 		{
+			[ _errorAlert show ];
 			NSLog( @"Auth failed!" );
 		}
 	}
 	else
 	{
+		[ _errorAlert show ];
 		NSLog( @"Failed to connect!" );
 	}
 	[ _alert dismissWithClickedButtonIndex: 0 animated: YES ];
@@ -199,5 +206,9 @@
 
 }
     
-
+- (void) alertView: (UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger) buttonIndex
+{
+	//I'm sorry
+	exit( 0 );
+}
 @end

@@ -14,7 +14,7 @@
 #import <fcntl.h>
 
 //comment this out to hide the nslog'ing of network read/writes
-//#define DEBUG_NETWORK_ACTIVITY 1
+#define DEBUG_NETWORK_ACTIVITY 1
 
 //NOTE these *must* match the keys as defined in
 //Root.plist in Settings.bundle
@@ -34,6 +34,9 @@
 #define RESOURCEPATH [ NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex: 0 ]
 #define F_SUBS [ RESOURCEPATH stringByAppendingPathComponent: @"iNG.subs.data" ]
 #define F_GROUPS [ RESOURCEPATH stringByAppendingPathComponent: @"iNG.groups.data" ]
+
+//max size of a single line
+#define MAX_BUFFER_SIZE 1000
 
 static NNTPAccount * sharedInstance = nil;
 
@@ -58,6 +61,7 @@ static NNTPAccount * sharedInstance = nil;
 		_subscribed = nil;
 		_canPost = false;
 		_currentGroup = nil;
+		_authFailDelegate = nil;
 	}
 
 	return self;
@@ -300,7 +304,7 @@ static NNTPAccount * sharedInstance = nil;
 - (NSString *) getLine
 {
 	NSString * ret = nil;
-	char buffer[360];
+	char buffer[MAX_BUFFER_SIZE];
 	//TODO: non-blocking, and TIMEOUT.
 
 	int size;
@@ -342,15 +346,33 @@ static NNTPAccount * sharedInstance = nil;
 	return ret;
 }
 
+- (void) setAuthFailDelegate: (id) delegate
+{
+	_authFailDelegate = delegate;
+}
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  isSuccessfulCommand
- *  Description:  returns true iff the string starts with a '2'.  Used to determine if a server is happy
+ *  Description:  returns true iff the string starts with a '2'.  Used to determine if a server is happy.  if response code indicates auth needed, calls authNeededDelegate
  * =====================================================================================
  */
 - (bool) isSuccessfulCommand: (NSString *) response
 {
+	//check to see if we have an auth-related error
+	//381--more info needed (pass usually, see above)
+	//480--auth needed (?)
+	//482--auth rejected
+	//502--no permission
+	if ( [ response hasPrefix: @"381" ] || [ response hasPrefix: @"480" ] || [ response hasPrefix: @"482" ] || [ response hasPrefix: @"502" ] )
+	{
+		NSLog( @"Auth Error!" );
+		if ( _authFailDelegate && [ _authFailDelegate respondsToSelector:@selector( authFail: ) ] )
+		{
+			[ _authFailDelegate authFail: response ];
+		}
+	}
+
 	return [ response characterAtIndex: 0 ] == '2';
 }
 
@@ -479,7 +501,10 @@ static NNTPAccount * sharedInstance = nil;
 	}
 
 	//no auth needed.. so success
-	return true;
+	//TODO: verify?
+	[ self sendCommand: @"MODE" withArg: @"READER" ];
+	response = [ self getLine ];
+	return [ self isSuccessfulCommand: response ];
 }
 
 
