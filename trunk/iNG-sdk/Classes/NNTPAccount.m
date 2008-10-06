@@ -550,6 +550,7 @@ static NNTPAccount * sharedInstance = nil;
 		//for non-subscribed groups, only we want a list
 		//of what exists
 		groups_array = [ NSMutableArray arrayWithCapacity: [ lines count ] ];	
+		[ groups_array retain ];
 
 		for ( NSString * line in lines )
 		{
