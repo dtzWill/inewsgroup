@@ -86,6 +86,7 @@
 
 - (void) reallyConnect: (NSTimer *) timer
 {
+	NSLog( @"Offline: %d\n", [ [ NNTPAccount sharedInstance ] isOffline ] );
 	if ( [ [ NNTPAccount sharedInstance ] connect ] )
 	{
 		//connected!
@@ -161,7 +162,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if ( [ [ NNTPAccount sharedInstance ] isConnected ] &&
+	if ( ([ [ NNTPAccount sharedInstance ] isConnected ] ||
+		  [ [ NNTPAccount sharedInstance ] isOffline ] ) &&
 		[ [ NNTPAccount sharedInstance ] subscribedGroups ] )
 	{
 		return [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] count ];
@@ -182,7 +184,7 @@
 		cell = [ [ [UITableViewCell alloc] initWithFrame: CGRectZero reuseIdentifier: @"GroupListViewCell" ] autorelease ];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
-	// Set up the text for the cell
+	// Set up the text for the cellx
 	if ( [ indexPath row ] >= 0 && [ indexPath row ] < [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] count ] )
 	{
 		NNTPGroupBasic * sub = [ [ [ NNTPAccount sharedInstance ] subscribedGroups ] objectAtIndex: [ indexPath row ]  ];

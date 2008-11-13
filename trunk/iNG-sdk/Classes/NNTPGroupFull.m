@@ -73,6 +73,12 @@
 
 	unsigned int i;//iter var
 
+	if ( [ [ NNTPAccount sharedInstance ] isOffline ] )
+	{
+		//can't get new articles!
+		return;
+	}
+	
 	if ( _lastUpdateTime )//if we've ever updated before
 	{
 		NSDateFormatter * dateFormatter = [ [ NSDateFormatter alloc ] init ];

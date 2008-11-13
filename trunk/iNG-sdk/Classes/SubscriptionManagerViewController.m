@@ -19,7 +19,7 @@
 		// Initialize your view controller.
 		self.title = @"Subscriptions";
 		_groups = nil;
-		if ( [ [ NNTPAccount sharedInstance ] isConnected ] )
+		if ( [ [ NNTPAccount sharedInstance ] isConnected ] || [ [ NNTPAccount sharedInstance ] isOffline ] )
 		{
 			_groups = [ [ NSMutableArray alloc ] initWithArray: [ [ NNTPAccount sharedInstance ] getGroupList: NO ] ]; 
 		}

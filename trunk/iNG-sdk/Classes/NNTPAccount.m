@@ -62,6 +62,7 @@ static NNTPAccount * sharedInstance = nil;
 		_canPost = false;
 		_currentGroup = nil;
 		_authFailDelegate = nil;
+		_offlineMode = false;
 	}
 
 	return self;
@@ -115,6 +116,11 @@ static NNTPAccount * sharedInstance = nil;
 	return _canPost;
 }
 
+- (bool) isOffline
+{
+	return _offlineMode;
+}
+
 - (void) setUser: (NSString *) user
 {
 	[ [ NSUserDefaults standardUserDefaults ] setObject: user forKey: K_USER ];
@@ -135,6 +141,10 @@ static NNTPAccount * sharedInstance = nil;
 	[ [ NSUserDefaults standardUserDefaults ] setInteger: port forKey: K_PORT ];
 }
 
+- (void) setOffline: (bool) offline
+{
+	_offlineMode = offline;
+}
 
 - (bool) isValid
 {//returns if we 'reasonably' think the data is valid.
@@ -158,9 +168,9 @@ static NNTPAccount * sharedInstance = nil;
  */
 - (bool) connect
 {
-	if ( [self isConnected ] )
+	if ( [self isOffline] || [self isConnected ] )
 	{
-		//TODO: possibly do a simple command to verify we're up
+		//TODO: possibly do a simple command to verify we're up (if we're connected, that is)
 		return true;
 	}
 	struct sockaddr_in s_add;
@@ -303,6 +313,11 @@ static NNTPAccount * sharedInstance = nil;
  */
 - (NSString *) getLine
 {
+	if ( [ self isOffline ] || ![ self isConnected ] )
+	{
+		//if no connection, don't even try!
+		return nil;
+	}
 	NSString * ret = nil;
 	char buffer[MAX_BUFFER_SIZE];
 	//TODO: non-blocking, and TIMEOUT.
@@ -395,6 +410,10 @@ static NNTPAccount * sharedInstance = nil;
  */
 - (bool) sendCommand: (NSString *) command withArg: (NSString *) arg
 {
+	if ( [ self isOffline ] || ![self isConnected] )
+	{
+		return false;
+	}
 	//TODO: switch to non-blocking network IO
 	//and make use of COMMAND_TIMEOUT... like in the
 	//connect code
@@ -455,6 +474,10 @@ static NNTPAccount * sharedInstance = nil;
  */
 - (bool) authenticate: (bool) forceAuth
 {
+	if ( [self isOffline] )
+	{
+		return true;
+	}
 	NSString * response;
 	NSLog( @"User: %@, Pass: %@", [ self getUser ], [ self getPassword ] );
 	if ( forceAuth || [ [ self getUser ] compare: @"" ] )
@@ -687,6 +710,12 @@ static NNTPAccount * sharedInstance = nil;
 	NSArray * subscribed = [ self subscribedGroups ];
 	unsigned int i;//iter var
 
+	if ( [ self isOffline ] )
+	{
+		//can't update, so just exit
+		return;
+	}
+	
 	//send a group command for each subscribed group
 	for ( i = 0; i < [ subscribed count ]; i++ )
 	{

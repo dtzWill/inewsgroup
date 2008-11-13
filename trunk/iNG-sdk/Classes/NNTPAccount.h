@@ -23,6 +23,7 @@
 	//data to save (other than account information)
 	NSMutableArray * _subscribed;// strings of the subscribed groups.
 	bool _canPost;
+	bool _offlineMode;
 
 	id _authFailDelegate;
 }
@@ -42,12 +43,14 @@
 - (int) getPort;
 - (bool) isConnected;
 - (bool) canPost;
+- (bool) isOffline;
 - (unsigned int) getMaxArtCache;
 
 - (void) setUser: (NSString *) user;
 - (void) setPassword: (NSString *) password;
 - (void) setServer: (NSString *) server;
 - (void) setPort: (int) port;
+- (void) setOffline: (bool) offline;
 
 - (bool) isValid;
 
