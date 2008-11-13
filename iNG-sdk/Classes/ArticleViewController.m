@@ -7,6 +7,7 @@
 //
 
 #import "ArticleViewController.h"
+#import "NntpAccount.h"
 
 
 @implementation ArticleViewController
@@ -67,7 +68,10 @@
 - (void) reallyLoadArticle: (NSTimer *) timer
 {
 	[ _articleView setBody ];
-	_article.read = YES; 
+	if ( [ [ NNTPAccount sharedInstance ] isconnected ] )
+	{
+		_article.read = YES; 
+	}
 	//[ (ArticleView *)self.view setBody ];
 }
 

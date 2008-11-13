@@ -55,8 +55,8 @@
 }
 - (void) offlinePressed
 {
-	//TODO: implement!!
-	NSLog( @"offline pressed!" );
+	[ [ NNTPAccount sharedInstance ] setOffline: YES ];
+	[ self connectPressed ];
 }
 - (void) connectPressed
 {

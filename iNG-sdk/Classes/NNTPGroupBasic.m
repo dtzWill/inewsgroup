@@ -142,6 +142,8 @@
 		_unreadCount = [ [ NNTPAccount sharedInstance ] getMaxArtCache ];
 	}
 
+	//we don't adjust low, even though max could change it because that'd mess up the caching.
+	
 	NSLog( @"Unread after: %d", _unreadCount );
 
 	_high = high;

@@ -7,6 +7,7 @@
 //
 
 #import "ArticleView.h"
+#import "NNTPAccount.h"
 
 
 @implementation ArticleView
@@ -63,7 +64,15 @@
 	}
 	else
 	{
-		_body.text = @"Error loading article!  If this persists, contact developer! (inewsgroupdev@gmail.com).";
+		if ( [ [ NNTPAccount sharedInstance ] isOffline ] )
+		{
+			_body.text = @"Article not loaded, and in offline mode!";
+		}
+		else
+		{
+			_body.text = @"Error loading article!  If this persists, contact developer! (inewsgroupdev@gmail.com).";
+		}
+		
 	}
 
 }
