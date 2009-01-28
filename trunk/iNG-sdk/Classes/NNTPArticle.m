@@ -75,6 +75,9 @@
 
 		while  ( hdr = [ enumer nextObject ] )
 		{
+			//TODO: redo this to find the first :, and create substrings from that
+			//not this significantly more expensive approach of splitting on :
+			//then joining all but the first part
 			NSArray * parts = [ hdr componentsSeparatedByString: @": " ];	
 			if ( [ parts count ] < 2 )//need at least "header: value"
 			{
@@ -101,6 +104,9 @@
 					_newsgroups = value;
 					break;
 				case REFERENCES:
+					//TODO: parse references into something more useful, like an array or some such
+					//so that isArtReply method doesn't have to do it every time, and can
+					//reduce to a strcmp in a loop
 					_references = value;
 					break;
 				case DATE:
@@ -148,6 +154,24 @@
 	return self;
 
 }
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  isArtReply
+ *  Description:  returns true iff argument is a direct reply to /this/ article
+ * =====================================================================================
+ */
+- (bool) isArtReply: (NNTPArticle *) replyCandidate
+{
+	//TODO: implement me!
+	//find first (or is it last? check RFC) reference in references list
+	//and compare that messageID to the one of this present artlce
+	//return replyCandidate.references != nil && 
+	// [ _messageID compareTo: [ replyCandidate._references getObjectAtIndex: 0 ] ];
+	//or so
+	return false;
+}
+
 
 /* 
  * ===  FUNCTION  ======================================================================
