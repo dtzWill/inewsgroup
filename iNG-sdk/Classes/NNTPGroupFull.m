@@ -100,13 +100,35 @@
 			
 			//lines should be an array of messageid's of new news in this group
 
+			int count = [ lines count ];
+			
 			//send a 'head' command for each msgid we get
 			for( NSString * msgid in lines )
 			{
-				[ [ NNTPAccount sharedInstance ] sendCommand: @"HEAD" withArg: msgid ];
+				//check if we already have an article by this message id
+				//this can happen is newnews date/time isn't sync'd properly
+				//TODO: make this not horribly expensive
+				//hash, etc, /anything/
+				bool isDup = NO;
+				NSLog( @"Got msgid: %@", msgid );
+				for ( NNTPArticle * art in _articles )
+				{
+					NSLog( @"Comparing to %@", art.messageID );
+					if ( [ art.messageID isEqualToString: msgid ] )
+					{
+						isDup = YES;
+						count--;
+						break;
+					}
+				}
+				if ( !isDup )
+				{
+					[ [ NNTPAccount sharedInstance ] sendCommand: @"HEAD" withArg: msgid ];					
+				}
+
 			}
 
-			for ( i = 0; i < [ lines count ]; i++ )
+			for ( i = 0; i < count; i++ )
 			{
 				if ( [ [ NNTPAccount sharedInstance ] isSuccessfulCommand: [ [ NNTPAccount sharedInstance ] getLine ] ] )
 				{

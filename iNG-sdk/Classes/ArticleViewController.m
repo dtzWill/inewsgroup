@@ -68,7 +68,7 @@
 - (void) reallyLoadArticle: (NSTimer *) timer
 {
 	[ _articleView setBody ];
-	if ( [ [ NNTPAccount sharedInstance ] isconnected ] )
+	if ( [ [ NNTPAccount sharedInstance ] isConnected ] )
 	{
 		_article.read = YES; 
 	}

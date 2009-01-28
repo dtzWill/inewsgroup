@@ -70,4 +70,13 @@
  * =====================================================================================
  */
 - (void) getBodyIfNeeded;
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  isArtReply
+ *  Description:  returns true iff argument is a direct reply to /this/ article
+ * =====================================================================================
+ */
+- (bool) isArtReply: (NNTPArticle *) replyCandidate;
+
 @end

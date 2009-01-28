@@ -16,6 +16,7 @@
 		BE7FB0920E467F2500BA1364 /* GroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7FB0910E467F2500BA1364 /* GroupCell.m */; };
 		BE8291750DBC7ECB000E412F /* ArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8291740DBC7ECB000E412F /* ArticleViewController.m */; };
 		BE8291780DBC7ED6000E412F /* ArticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8291770DBC7ED6000E412F /* ArticleView.m */; };
+		BE82D8990F0EE1AA003CDF73 /* NNTPThreaded.m in Sources */ = {isa = PBXBuildFile; fileRef = BE82D8980F0EE1AA003CDF73 /* NNTPThreaded.m */; };
 		BE88702F0DA9494400F372E6 /* AccountView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE88702E0DA9494400F372E6 /* AccountView.m */; };
 		BE8870D50DA9759C00F372E6 /* GroupListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8870D40DA9759C00F372E6 /* GroupListViewController.m */; };
 		BE8C6FBE0DAB0E000000C41E /* NNTPGroupBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8C6FBD0DAB0E000000C41E /* NNTPGroupBasic.m */; };
@@ -31,6 +32,7 @@
 		BEDC6B9F0DB0249000A3BF70 /* NNTPArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = BEDC6B9E0DB0249000A3BF70 /* NNTPArticle.m */; };
 		BEE3438E0EA941FC00A3FDB8 /* UnreadIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = BEE3438D0EA941FC00A3FDB8 /* UnreadIndicator.png */; };
 		BEE343900EA9421000A3FDB8 /* ReadIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = BEE3438F0EA9421000A3FDB8 /* ReadIndicator.png */; };
+		BEFD549F0ECCF5D300D4D6CE /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = BEFD549E0ECCF5D300D4D6CE /* Entitlements.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -64,6 +66,8 @@
 		BE8291740DBC7ECB000E412F /* ArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleViewController.m; sourceTree = "<group>"; };
 		BE8291760DBC7ED6000E412F /* ArticleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleView.h; sourceTree = "<group>"; };
 		BE8291770DBC7ED6000E412F /* ArticleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleView.m; sourceTree = "<group>"; };
+		BE82D8970F0EE1AA003CDF73 /* NNTPThreaded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NNTPThreaded.h; sourceTree = "<group>"; };
+		BE82D8980F0EE1AA003CDF73 /* NNTPThreaded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTPThreaded.m; sourceTree = "<group>"; };
 		BE88702D0DA9494400F372E6 /* AccountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountView.h; sourceTree = "<group>"; };
 		BE88702E0DA9494400F372E6 /* AccountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountView.m; sourceTree = "<group>"; };
 		BE8870D30DA9759C00F372E6 /* GroupListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupListViewController.h; sourceTree = "<group>"; };
@@ -91,6 +95,7 @@
 		BEDC6B9E0DB0249000A3BF70 /* NNTPArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NNTPArticle.m; sourceTree = "<group>"; };
 		BEE3438D0EA941FC00A3FDB8 /* UnreadIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UnreadIndicator.png; sourceTree = "<group>"; };
 		BEE3438F0EA9421000A3FDB8 /* ReadIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReadIndicator.png; sourceTree = "<group>"; };
+		BEFD549E0ECCF5D300D4D6CE /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +150,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				BEFD549E0ECCF5D300D4D6CE /* Entitlements.plist */,
 				BE7422F00E54037200EC7C2F /* icon.png */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -264,6 +270,8 @@
 				BEDC6B850DB0216E00A3BF70 /* NNTPGroupFull.m */,
 				BEDC6B9D0DB0249000A3BF70 /* NNTPArticle.h */,
 				BEDC6B9E0DB0249000A3BF70 /* NNTPArticle.m */,
+				BE82D8970F0EE1AA003CDF73 /* NNTPThreaded.h */,
+				BE82D8980F0EE1AA003CDF73 /* NNTPThreaded.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -323,6 +331,7 @@
 				BE7422F10E54037200EC7C2F /* icon.png in Resources */,
 				BEE3438E0EA941FC00A3FDB8 /* UnreadIndicator.png in Resources */,
 				BEE343900EA9421000A3FDB8 /* ReadIndicator.png in Resources */,
+				BEFD549F0ECCF5D300D4D6CE /* Entitlements.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +359,7 @@
 				BE8291750DBC7ECB000E412F /* ArticleViewController.m in Sources */,
 				BE8291780DBC7ED6000E412F /* ArticleView.m in Sources */,
 				BE7FB0920E467F2500BA1364 /* GroupCell.m in Sources */,
+				BE82D8990F0EE1AA003CDF73 /* NNTPThreaded.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,12 +398,39 @@
 			};
 			name = Release;
 		};
+		BE83A1780ECCE6BE0092BADA /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: William Dietz";
+				PREBINDING = NO;
+				PROVISIONING_PROFILE = DefaultProfileUuid;
+				SDKROOT = iphoneos2.0;
+			};
+			name = Distribution;
+		};
+		BE83A1790ECCE6BE0092BADA /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = iNG_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				PREBINDING = NO;
+				PRODUCT_NAME = iNG;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Distribution;
+		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "William Dietz";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
@@ -431,8 +468,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "William Dietz";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				PREBINDING = NO;
+				PROVISIONING_PROFILE = DefaultProfileUuid;
 				SDKROOT = iphoneos2.0;
 			};
 			name = Release;
@@ -445,6 +483,7 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
+				BE83A1790ECCE6BE0092BADA /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -454,6 +493,7 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
+				BE83A1780ECCE6BE0092BADA /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
