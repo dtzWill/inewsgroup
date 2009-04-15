@@ -10,7 +10,6 @@
 #import "GroupListViewController.h"
 #import "AccountView.h"
 #import "authinfo.h"
-
 #import "NNTPAccount.h"
 
 
@@ -39,10 +38,10 @@
 	//Remove this before any real build--this is so I don't have to set these
 	//values by hand every time I wanna debug
 	//XXX
-//	[ [ NNTPAccount sharedInstance ] setServer: @"news.cs.uiuc.edu" ];
-//	[ [ NNTPAccount sharedInstance ] setPort: 119 ];
-//	[ [ NNTPAccount sharedInstance ] setUser: @"wdietz2" ];
-//	[ [ NNTPAccount sharedInstance ] setPassword: MY_PASS ];//would rather not check my pass into svn :)
+	[ [ NNTPAccount sharedInstance ] setServer: @"news.cs.uiuc.edu" ];
+	[ [ NNTPAccount sharedInstance ] setPort: 119 ];
+	[ [ NNTPAccount sharedInstance ] setUser: @"wdietz2" ];
+	[ [ NNTPAccount sharedInstance ] setPassword: MY_PASS ];//would rather not check my pass into svn :)
 	[ [ NNTPAccount sharedInstance ] setAuthFailDelegate: self ];
 
 	AccountView *view = [ [ AccountView alloc ] initWithFrame:[ UIScreen mainScreen ].applicationFrame ];

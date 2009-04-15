@@ -70,7 +70,7 @@
 	[ _articleView setBody ];
 	if ( [ [ NNTPAccount sharedInstance ] isConnected ] )
 	{
-		_article.read = YES; 
+		_article.read = YES;
 	}
 	//[ (ArticleView *)self.view setBody ];
 }
