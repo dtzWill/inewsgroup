@@ -901,5 +901,18 @@ static NNTPAccount * sharedInstance = nil;
 	}
 }
 
-
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  saveCurrentGroup
+ *  Description:  saves currently active group to disk.  Call this when changes have
+ been made to the group and the user won't mind waiting for save.
+ * =====================================================================================
+ */
+- (void) saveCurrentGroup
+{
+	if ( _currentGroup )
+	{
+		[ _currentGroup save ];
+	}
+}
 @end

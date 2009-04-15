@@ -38,12 +38,15 @@
 	_date = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
 	_author = [ [ UILabel alloc ] initWithFrame: CGRectZero ];
 
-	_subject.numberOfLines = 2;
+	_subject.numberOfLines = 4;
 
 
-	UIFont * font = [ UIFont systemFontOfSize: 12 ];
+	UIFont * font = [ UIFont systemFontOfSize: 10 ];
 	_author.font = font;
 	_date.font = font;
+	
+	UIFont * subjFont = [ UIFont systemFontOfSize: 11 ];
+	_subject.font = subjFont;
 
 	_date.textColor = [ UIColor blueColor ];
 
@@ -88,7 +91,7 @@
 	const CGFloat DATE_AUTHOR_WIDTH = 100.0f;
 	const CGFloat DATE_AUTHOR_HEIGHT = 25.0f;
 	const CGFloat ACCESSORY_WIDTH = 30.0f;
-	const CGFloat SPACING = 20.f;
+	const CGFloat SPACING = 30.f;
 	const int num_lines = 4;
 
 	//x,y,width,height

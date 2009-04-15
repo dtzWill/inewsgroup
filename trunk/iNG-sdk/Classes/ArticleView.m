@@ -57,6 +57,8 @@
 - (void) setBody
 {
 	[ _article getBodyIfNeeded ];
+	[ NSTimer scheduledTimerWithTimeInterval: (NSTimeInterval)0.01 target: [ NNTPAccount sharedInstance ] selector: @selector( saveCurrentGroup ) userInfo: nil repeats: NO ];
+
 
 	if ( _article.body )
 	{
