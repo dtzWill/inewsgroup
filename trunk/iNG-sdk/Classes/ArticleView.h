@@ -18,7 +18,7 @@
 	UIView * _contentView;
 	UITextView * _subject;
 	UITextView * _from;
-	UITextView * _body;
+	UIWebView * _body;
 
 
 }

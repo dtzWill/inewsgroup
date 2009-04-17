@@ -16,13 +16,14 @@
 //#define DEBUG_ENCODING
 
 //for switching on the header type
-#define FROM 1
-#define SUBJECT 2
-#define NEWSGROUPS 3
-#define REFERENCES 4
-#define DATE 5
-#define MESSAGEID 6
-#define SENDER 7
+#define FROM        1
+#define SUBJECT     2
+#define NEWSGROUPS  3
+#define REFERENCES  4
+#define DATE        5
+#define MESSAGEID   6
+#define SENDER      7
+#define CONTENTTYPE 8
 #define HEADERS_DICT [ [ NSDictionary alloc ] initWithObjectsAndKeys: \
 			[ NSNumber numberWithInt: FROM ], @"FROM", \
 			[ NSNumber numberWithInt: SUBJECT ], @"SUBJECT", \
@@ -31,6 +32,7 @@
 			[ NSNumber numberWithInt: DATE ], @"DATE", \
 			[ NSNumber numberWithInt: MESSAGEID ], @"MESSAGE-ID", \
 			[ NSNumber numberWithInt: SENDER ], @"SENDER", \
+			[ NSNumber numberWithInt: CONTENTTYPE ], @"CONTENT-TYPE", \
 			nil ];
 
 //NSCoder keys
@@ -43,10 +45,13 @@
 #define K_NNTPARTICLE_SENDER @"NA_SENDER"
 #define K_NNTPARTICLE_BODY @"NA_BODY"
 #define K_NNTPARTICLE_READ @"NA_READ"
+#define K_NNTPARTICLE_CONTENTTYPE @"NA_CONTENTTYPE"
 
 @implementation NNTPArticle
 
-@synthesize from=_from, subject=_subject, newsgroups=_newsgroups, references=_references, date=_date, messageID=_messageID, sender=_sender, body=_body, read=_read;
+@synthesize from=_from, subject=_subject, newsgroups=_newsgroups,
+	references=_references, date=_date, messageID=_messageID,
+	sender=_sender, body=_body, read=_read, contentType=_contentType;
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -65,9 +70,37 @@
 		_from = _subject = _newsgroups = _references = _date = nil;
 		_messageID = _sender = _body = nil;
 
+		//first we 'unfold' the headers jic they're multi-line
+		NSMutableArray * headers_unfolded = [ [ NSMutableArray alloc ] init ];
+		NSCharacterSet * whitespace = [ NSCharacterSet whitespaceCharacterSet ];
+		for ( NSString * header in headers )
+		{
+			if ( [ header rangeOfCharacterFromSet: whitespace options: NSLiteralSearch ].location == 0 )
+			{
+				//if this header starts with whitespace....
+				//then we append to previous header
+				if ( [ headers_unfolded count ] > 0 )
+				{
+					NSMutableString * new_header = [ NSMutableString stringWithString: [ headers_unfolded objectAtIndex: [ headers_unfolded count ] - 1 ] ];
+					[ new_header appendString: header ];
+					[ headers_unfolded replaceObjectAtIndex: [ headers_unfolded count ] - 1 withObject: new_header ];
+				}
+				else
+				{
+					NSLog( @"Invalid header on first line!" );
+				}
+			}
+			else
+			{
+				[ headers_unfolded addObject: header ];
+			}
+		}
+			
+		
+		
 		//parse headers
 
-		NSEnumerator * enumer = [ headers objectEnumerator ];
+		NSEnumerator * enumer = [ headers_unfolded objectEnumerator ];
 		NSString * hdr;
 
 		//TODO: global?!
@@ -95,7 +128,7 @@
 			switch ( [ [ headersDict objectForKey: [ [ parts objectAtIndex: 0 ] uppercaseString ] ] intValue ] )
 			{
 				case FROM:
-					_from = value; 
+					_from = value;
 					break;
 				case SUBJECT:
 					_subject = value;
@@ -117,6 +150,9 @@
 					break;
 				case SENDER:
 					_sender = value;
+					break;
+				case CONTENTTYPE:
+					_contentType = value;
 					break;
 				default:
 #ifdef DEBUG_HEADERS
@@ -147,6 +183,8 @@
 		NSLog( @"Message-ID: %@", _messageID );
 	if ( _sender )
 		NSLog( @"Sender: %@", _sender );
+	if ( _contentType )
+		NSLog( @"Content-Type: %@", _contentType );
 #endif
 
 
@@ -192,6 +230,7 @@
 		_sender = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_SENDER ] retain ];
 		_body = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_BODY ] retain ];
 		_read = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_READ ] boolValue ];
+		_contentType = [ [ decoder decodeObjectForKey: K_NNTPARTICLE_CONTENTTYPE ] retain ];
 	}
 
 	return self;
@@ -242,6 +281,10 @@
 	if ( _body )
 	{
 		[ coder encodeObject: _body forKey: K_NNTPARTICLE_BODY ];
+	}
+	if ( _contentType )
+	{
+		[ coder encodeObject: _contentType forKey: K_NNTPARTICLE_CONTENTTYPE ];
 	}
 
 	[ coder encodeObject: [ NSNumber numberWithBool: _read ] forKey: K_NNTPARTICLE_READ ];

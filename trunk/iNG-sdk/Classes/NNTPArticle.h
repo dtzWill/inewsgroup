@@ -13,13 +13,14 @@
 
 	//header information
 	//			FIELD			MEANING/VALUE
-	NSString * _from;//		user-reported name
-	NSString * _subject;//		..subject
-	NSString * _newsgroups;//	list of groups this is posted to
-	NSString * _references;//	list of references
-	NSString * _date;//			NSDate ?
-	NSString * _messageID;//	uniq id for this
-	NSString * _sender;//		username@senderip
+	NSString * _from;        // user-reported name
+	NSString * _subject;     // ..subject
+	NSString * _newsgroups;  // list of groups this is posted to
+	NSString * _references;  // list of references
+	NSString * _date;        // NSDate ?
+	NSString * _messageID;   // uniq id for this
+	NSString * _sender;      // username@senderip
+	NSString * _contentType; // content-type parameters
 	
 	//body information
 	NSMutableString * _body;
@@ -37,6 +38,7 @@
 @property (readonly) NSString * messageID;
 @property (readonly) NSString * sender;
 @property (readonly) NSString * body;
+@property (readonly) NSString * contentType;
 @property bool read;
 
 /* 
