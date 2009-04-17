@@ -113,7 +113,7 @@
 				NSLog( @"Got msgid: %@", msgid );
 				for ( NNTPArticle * art in _articles )
 				{
-					NSLog( @"Comparing to %@", art.messageID );
+					//NSLog( @"Comparing to %@", art.messageID );
 					if ( [ art.messageID isEqualToString: msgid ] )
 					{
 						isDup = YES;
