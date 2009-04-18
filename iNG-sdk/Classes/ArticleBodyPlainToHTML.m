@@ -12,6 +12,23 @@ NSString * unstuff( NSString * string );
 int quoteLevel( NSString * string );
 BOOL is_flowed( NSString * string );
 
+//number of colors we cycle through
+#define DEPTH_COLORS_COUNT 3
+const unsigned char depth_colors[DEPTH_COLORS_COUNT][2][3] = {
+{//blue
+	{ 50, 50, 200 },//fg
+	{ 240, 240, 255 } //bg
+},
+{//green
+	{ 50, 150, 50 },//fg
+	{ 240, 255, 240 } //bg
+},
+{//red
+	{ 200, 50, 50 },//fg
+	{ 255, 240, 240 } //bg
+}
+};
+
 //removes leading space if found
 NSString * unstuff( NSString * string )
 {
@@ -66,9 +83,9 @@ int quoteLevel( NSString * string )
 	//style information for quotes to look right!
 	//...ouch at this line :(
 	[ htmlBody appendString:
-	 @"<style type=\"text/css\">	div.quote {	border-style: solid; border-left-width: 2px; border-right-width: 0px; border-top-width: 0px; border-bottom-width: 0px; padding-left: 15px; border-color: blue }</style>"
+	 @"<style type=\"text/css\">	div.quote {	border-style: solid; border-left-width: 2px; border-right-width: 2px; border-top-width: 0px; border-bottom-width: 0px; padding-left: 15px; padding-right: 15px }</style>"
 	];
-	[ htmlBody appendString: @"<font size=10>" ];
+	[ htmlBody appendString: @"<font size=6>" ];//XXX: read in font size from some setting!
 	//flow processing
 	while( line_unmutable != nil )
 	{
@@ -115,7 +132,13 @@ int quoteLevel( NSString * string )
 			for ( ; quotes_prev < quotes; quotes_prev++ )
 			{
 				//increase quote level
-				[ htmlBody appendString: @"<div class=\"quote\" >" ];
+				[ htmlBody appendString: @"<div class=\"quote\" " ];
+				int c = quotes_prev % DEPTH_COLORS_COUNT;
+				[ htmlBody appendFormat: @"style=\"color: rgb(%d,%d,%d); background-color: rgb(%d,%d,%d); border-color: rgb(%d,%d,%d)\" />",
+					depth_colors[c][0][0],depth_colors[c][0][1],depth_colors[c][0][2], //fg
+					depth_colors[c][1][0],depth_colors[c][1][1],depth_colors[c][1][2], //bg
+ 					depth_colors[c][0][0],depth_colors[c][0][1],depth_colors[c][0][2] //fg (used again for border color)
+				 ];
 			}
 			for ( ; quotes_prev > quotes; quotes_prev-- )
 			{

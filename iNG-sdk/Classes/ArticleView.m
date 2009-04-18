@@ -65,9 +65,9 @@
 	if ( _article.body )
 	{
 		NSString * htmlBody;
-		if ( _article.contentType == nil || [ _article.contentType rangeOfString: @"text/plain" ].location != NSNotFound )
+		if ( _article.contentType == nil || [ _article.contentType rangeOfString: @"text/plain" options: NSCaseInsensitiveSearch ].location != NSNotFound )
 		{
-			BOOL flowed = /*global use preference indicating use flow && */ [ _article.contentType rangeOfString: @"format=flowed" ].location != NSNotFound;
+			BOOL flowed = /*global use preference indicating use flow && */ [ _article.contentType rangeOfString: @"format=flowed" options: NSCaseInsensitiveSearch ].location != NSNotFound;
 			htmlBody = [ ArticleBodyPlainToHTML convert: _article.body useFlowed: flowed ];
 		}
 		else
